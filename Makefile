@@ -23,3 +23,6 @@ lint: node_modules/
 
 test: lint
 	npx mocha --opts ./mocha.opts test/
+
+deps:
+	brew install pkg-config cairo pango libpng jpeg giflib
