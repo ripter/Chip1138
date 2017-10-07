@@ -1,33 +1,14 @@
 import 'document-register-element';
-import getImageData from './getImageData.js';
-// 
-// const WIDTH = 10;
-// const HEIGHT = 10;
-// const { canvas } = window;
-// canvas.width = WIDTH;
-// canvas.height = HEIGHT;
-// const ctx = canvas.getContext('2d');
+import zelda from '../roms/zelda-la.json';
 
-// ctx.fillStyle = '#FF0000';
-// ctx.fillRect(0, 0, WIDTH, HEIGHT);
-// const imgData = ctx.getImageData(0, 0, WIDTH, HEIGHT);
-// const dataURL = canvas.toDataURL();
-//
-// console.log('imgData', imgData);
-// console.log('dataURL', dataURL);
-// window.dataURL = dataURL;
-// window.imgData = imgData;
+const rom = window.rom = zelda;
+console.log('rom', rom);
 
+// convert the base64 rom back into binary
+const romData = atob(rom.data);
 
-// 10x10 red square
-const dataURL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGElEQVQoU2P8z8Dwn4EIwDiqEF8oUT94AGX8E/fVVQbMAAAAAElFTkSuQmCC';
-
-// 1x1 red square
-// const dataURL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYV2P4z8DwHwAFAAH/plybXQAAAABJRU5ErkJggg==';
-// const img = new Image(10, 10);
-// img.onload = function() {
-//   ctx.drawImage(img, 0, 0);
-//   window.app.append(img);
-// }
-
-getImageData(dataURL);
+// print the rom title
+const title = [0x134, 0x135, 0x136, 0x137, 0x138, 0x139, 0x140, 0x141, 0x142].reduce((acc, addr) => {
+  return acc + romData.charAt(addr).toString(16)
+}, '');
+console.log('rom title: ', title);
