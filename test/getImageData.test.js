@@ -1,11 +1,14 @@
 const expect = require('expect.js');
+const getImageData = require('../src/getImageData.js');
 
+console.log(getImageData)
 describe('parse image:', () => {
   let actual, dataURL;
 
   describe('return 1x1 Red Square', () => {
     beforeEach(() => {
       dataURL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYV2P4z8DwHwAFAAH/plybXQAAAABJRU5ErkJggg==';
+      actual = getImageData(dataURL);
     });
 
     it('ImageData', () => {

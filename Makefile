@@ -1,4 +1,4 @@
-.PHONY: all build dev-server server plop lint test
+.PHONY: all build dev-server server plop lint test test.only
 
 all: build lint server
 
@@ -24,5 +24,5 @@ lint: node_modules/
 test: lint
 	npx mocha --opts ./mocha.opts test/
 
-deps:
-	brew install pkg-config cairo pango libpng jpeg giflib
+test.only:
+	npx mocha --opts ./mocha.opts test/
