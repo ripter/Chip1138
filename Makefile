@@ -1,4 +1,5 @@
 .PHONY: all build dev-server server plop lint test test.only
+NPM_BIN=./node_modules/.bin
 
 all: build lint server
 
@@ -22,7 +23,7 @@ lint: node_modules/
 	npx eslint src/
 
 test: lint
-	npx mocha --opts ./mocha.opts test/
+	npx mocha --opts mocha.ops
 
 test.only:
-	npx mocha --opts ./mocha.opts test/
+	npx mocha --opts mocha.ops

@@ -1,6 +1,6 @@
-const expect = require('expect.js');
-const getImageData = require('../src/getImageData.js');
+import getImageData from '../src/getImageData.js'
 
+console.log('document', window.document);
 describe('parse image:', () => {
   let dataURL;
 
