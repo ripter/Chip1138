@@ -22,6 +22,8 @@
     "babel-preset-env": "^1.6.0",
     "eslint": "^4.7.2",
     "expect.js": "^0.3.1",
+    "jsdom": "11.3.0",
+    "jsdom-global": "3.0.2",
     "plop": "^1.8.1",
     "webpack": "^3.6.0",
     "webpack-dev-server": "^2.8.2"
