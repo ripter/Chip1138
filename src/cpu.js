@@ -24,7 +24,7 @@ class CPU {
   }
 
   get c() {
-    return this.memory8bit[2]
+    return this.memory8bit[2];
   }
 
   set c(value) {
