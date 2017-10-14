@@ -51,44 +51,44 @@ describe('CPU', () => {
   }); // main registers
 
   describe('alternate registers', () => {
-    it('alternate.a is 8-bit', () => {
-      cpu.alternate.a = 0xfff; // 4095 should overflow on 8-bit
-      expect(cpu.alternate.a).to.eql(0xff); // largest 8-bit number
+    it('altA is 8-bit', () => {
+      cpu.altA = 0xfff; // 4095 should overflow on 8-bit
+      expect(cpu.altA).to.eql(0xff); // largest 8-bit number
     });
 
-    it('alternate.b is 8-bit', () => {
-      cpu.alternate.b = 0xfff; // 4095 should overflow on 8-bit
-      expect(cpu.alternate.b).to.eql(0xff); // largest 8-bit number
+    it('altB is 8-bit', () => {
+      cpu.altB = 0xfff; // 4095 should overflow on 8-bit
+      expect(cpu.altB).to.eql(0xff); // largest 8-bit number
     });
 
-    it('alternate.d is 8-bit', () => {
-      cpu.alternate.d = 0xfff; // 4095 should overflow on 8-bit
-      expect(cpu.alternate.d).to.eql(0xff); // largest 8-bit number
+    it('altD is 8-bit', () => {
+      cpu.altD = 0xfff; // 4095 should overflow on 8-bit
+      expect(cpu.altD).to.eql(0xff); // largest 8-bit number
     });
 
-    it('alternate.h is 8-bit', () => {
-      cpu.alternate.h = 0xfff; // 4095 should overflow on 8-bit
-      expect(cpu.alternate.h).to.eql(0xff); // largest 8-bit number
+    it('altH is 8-bit', () => {
+      cpu.altH = 0xfff; // 4095 should overflow on 8-bit
+      expect(cpu.altH).to.eql(0xff); // largest 8-bit number
     });
 
-    it('alternate.f is 8-bit', () => {
-      cpu.alternate.f = 0xfff; // 4095 should overflow on 8-bit
-      expect(cpu.alternate.f).to.eql(0xff); // largest 8-bit number
+    it('altF is 8-bit', () => {
+      cpu.altF = 0xfff; // 4095 should overflow on 8-bit
+      expect(cpu.altF).to.eql(0xff); // largest 8-bit number
     });
 
-    it('alternate.c is 8-bit', () => {
-      cpu.alternate.c = 0xfff; // 4095 should overflow on 8-bit
-      expect(cpu.alternate.c).to.eql(0xff); // largest 8-bit number
+    it('altC is 8-bit', () => {
+      cpu.altC = 0xfff; // 4095 should overflow on 8-bit
+      expect(cpu.altC).to.eql(0xff); // largest 8-bit number
     });
 
-    it('alternate.e is 8-bit', () => {
-      cpu.alternate.e = 0xfff; // 4095 should overflow on 8-bit
-      expect(cpu.alternate.e).to.eql(0xff); // largest 8-bit number
+    it('altE is 8-bit', () => {
+      cpu.altE = 0xfff; // 4095 should overflow on 8-bit
+      expect(cpu.altE).to.eql(0xff); // largest 8-bit number
     });
 
-    it('alternate.l is 8-bit', () => {
-      cpu.alternate.l = 0xfff; // 4095 should overflow on 8-bit
-      expect(cpu.alternate.l).to.eql(0xff); // largest 8-bit number
+    it('altL is 8-bit', () => {
+      cpu.altL = 0xfff; // 4095 should overflow on 8-bit
+      expect(cpu.altL).to.eql(0xff); // largest 8-bit number
     });
   }); // alternate registers
 
