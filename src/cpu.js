@@ -55,7 +55,6 @@ class CPU {
   get b() {
     return this.memory8bit[1];
   }
-
   set b(value) {
     this.memory8bit[1] = value;
   }
@@ -63,7 +62,6 @@ class CPU {
   get c() {
     return this.memory8bit[2];
   }
-
   set c(value) {
     this.memory8bit[2] = value;
   }
@@ -71,7 +69,6 @@ class CPU {
   get d() {
     return this.memory8bit[3];
   }
-
   set d(value) {
     this.memory8bit[3] = value;
   }
@@ -79,7 +76,6 @@ class CPU {
   get e() {
     return this.memory8bit[4];
   }
-
   set e(value) {
     this.memory8bit[4] = value;
   }
@@ -87,7 +83,6 @@ class CPU {
   get f() {
     return this.memory8bit[5];
   }
-
   set f(value) {
     this.memory8bit[5] = value;
   }
@@ -95,7 +90,6 @@ class CPU {
   get l() {
     return this.memory8bit[6];
   }
-
   set l(value) {
     this.memory8bit[6] = value;
   }
@@ -103,7 +97,6 @@ class CPU {
   get h() {
     return this.memory8bit[7];
   }
-
   set h(value) {
     this.memory8bit[7] = value;
   }
