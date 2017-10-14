@@ -8,6 +8,10 @@ class CPU {
     this.memory16bit = new Uint16Array(5);
   }
 
+  processOpcode(bite) {
+    
+  }
+
   get a() {
     return this.memory8bit[0];
   }
