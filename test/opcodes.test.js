@@ -20,12 +20,13 @@ describe('CPU can run OPCODES:', () => {
     loadOpcodes.forEach(function(opcode) {
       const randomByte = 0|Math.random()*256;
       const { addr, length, mnemonic, operand1 } = opcode;
+      const register = operand1.toLowerCase();
 
       console.log(mnemonic, operand1);
-      it(`${mnemonic} ${operand1}, ${randomByte}; loads ${randomByte} into register ${operand1}`, () => {
+      it(`${mnemonic} ${operand1}, ${randomByte}; loads ${randomByte} into register ${register}`, () => {
         cpu.processOpcode(addr);
         cpu.processOpcode(randomByte);
-        expect(cpu[operand1]).to.eql(randomByte);
+        expect(cpu[register]).to.eql(randomByte);
       });
     });
 
