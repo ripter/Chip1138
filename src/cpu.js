@@ -1,6 +1,8 @@
 /**
  * Virtual CPU for the Gameboy Color; a modified z80
  */
+import { OPCODE } from '../const/asm.js';
+
 class CPU {
   constructor() {
     // Create the memory banks
@@ -9,7 +11,11 @@ class CPU {
   }
 
   processOpcode(bite) {
-    
+    let counter;
+    if (typeof OPCODE.bite === 'object') {
+      const opObject = Object.keys(OPCODE.bite);
+      
+    }
   }
 
   get a() {
