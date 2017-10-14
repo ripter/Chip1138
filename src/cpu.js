@@ -1,7 +1,7 @@
 /**
  * Virtual CPU for the Gameboy Color; a modified z80
  */
-import { OPCODE } from '../const/asm.js';
+// import { OPCODE } from '../const/opcode.js';
 
 class CPU {
   constructor() {
@@ -10,39 +10,40 @@ class CPU {
     this.memory16bit = new Uint16Array(5);
   }
 
-  processOpcode(bite) {
-    if (OPCODE.bite) {
-      const counter = OPCODE.bite.argLength;
-      const cycle = OPCODE.bite.cycles;
-      let reg;
-      if (counter) {
-        switch(bite) {
-          case 0x1c:
-            reg = 'b';
-            break;
-          case 0x0e:
-            reg = 'c';
-            break;
-          case 0x16:
-            reg = 'd';
-            break;
-          case 0x1e:
-            reg = 'e';
-            break;
-          case 0x26:
-            reg = 'h';
-            break;
-          case 0x2e:
-            reg = 'l';
-            break;
-          default:
-            break;
-        }
-      }
-    }
-    else if (counter > 0){
-      this[reg] = bite;
-    }
+  processOpcode(opcode) {
+    return opcode; // TEMP: So Chris can write some tests
+    // if (OPCODE.bite) {
+    //   const counter = OPCODE.bite.argLength;
+    //   const cycle = OPCODE.bite.cycles;
+    //   let reg;
+    //   if (counter) {
+    //     switch(bite) {
+    //       case 0x1c:
+    //         reg = 'b';
+    //         break;
+    //       case 0x0e:
+    //         reg = 'c';
+    //         break;
+    //       case 0x16:
+    //         reg = 'd';
+    //         break;
+    //       case 0x1e:
+    //         reg = 'e';
+    //         break;
+    //       case 0x26:
+    //         reg = 'h';
+    //         break;
+    //       case 0x2e:
+    //         reg = 'l';
+    //         break;
+    //       default:
+    //         break;
+    //     }
+    //   }
+    // }
+    // else if (counter > 0){
+    //   this[reg] = bite;
+    // }
   }
 
   get a() {
