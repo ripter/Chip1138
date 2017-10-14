@@ -11,10 +11,37 @@ class CPU {
   }
 
   processOpcode(bite) {
-    let counter;
-    if (typeof OPCODE.bite === 'object') {
-      const opObject = Object.keys(OPCODE.bite);
-      
+    if (OPCODE.bite) {
+      const counter = OPCODE.bite.argLength;
+      const cycle = OPCODE.bite.cycles;
+      let reg;
+      if (counter) {
+        switch(bite) {
+          case 0x1c:
+            reg = 'b';
+            break;
+          case 0x0e:
+            reg = 'c';
+            break;
+          case 0x16:
+            reg = 'd';
+            break;
+          case 0x1e:
+            reg = 'e';
+            break;
+          case 0x26:
+            reg = 'h';
+            break;
+          case 0x2e:
+            reg = 'l';
+            break;
+          default:
+            break;
+        }
+      }
+    }
+    else if (counter > 0){
+      this[reg] = bite;
     }
   }
 
