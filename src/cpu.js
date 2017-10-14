@@ -1,11 +1,48 @@
 /**
  * Virtual CPU for the Gameboy Color; a modified z80
  */
+import { OPCODE } from '../const/asm.js';
+
 class CPU {
   constructor() {
     // Create the memory banks
     this.memory8bit = new Uint8Array(18);
     this.memory16bit = new Uint16Array(5);
+  }
+
+  processOpcode(bite) {
+    if (OPCODE.bite) {
+      const counter = OPCODE.bite.argLength;
+      const cycle = OPCODE.bite.cycles;
+      let reg;
+      if (counter) {
+        switch(bite) {
+          case 0x1c:
+            reg = 'b';
+            break;
+          case 0x0e:
+            reg = 'c';
+            break;
+          case 0x16:
+            reg = 'd';
+            break;
+          case 0x1e:
+            reg = 'e';
+            break;
+          case 0x26:
+            reg = 'h';
+            break;
+          case 0x2e:
+            reg = 'l';
+            break;
+          default:
+            break;
+        }
+      }
+    }
+    else if (counter > 0){
+      this[reg] = bite;
+    }
   }
 
   get a() {
@@ -18,7 +55,6 @@ class CPU {
   get b() {
     return this.memory8bit[1];
   }
-
   set b(value) {
     this.memory8bit[1] = value;
   }
@@ -26,7 +62,6 @@ class CPU {
   get c() {
     return this.memory8bit[2];
   }
-
   set c(value) {
     this.memory8bit[2] = value;
   }
@@ -34,7 +69,6 @@ class CPU {
   get d() {
     return this.memory8bit[3];
   }
-
   set d(value) {
     this.memory8bit[3] = value;
   }
@@ -42,7 +76,6 @@ class CPU {
   get e() {
     return this.memory8bit[4];
   }
-
   set e(value) {
     this.memory8bit[4] = value;
   }
@@ -50,7 +83,6 @@ class CPU {
   get f() {
     return this.memory8bit[5];
   }
-
   set f(value) {
     this.memory8bit[5] = value;
   }
@@ -58,7 +90,6 @@ class CPU {
   get l() {
     return this.memory8bit[6];
   }
-
   set l(value) {
     this.memory8bit[6] = value;
   }
@@ -66,7 +97,6 @@ class CPU {
   get h() {
     return this.memory8bit[7];
   }
-
   set h(value) {
     this.memory8bit[7] = value;
   }
