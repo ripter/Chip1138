@@ -2,7 +2,7 @@ export const LD {
 
 };
 
-export opcodes {
+export const opcodes = {
    0x06: {
      asm: 'LD B, d8; load the next 8bit value into register b',
      parameterCount: 1,
