@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "document-register-element": "^1.7.0",
+    "lodash.filter": "^4.6.0",
     "mocha": "^3.5.3"
   }
 }
