@@ -1,17 +1,43 @@
 /**
  * Virtual CPU for the Gameboy Color; a modified z80
  */
-// import { OPCODE } from '../const/opcode.js';
+import { OPCODE } from '../const/opcode.js';
 
 class CPU {
   constructor() {
     // Create the memory banks
     this.memory8bit = new Uint8Array(18);
     this.memory16bit = new Uint16Array(5);
+
+    // an array to store the opcodes in between calls in order to know how to process
+    this.opcodeArray = [];
+
   }
 
   processOpcode(opcode) {
-    return opcode; // TEMP: So Chris can write some tests
+    this.opcodeArray.push(opcode);
+
+    if (this.opcodeArray.length === 2) {
+      const currentOpcode = OPCODE[this.opcodeArray[0]];
+      const data = this.opcodeArray[1];
+      this[currentOpcode.operand1.toLowerCase()] = data;
+
+      this.opcodeArray = [];
+      return data;
+    }
+
+    // if (OPCODE[opcode] ) {
+    //   const { addr, length, mnemonic, operand1, operand2 } = OPCODE[opcode];
+    //
+    //   this[operand1.toLowerCase()] = getNextCode();
+    //   console.log(operand1.toLowerCase());
+    //   console.log(getNextCode(length));
+    //   console.log('=== data ===')
+    //   console.log(this[operand1.toLowerCase()])
+    //   // this.length--;
+    // }
+
+
     // if (OPCODE.bite) {
     //   const counter = OPCODE.bite.argLength;
     //   const cycle = OPCODE.bite.cycles;
