@@ -23,53 +23,7 @@ class CPU {
       this[currentOpcode.operand1.toLowerCase()] = data;
 
       this.opcodeArray = [];
-      return data;
     }
-
-    // if (OPCODE[opcode] ) {
-    //   const { addr, length, mnemonic, operand1, operand2 } = OPCODE[opcode];
-    //
-    //   this[operand1.toLowerCase()] = getNextCode();
-    //   console.log(operand1.toLowerCase());
-    //   console.log(getNextCode(length));
-    //   console.log('=== data ===')
-    //   console.log(this[operand1.toLowerCase()])
-    //   // this.length--;
-    // }
-
-
-    // if (OPCODE.bite) {
-    //   const counter = OPCODE.bite.argLength;
-    //   const cycle = OPCODE.bite.cycles;
-    //   let reg;
-    //   if (counter) {
-    //     switch(bite) {
-    //       case 0x1c:
-    //         reg = 'b';
-    //         break;
-    //       case 0x0e:
-    //         reg = 'c';
-    //         break;
-    //       case 0x16:
-    //         reg = 'd';
-    //         break;
-    //       case 0x1e:
-    //         reg = 'e';
-    //         break;
-    //       case 0x26:
-    //         reg = 'h';
-    //         break;
-    //       case 0x2e:
-    //         reg = 'l';
-    //         break;
-    //       default:
-    //         break;
-    //     }
-    //   }
-    // }
-    // else if (counter > 0){
-    //   this[reg] = bite;
-    // }
   }
 
   get a() {
