@@ -24,7 +24,7 @@ describe('CPU can run OPCODES:', () => {
 
       console.log(mnemonic, operand1);
       it(`${mnemonic} ${operand1}, ${randomByte}; loads ${randomByte} into register ${register}`, () => {
-        cpu.processOpcode(addr);
+        cpu.processOpcode(parseInt(addr, 16));
         cpu.processOpcode(randomByte);
         expect(cpu[register]).to.eql(randomByte);
       });
