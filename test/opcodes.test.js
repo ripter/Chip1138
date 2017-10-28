@@ -50,7 +50,13 @@ describe('CPU can run OPCODES:', () => {
         cpu[register2] = 0x1;
         cpu[register] = 0x2;
         cpu.processOpcode(parseInt(addr, 16));
-        expect(cpu[register]).to.eql(0x3);
+
+        if (register === register2) {
+          expect(cpu[register]).to.eql(0x4);
+        }
+        else {
+          expect(cpu[register]).to.eql(0x3);
+        }
       });
     });
 
