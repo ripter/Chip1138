@@ -26,7 +26,6 @@ class CPU {
 
     // Check our opcode's length...
     const sortOpcodes = () => {
-      // console.log(OPCODE[opKey]);
 
       if (length === 1) {
         if (regValue1 === regValue2 ) {
