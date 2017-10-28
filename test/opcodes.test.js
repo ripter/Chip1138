@@ -60,11 +60,33 @@ describe('CPU can run OPCODES:', () => {
       });
     });
 
-    it.skip('ADD 255, 255; Sets the carry flag', () => {
+    it('ADD 255, 255; Sets the carry flag', () => {
       const opcodes = [
         0x3e, 0xff,  // LD a, 255
-        0x87, // ADD a,a;
+        0x87,        // ADD a,a;
       ];
+
+      // run the opcodes
+      opcodes.forEach(function(opcode) {
+        cpu.processOpcode(opcode);
+      });
+
+      expect(cpu.f & 0b1).to.eql(1);
+    });
+
+    it('ADD 255, 254; Unsets the carry flag', () => {
+      const opcodes = [
+        0x3e, 0xff, // LD a, 255
+        0x6, 0xf2,  // LD b, 254
+        0x80,       // ADD a, b
+      ];
+
+      // run the opcodes
+      opcodes.forEach(function(opcode) {
+        cpu.processOpcode(opcode);
+      });
+
+      expect(cpu.f & 0b1).to.eql(0);
     });
   }); // ADD
 
