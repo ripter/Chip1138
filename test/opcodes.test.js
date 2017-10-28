@@ -58,12 +58,21 @@ describe('CPU can run OPCODES:', () => {
           expect(cpu[register]).to.eql(0x3);
         }
       });
+
+      it(`${mnemonic} ${operand1}, ${operand2}; Clears the Add/Subtract Flag n [${addr}]`, () => {
+        // Set values we want to add together
+        cpu[register2] = 0x1;
+        cpu[register] = 0x2;
+        cpu.processOpcode(parseInt(addr, 16));
+
+        expect(cpu.f & 0b10).to.eql(0);
+      });
     });
 
     it('ADD 255, 255; Sets the carry flag', () => {
       const opcodes = [
-        0x3e, 0xff,  // LD a, 255
-        0x87,        // ADD a,a;
+        0x3e, 0xff,  // LD  a, 255
+        0x87,        // ADD a, a
       ];
 
       // run the opcodes
@@ -76,8 +85,8 @@ describe('CPU can run OPCODES:', () => {
 
     it('ADD 255, 254; Unsets the carry flag', () => {
       const opcodes = [
-        0x3e, 0xff, // LD a, 255
-        0x6, 0xf2,  // LD b, 254
+        0x3e, 0xff, // LD  a, 255
+        0x6, 0xf2,  // LD  b, 254
         0x80,       // ADD a, b
       ];
 
