@@ -23,7 +23,7 @@ describe('CPU can run OPCODES:', () => {
       const { addr, length, mnemonic, operand1 } = opcode;
       const register = operand1.toLowerCase();
 
-      it(`${mnemonic} ${operand1}, ${randomByte}; loads ${randomByte} into register ${register}`, () => {
+      it(`${mnemonic} ${operand1}, ${randomByte}; loads ${randomByte} into register ${register}  [${addr}]`, () => {
         cpu.processOpcode(parseInt(addr, 16));
         cpu.processOpcode(randomByte);
         expect(cpu[register]).to.eql(randomByte);
@@ -45,13 +45,20 @@ describe('CPU can run OPCODES:', () => {
       const register = operand1.toLowerCase();
       const register2 = operand2.toLowerCase();
 
-      it(`${mnemonic} ${operand1}, ${operand2}; Adds register ${register2} to register ${register}`, () => {
+      it(`${mnemonic} ${operand1}, ${operand2}; Adds register ${register2} to register ${register} [${addr}]`, () => {
         // Set values we want to add together
         cpu[register2] = 0x1;
         cpu[register] = 0x2;
         cpu.processOpcode(parseInt(addr, 16));
         expect(cpu[register]).to.eql(0x3);
       });
+    });
+
+    it.skip('ADD 255, 255; Sets the carry flag', () => {
+      const opcodes = [
+        0x3e, 0xff,  // LD a, 255
+        0x87, // ADD a,a;
+      ];
     });
   }); // ADD
 
