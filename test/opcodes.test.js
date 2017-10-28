@@ -20,7 +20,7 @@ describe('CPU can run OPCODES:', () => {
     // test that each opcode can load an 8-bit value into a register
     loadOpcodes.forEach(function(opcode) {
       const randomByte = 0|Math.random()*256;
-      const { addr, length, mnemonic, operand1 } = opcode;
+      const { addr, mnemonic, operand1 } = opcode;
       const register = operand1.toLowerCase();
 
       it(`${mnemonic} ${operand1}, ${randomByte}; loads ${randomByte} into register ${register}  [${addr}]`, () => {
@@ -41,7 +41,7 @@ describe('CPU can run OPCODES:', () => {
 
 
     loadOpcodes.forEach(function(opcode) {
-      const { addr, length, mnemonic, operand1, operand2 } = opcode;
+      const { addr, mnemonic, operand1, operand2 } = opcode;
       const register = operand1.toLowerCase();
       const register2 = operand2.toLowerCase();
 
@@ -71,8 +71,8 @@ describe('CPU can run OPCODES:', () => {
 
     it('ADD 255, 255; Sets the carry flag', () => {
       const opcodes = [
-        0x3e, 0xff,  // LD  a, 255
-        0x87,        // ADD a, a
+        0x3e, 0xff, // LD  a, 255
+        0x87, // ADD a, a
       ];
 
       // run the opcodes
@@ -86,8 +86,8 @@ describe('CPU can run OPCODES:', () => {
     it('ADD 255, 254; Unsets the carry flag', () => {
       const opcodes = [
         0x3e, 0xff, // LD  a, 255
-        0x6, 0xf2,  // LD  b, 254
-        0x80,       // ADD a, b
+        0x6, 0xf2, // LD  b, 254
+        0x80, // ADD a, b
       ];
 
       // run the opcodes

@@ -20,7 +20,7 @@ plop: node_modules/
 	npx plop
 
 lint: node_modules/
-	npx eslint src/
+	npx eslint src/ test/
 
 test: lint
 	npx mocha --opts mocha.ops
