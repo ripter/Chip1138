@@ -69,6 +69,14 @@ describe('CPU can run OPCODES:', () => {
       });
     });
 
+    it(`ADD A, 0x33; Adds register a to register a [0xc6]`, () => {
+      cpu.a = 0x23;
+      cpu.processOpcode(0xc6);
+      cpu.processOpcode(0x33);
+
+      expect(cpu.a).to.eql(0x56);
+    });
+
     it('ADD 255, 255; Sets the carry flag', () => {
       const opcodes = [
         0x3e, 0xff, // LD  a, 255
