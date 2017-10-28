@@ -17,13 +17,45 @@ class CPU {
   processOpcode(opcode) {
     this.opcodeArray.push(opcode);
 
-    if (this.opcodeArray.length === 2) {
-      const currentOpcode = OPCODE[this.opcodeArray[0]];
-      const data = this.opcodeArray[1];
-      this[currentOpcode.operand1.toLowerCase()] = data;
+    // our object key for the table
+    const opKey = this.opcodeArray[0];
+    const {length, operand1, operand2} = OPCODE[opKey];
 
-      this.opcodeArray = [];
-    }
+    const regValue1 = this[operand1.toLowerCase()];
+    const regValue2 = this[operand2.toLowerCase()];
+
+    // Check our opcode's length...
+    const sortOpcodes = () => {
+      console.log(OPCODE[opKey]);
+
+      if (length === 1) {
+        if (regValue1 === regValue2 ) {
+          this[operand1.toLowerCase()] = regValue1;
+        }
+        this[operand1.toLowerCase()] = regValue1 + regValue2;
+      }
+
+      if (length === 2 && this.opcodeArray.length === 2) {
+        if (this.opcodeArray.length === 2) {
+          const data = this.opcodeArray[1];
+
+          this[operand1.toLowerCase()] = data;
+          this.opcodeArray.length = 0;
+        }
+      }
+    };
+
+    sortOpcodes();
+
+    // if (this.opcodeArray.length === 2) {
+    //   const currentOpcode = OPCODE[this.opcodeArray[0]];
+    //   const data = this.opcodeArray[1];
+    //   this[currentOpcode.operand1.toLowerCase()] = data;
+    //
+    //   // The preferred method to empty an array. As opposed to
+    //   // this.opcodeArray = [], which is creating a new, empty array.
+    //   this.opcodeArray.length = 0;
+    // }
   }
 
   get a() {
