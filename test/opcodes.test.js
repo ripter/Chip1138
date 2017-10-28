@@ -104,5 +104,4 @@ describe('CPU can run OPCODES:', () => {
       expect(cpu.f & 0b1).to.eql(0);
     });
   }); // ADD
-
 });

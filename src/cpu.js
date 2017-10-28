@@ -26,7 +26,6 @@ class CPU {
 
     // Check our opcode's length...
     const sortOpcodes = () => {
-
       if (length === 1) {
         if (regValue1 === regValue2 ) {
           this[operand1.toLowerCase()] = regValue1;
@@ -36,9 +35,13 @@ class CPU {
 
       if (length === 2 && this.opcodeArray.length === 2) {
         if (this.opcodeArray.length === 2) {
-          const data = this.opcodeArray[1];
+          let data = this.opcodeArray[1];
 
           this[operand1.toLowerCase()] = data;
+
+          data = data.toString();
+          data = parseInt(data, 2);
+          console.log('data', data)
           this.opcodeArray.length = 0;
         }
       }

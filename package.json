@@ -4,7 +4,7 @@
   "description": "A fantasy chip",
   "main": "src/index.js",
   "scripts": {
-    "test": "npm test"
+    "test": "make test"
   },
   "repository": {
     "type": "git",
