@@ -35,13 +35,18 @@ class CPU {
 
       if (length === 2 && this.opcodeArray.length === 2) {
         if (this.opcodeArray.length === 2) {
-          let data = this.opcodeArray[1];
+          const opcode2 = this.opcodeArray[1];
+          console.log(`Opcode ${opcode2}, `)
+          const data = this[operand1.toLowerCase()] + opcode2;
+          if (data > 0xff) {
+            console.log( `this "F" ${data}`);
+            this.f = 1;
+          }
 
           this[operand1.toLowerCase()] = data;
 
-          data = data.toString();
-          data = parseInt(data, 2);
-          console.log('data', data)
+
+          console.log('data', data, OPCODE[this.opcodeArray[0]]);
           this.opcodeArray.length = 0;
         }
       }
