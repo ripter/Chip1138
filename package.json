@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "",
-    "test": "npx mocha --require babel-register -R @ripter/mocha-reporter-blink1 "
+    "test": "npx mocha --opts mocha.ops -R @ripter/mocha-reporter-blink1"
   },
   "repository": {
     "type": "git",
