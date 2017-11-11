@@ -19,7 +19,7 @@ class CPU {
 
     // our object key for the table
     const opKey = this.opcodeArray[0];
-    const {length, operand1, operand2} = OPCODE[opKey];
+    const {length, operand1, operand2, mnemonic} = OPCODE[opKey];
 
     const regValue1 = this[operand1.toLowerCase()];
     const regValue2 = this[operand2.toLowerCase()];
@@ -27,6 +27,12 @@ class CPU {
     // Check our opcode's length...
     const sortOpcodes = () => {
       if (length === 1) {
+console.log('mnemonic', mnemonic)
+        if (mnemonic === 'SUB') {
+          const testVal = this[operand1.toLowerCase()];
+          console.log(testVal)
+        }
+
         if (regValue1 === regValue2 ) {
           this[operand1.toLowerCase()] = regValue1;
         }
