@@ -29,7 +29,7 @@ describe('CPU can run OPCODES:', () => {
         expect(cpu[register]).to.eql(randomByte);
       });
     });
-  });
+  }); // LD:
 
   describe('ADD:', () => {
     // Test ADD opcodes that add two registers together.
@@ -72,10 +72,10 @@ describe('CPU can run OPCODES:', () => {
     }); // end forEach
 
 
-    it('ADD A, 0x33; Adds register a to register a [0xc6]', () => {
+    it('ADD A, 0x33; Adds 51 to register a [0xc6]', () => {
       [
-        0x3e, 0x23, // LD  a, d8
-        0xc6, 0x33, // ADD a, d8
+        0x3e, 0x23, // LD  a, 23
+        0xc6, 0x33, // ADD a, 51
       ].forEach(cpu.processOpcode.bind(cpu));
 
       // 0x23 + 0x33 = 0x56
@@ -125,9 +125,43 @@ describe('CPU can run OPCODES:', () => {
 
       expect(cpu.f & 0b10).to.eql(0);
     });
+
+    // Subtract Flag (N):
+    // This bit is set if a subtraction was performed in the last math instruction.
+    it('ADD 1, 2 ; Clears the subtract flag', () => {
+      [
+        0x3e, 0x1, // LD  a, 1
+        0x6, 0x2, // LD  b, 2
+        0x80, // ADD a, b
+      ].forEach(cpu.processOpcode.bind(cpu));
+
+      expect(cpu.f & 0b100).to.eql(0);
+    });
+
+    // Zero Flag (Z):
+    // This bit is set when the result of a math operation is zero or two values match when using the CP instruction.
+    it('ADD 255, 1; Sets the zero flag', () => {
+      [
+        0x3e, 0xff, // LD  a, 255
+        0x6, 0x1, // LD  b, 1
+        0x80, // ADD a, b
+      ].forEach(cpu.processOpcode.bind(cpu));
+
+      expect(cpu.f & 0b1000).to.eql(1);
+    });
+
+    it('ADD 1, 2; Clears the zero flag', () => {
+      [
+        0x3e, 0x1, // LD  a, 1
+        0x16, 0x2, // LD  d, 2
+        0x82, // ADD a, d
+      ].forEach(cpu.processOpcode.bind(cpu));
+
+      expect(cpu.f & 0b1000).to.eql(0);
+    });
   }); // ADD
 
-  describe.skip('SUB:', () => {
+  describe('SUB:', () => {
     loadOpcodes = filter(OPCODE, {mnemonic: 'SUB', length: 1});
     loadOpcodes = filter(loadOpcodes, ({operand1}) => operand1.length === 1);
     loadOpcodes.forEach(function(opcode) {
@@ -153,6 +187,28 @@ describe('CPU can run OPCODES:', () => {
       });
     }); // end forEach opcode
 
+    // Carry Flag (C):
+    // This bit is set if a carry occurred from the last math operation or if register A is the smaller value when executing the CP instruction.
+    it('SUB 255, 255; Sets the carry flag', () => {
+      [
+        0x3e, 0xff, // LD  a, 255
+        0x97, // SUB a, a
+      ].forEach(cpu.processOpcode.bind(cpu));
+
+      // Check that the Carry flag has been set
+      expect(cpu.f & 0b1).to.eql(1);
+    });
+
+    it('SUB 255, 254; Unsets the carry flag', () => {
+      [
+        0x3e, 0xff, // LD  a, 255
+        0x6, 0xf2, // LD  b, 254
+        0x90, // SUB a, b
+      ].forEach(cpu.processOpcode.bind(cpu));
+
+      expect(cpu.f & 0b1).to.eql(0);
+    });
+
     // Half Carry Flag (H):
     // This bit is set if a carry occurred from the lower nibble in the last math operation.
     it('SUB 62, 34; Sets the half-carry flag', () => {
@@ -173,6 +229,39 @@ describe('CPU can run OPCODES:', () => {
       ].forEach(cpu.processOpcode.bind(cpu));
 
       expect(cpu.f & 0b10).to.eql(0);
+    });
+
+    // Subtract Flag (N):
+    // This bit is set if a subtraction was performed in the last math instruction.
+    it('SUB 1, 2; Sets the subtract flag', () => {
+      [
+        0x3e, 0x1, // LD  a, 1
+        0x6, 0x2, // LD  b, 2
+        0x90, // ADD a, b
+      ].forEach(cpu.processOpcode.bind(cpu));
+
+      expect(cpu.f & 0b100).to.eql(1);
+    });
+
+    // Zero Flag (Z):
+    // This bit is set when the result of a math operation is zero or two values match when using the CP instruction.
+    it('SUB 42, 42; Sets the zero flag', () => {
+      [
+        0x3e, 0x2a, // LD  a, 42
+        0x16, 0x2a, // LD  d, 42
+        0x92, // SUB a, d
+      ].forEach(cpu.processOpcode.bind(cpu));
+
+      expect(cpu.f & 0b1000).to.eql(1);
+    });
+
+    it('SUB 38, 26; Clears the zero flag', () => {
+      [
+        0x3e, 0x26, // LD  a, 38
+        0xd6, 0x1a // SUB a, 26
+      ].forEach(cpu.processOpcode.bind(cpu));
+
+      expect(cpu.f & 0b1000).to.eql(0);
     });
   }); // SUB
 });
