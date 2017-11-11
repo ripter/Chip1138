@@ -97,23 +97,39 @@ describe('CPU can run OPCODES:', () => {
     });
 
     it('ADD 255, 254; Unsets the carry flag', () => {
-      const opcodes = [
+      [
         0x3e, 0xff, // LD  a, 255
         0x6, 0xf2, // LD  b, 254
         0x80, // ADD a, b
-      ];
+      ].forEach(cpu.processOpcode.bind(cpu));
 
-      // run the opcodes
-      opcodes.forEach(function(opcode) {
-        cpu.processOpcode(opcode);
-      });
-
-      // Check that the Carry flag has been unset
       expect(cpu.f & 0b1).to.eql(0);
+    });
+
+    // Half Carry Flag (H):
+    // This bit is set if a carry occurred from the lower nibble in the last math operation.
+    it('ADD 62, 34; Sets the half-carry flag', () => {
+      [
+        0x3e, 0x3e, // LD  a, 62
+        0x6, 0x22, // LD  b, 34
+        0x80, // ADD a, b
+      ].forEach(cpu.processOpcode.bind(cpu));
+
+      expect(cpu.f & 0b10).to.eql(1);
+    });
+
+    it('ADD 62, 33; Clears the half-carry flag', () => {
+      [
+        0x3e, 0x3e, // LD  a, 62
+        0x6, 0x21, // LD  b, 33
+        0x80, // ADD a, b
+      ].forEach(cpu.processOpcode.bind(cpu));
+
+      expect(cpu.f & 0b10).to.eql(0);
     });
   }); // ADD
 
-  describe('SUB:', () => {
+  describe.skip('SUB:', () => {
     loadOpcodes = filter(OPCODE, {mnemonic: 'SUB', length: 1});
     loadOpcodes = filter(loadOpcodes, ({operand1}) => operand1.length === 1);
     loadOpcodes.forEach(function(opcode) {
@@ -139,5 +155,26 @@ describe('CPU can run OPCODES:', () => {
       });
     });
 
+    // Half Carry Flag (H):
+    // This bit is set if a carry occurred from the lower nibble in the last math operation.
+    it('SUB 62, 34; Sets the half-carry flag', () => {
+      [
+        0x3e, 0x3e, // LD  a, 62
+        0x6, 0x22, // LD  b, 34
+        0x90, // SUB a, b
+      ].forEach(cpu.processOpcode.bind(cpu));
+
+      expect(cpu.f & 0b10).to.eql(1);
+    });
+
+    it('ADD 62, 33; Clears the half-carry flag', () => {
+      [
+        0x3e, 0x3e, // LD  a, 62
+        0x6, 0x21, // LD  b, 33
+        0x90, // ADD a, b
+      ].forEach(cpu.processOpcode.bind(cpu));
+
+      expect(cpu.f & 0b10).to.eql(0);
+    });
   }); // SUB
 });
