@@ -1,8 +1,4 @@
 export const OPCODE = {
-  /*
-  * LD; Load Instruction
-  */
-
   // Length: 1
   0x2: {
     mnemonic: 'LD',
