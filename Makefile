@@ -20,10 +20,14 @@ plop: node_modules/
 	npx plop
 
 lint: node_modules/
-	npx eslint src/
+	npx eslint src/ test/
 
 test: lint
 	npx mocha --opts mocha.ops
 
 test.only:
 	npx mocha --opts mocha.ops
+
+test.blink:
+	# npx mocha --opts mocha.ops --require babel-register
+	mocha -R @ripter/mocha-reporter-blink1

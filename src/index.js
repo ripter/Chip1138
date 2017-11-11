@@ -1,4 +1,16 @@
 import 'document-register-element';
+import CPU from './cpu.js';
+
+const cpu = new CPU();
+const opcodes = [
+  0x3e, 0xff, // LD  a, 255
+  0x87, // ADD a, a
+];
+
+// run the opcodes
+opcodes.forEach(function(opcode) {
+  cpu.processOpcode(opcode);
+});
 // import zelda from '../roms/zelda-la.json';
 //
 // const rom = window.rom = zelda;
