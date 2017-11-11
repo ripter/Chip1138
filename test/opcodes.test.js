@@ -83,14 +83,10 @@ describe('CPU can run OPCODES:', () => {
     // Carry Flag (C):
     // This bit is set if a carry occurred from the last math operation or if register A is the smaller value when executing the CP instruction.
     it('ADD 255, 255; Sets the carry flag', () => {
-      const opcodes = [
+      [
         0x3e, 0xff, // LD  a, 255
         0x87, // ADD a, a
-      ];
-      // run the opcodes
-      opcodes.forEach(function(opcode) {
-        cpu.processOpcode(opcode);
-      });
+      ].forEach(cpu.processOpcode.bind(cpu));
 
       // Check that the Carry flag has been set
       expect(cpu.f & 0b1).to.eql(1);
@@ -167,11 +163,11 @@ describe('CPU can run OPCODES:', () => {
       expect(cpu.f & 0b10).to.eql(1);
     });
 
-    it('ADD 62, 33; Clears the half-carry flag', () => {
+    it('SUB 62, 33; Clears the half-carry flag', () => {
       [
         0x3e, 0x3e, // LD  a, 62
         0x6, 0x21, // LD  b, 33
-        0x90, // ADD a, b
+        0x90, // SUB a, b
       ].forEach(cpu.processOpcode.bind(cpu));
 
       expect(cpu.f & 0b10).to.eql(0);
