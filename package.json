@@ -4,7 +4,8 @@
   "description": "A fantasy chip",
   "main": "src/index.js",
   "scripts": {
-    "test": "npm test"
+    "start": "",
+    "test": "npx mocha --opts mocha.ops -R @ripter/mocha-reporter-blink1"
   },
   "repository": {
     "type": "git",
@@ -30,6 +31,7 @@
   },
   "dependencies": {
     "@ripter/mocha-reporter-blink1": "0.0.1",
+    "babel-cli": "^6.26.0",
     "document-register-element": "^1.7.0",
     "lodash.filter": "^4.6.0",
     "mocha": "^3.5.3"

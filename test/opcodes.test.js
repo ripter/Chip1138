@@ -104,6 +104,7 @@ describe('CPU can run OPCODES:', () => {
       expect(cpu.f & 0b1).to.eql(0);
     });
   }); // ADD
+<<<<<<< HEAD
 
   describe('SUB:', () => {
     // Test LD opcodes that load from the next byte into a register.
@@ -133,4 +134,6 @@ describe('CPU can run OPCODES:', () => {
     });
 
   }); // SUB
+=======
+>>>>>>> master
 });
