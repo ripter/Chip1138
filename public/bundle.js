@@ -151,30 +151,52 @@ var CPU = function () {
       var _OPCODE$opKey = _opcode.OPCODE[opKey],
           length = _OPCODE$opKey.length,
           operand1 = _OPCODE$opKey.operand1,
-          operand2 = _OPCODE$opKey.operand2;
+          operand2 = _OPCODE$opKey.operand2,
+          mnemonic = _OPCODE$opKey.mnemonic;
 
 
       var regValue1 = this[operand1.toLowerCase()];
-      var regValue2 = this[operand2.toLowerCase()];
+      var regValue2 = void 0;
+
+      if (operand2) {
+        regValue2 = this[operand2.toLowerCase()];
+      }
 
       // Check our opcode's length...
       var sortOpcodes = function sortOpcodes() {
         if (length === 1) {
+          console.log('mnemonic', mnemonic);
+
           if (regValue1 === regValue2) {
             _this[operand1.toLowerCase()] = regValue1;
           }
           _this[operand1.toLowerCase()] = regValue1 + regValue2;
         }
 
+        if (mnemonic === 'SUB') {
+          _this.f = 3;
+          var testVal = _this[operand1.toLowerCase()];
+          console.log(testVal);
+        }
+
         if (length === 2 && _this.opcodeArray.length === 2) {
+
           if (_this.opcodeArray.length === 2) {
-            var data = _this.opcodeArray[1];
+            var opcode2 = _this.opcodeArray[1];
+
+            // console.log(`Opcode ${opcode2}, `)
+            var data = _this[operand1.toLowerCase()] + opcode2;
+            if (data >= 0xff) {
+              // console.log( `this "F" ${data}`);
+              _this.f = 1;
+            }
+            if (data < 0xff) {
+              // console.log( `this "F" ${data}`);
+              _this.f = 0;
+            }
 
             _this[operand1.toLowerCase()] = data;
-
-            data = data.toString();
-            data = parseInt(data, 2);
-            console.log('data', data);
+            // console.log('data', data, OPCODE[this.opcodeArray[0]]);
             _this.opcodeArray.length = 0;
           }
         }
@@ -374,10 +396,6 @@ exports.default = CPU;
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 const OPCODE = {
-  /*
-  * LD; Load Instruction
-  */
-
   // Length: 1
   0x2: {
     mnemonic: 'LD',
@@ -1497,6 +1515,102 @@ const OPCODE = {
     operand1: 'A',
     operand2: 'C'
   },
+  0x7a: {
+    mnemonic: 'LD',
+    length: 1,
+    cycles: [
+      4
+    ],
+    flags: [
+      '-',
+      '-',
+      '-',
+      '-'
+    ],
+    addr: '0x7a',
+    operand1: 'A',
+    operand2: 'D'
+  },
+  0x7b: {
+    mnemonic: 'LD',
+    length: 1,
+    cycles: [
+      4
+    ],
+    flags: [
+      '-',
+      '-',
+      '-',
+      '-'
+    ],
+    addr: '0x7b',
+    operand1: 'A',
+    operand2: 'E'
+  },
+  0x7c: {
+    mnemonic: 'LD',
+    length: 1,
+    cycles: [
+      4
+    ],
+    flags: [
+      '-',
+      '-',
+      '-',
+      '-'
+    ],
+    addr: '0x7c',
+    operand1: 'A',
+    operand2: 'H'
+  },
+  0x7d: {
+    mnemonic: 'LD',
+    length: 1,
+    cycles: [
+      4
+    ],
+    flags: [
+      '-',
+      '-',
+      '-',
+      '-'
+    ],
+    addr: '0x7d',
+    operand1: 'A',
+    operand2: 'L'
+  },
+  0x7e: {
+    mnemonic: 'LD',
+    length: 1,
+    cycles: [
+      8
+    ],
+    flags: [
+      '-',
+      '-',
+      '-',
+      '-'
+    ],
+    addr: '0x7e',
+    operand1: 'A',
+    operand2: '(HL)'
+  },
+  0x7f: {
+    mnemonic: 'LD',
+    length: 1,
+    cycles: [
+      4
+    ],
+    flags: [
+      '-',
+      '-',
+      '-',
+      '-'
+    ],
+    addr: '0x7f',
+    operand1: 'A',
+    operand2: 'A'
+  },
   0x80: {
     mnemonic: 'ADD',
     length: 1,
@@ -1625,101 +1739,125 @@ const OPCODE = {
     operand1: 'A',
     operand2: 'A'
   },
-  0x7a: {
-    mnemonic: 'LD',
+  0x90: {
+    mnemonic: 'SUB',
     length: 1,
     cycles: [
       4
     ],
     flags: [
-      '-',
-      '-',
-      '-',
-      '-'
+      'Z',
+      '1',
+      'H',
+      'C'
     ],
-    addr: '0x7a',
-    operand1: 'A',
-    operand2: 'D'
+    addr: '0x90',
+    operand1: 'B'
   },
-  0x7b: {
-    mnemonic: 'LD',
+  0x91: {
+    mnemonic: 'SUB',
     length: 1,
     cycles: [
       4
     ],
     flags: [
-      '-',
-      '-',
-      '-',
-      '-'
+      'Z',
+      '1',
+      'H',
+      'C'
     ],
-    addr: '0x7b',
-    operand1: 'A',
-    operand2: 'E'
+    addr: '0x91',
+    operand1: 'C'
   },
-  0x7c: {
-    mnemonic: 'LD',
+  0x92: {
+    mnemonic: 'SUB',
     length: 1,
     cycles: [
       4
     ],
     flags: [
-      '-',
-      '-',
-      '-',
-      '-'
+      'Z',
+      '1',
+      'H',
+      'C'
     ],
-    addr: '0x7c',
-    operand1: 'A',
-    operand2: 'H'
+    addr: '0x92',
+    operand1: 'D'
   },
-  0x7d: {
-    mnemonic: 'LD',
+  0x93: {
+    mnemonic: 'SUB',
     length: 1,
     cycles: [
       4
     ],
     flags: [
-      '-',
-      '-',
-      '-',
-      '-'
+      'Z',
+      '1',
+      'H',
+      'C'
     ],
-    addr: '0x7d',
-    operand1: 'A',
-    operand2: 'L'
+    addr: '0x93',
+    operand1: 'E'
   },
-  0x7e: {
-    mnemonic: 'LD',
+  0x94: {
+    mnemonic: 'SUB',
+    length: 1,
+    cycles: [
+      4
+    ],
+    flags: [
+      'Z',
+      '1',
+      'H',
+      'C'
+    ],
+    addr: '0x94',
+    operand1: 'H'
+  },
+  0x95: {
+    mnemonic: 'SUB',
+    length: 1,
+    cycles: [
+      4
+    ],
+    flags: [
+      'Z',
+      '1',
+      'H',
+      'C'
+    ],
+    addr: '0x95',
+    operand1: 'L'
+  },
+  0x96: {
+    mnemonic: 'SUB',
     length: 1,
     cycles: [
       8
     ],
     flags: [
-      '-',
-      '-',
-      '-',
-      '-'
+      'Z',
+      '1',
+      'H',
+      'C'
     ],
-    addr: '0x7e',
-    operand1: 'A',
-    operand2: '(HL)'
+    addr: '0x96',
+    operand1: '(HL)'
   },
-  0x7f: {
-    mnemonic: 'LD',
+  0x97: {
+    mnemonic: 'SUB',
     length: 1,
     cycles: [
       4
     ],
     flags: [
-      '-',
-      '-',
-      '-',
-      '-'
+      'Z',
+      '1',
+      'H',
+      'C'
     ],
-    addr: '0x7f',
-    operand1: 'A',
-    operand2: 'A'
+    addr: '0x97',
+    operand1: 'A'
   },
   0xf9: {
     mnemonic: 'LD',
@@ -1882,6 +2020,21 @@ const OPCODE = {
     addr: '0x3e',
     operand1: 'A',
     operand2: 'd8'
+  },
+  0xd6: {
+    mnemonic: 'SUB',
+    length: 2,
+    cycles: [
+      8
+    ],
+    flags: [
+      'Z',
+      '1',
+      'H',
+      'C'
+    ],
+    addr: '0xd6',
+    operand1: 'd8'
   },
   0xe0: {
     mnemonic: 'LDH',
@@ -2807,126 +2960,7 @@ addr: '0x8f',
 operand1: 'A',
 operand2: 'A'
 },
-0x90: {
-mnemonic: 'SUB',
-length: 1,
-cycles: [
-4
-],
-flags: [
-'Z',
-'1',
-'H',
-'C'
-],
-addr: '0x90',
-operand1: 'B'
-},
-0x91: {
-mnemonic: 'SUB',
-length: 1,
-cycles: [
-4
-],
-flags: [
-'Z',
-'1',
-'H',
-'C'
-],
-addr: '0x91',
-operand1: 'C'
-},
-0x92: {
-mnemonic: 'SUB',
-length: 1,
-cycles: [
-4
-],
-flags: [
-'Z',
-'1',
-'H',
-'C'
-],
-addr: '0x92',
-operand1: 'D'
-},
-0x93: {
-mnemonic: 'SUB',
-length: 1,
-cycles: [
-4
-],
-flags: [
-'Z',
-'1',
-'H',
-'C'
-],
-addr: '0x93',
-operand1: 'E'
-},
-0x94: {
-mnemonic: 'SUB',
-length: 1,
-cycles: [
-4
-],
-flags: [
-'Z',
-'1',
-'H',
-'C'
-],
-addr: '0x94',
-operand1: 'H'
-},
-0x95: {
-mnemonic: 'SUB',
-length: 1,
-cycles: [
-4
-],
-flags: [
-'Z',
-'1',
-'H',
-'C'
-],
-addr: '0x95',
-operand1: 'L'
-},
-0x96: {
-mnemonic: 'SUB',
-length: 1,
-cycles: [
-8
-],
-flags: [
-'Z',
-'1',
-'H',
-'C'
-],
-addr: '0x96',
-operand1: '(HL)'
-},
-0x97: {
-mnemonic: 'SUB',
-length: 1,
-cycles: [
-4
-],
-flags: [
-'Z',
-'1',
-'H',
-'C'
-],
-addr: '0x97',
-operand1: 'A'
-},
+
 0x98: {
 mnemonic: 'SBC',
 length: 1,
@@ -3850,21 +3884,7 @@ flags: [
 addr: '0xd5',
 operand1: 'DE'
 },
-0xd6: {
-mnemonic: 'SUB',
-length: 2,
-cycles: [
-8
-],
-flags: [
-'Z',
-'1',
-'H',
-'C'
-],
-addr: '0xd6',
-operand1: 'd8'
-},
+
 0xd7: {
 mnemonic: 'RST',
 length: 1,
