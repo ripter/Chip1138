@@ -4,8 +4,13 @@
   "description": "A fantasy chip",
   "main": "src/index.js",
   "scripts": {
+    "cover": "./node_modules/istanbul/lib/cli.js cover _mocha",
     "start": "",
-    "test": "npx mocha --opts mocha.ops -R @ripter/mocha-reporter-blink1"
+    "clean": "rm -rf node_modules dist",
+    "build": "npm run clean && npm i && webpack -p",
+    "dev": "webpack --progress --colors -d --watch",
+    "lint": "",
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -20,12 +25,16 @@
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
+    "babel-plugin-istanbul": "^3.0.0",
     "babel-preset-env": "^1.6.0",
+    "coveralls": "^2.11.15",
     "eslint": "^4.7.2",
     "expect.js": "^0.3.1",
     "jsdom": "11.3.0",
     "jsdom-global": "3.0.2",
-    "plop": "^1.8.1",
+    "istanbul": "^0.4.5",
+    "mocha-lcov-reporter": "^1.2.0",
+    "nyc": "^10.0.0-candidate.2",
     "webpack": "^3.6.0",
     "webpack-dev-server": "^2.8.2"
   },
