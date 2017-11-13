@@ -174,9 +174,9 @@ var CPU = function () {
         }
 
         if (mnemonic === 'SUB') {
-          _this.f = 3;
+          _this.f = 4;
           var testVal = _this[operand1.toLowerCase()];
-          console.log(testVal);
+          console.log('SUB', testVal, _this.f);
         }
 
         if (length === 2 && _this.opcodeArray.length === 2) {

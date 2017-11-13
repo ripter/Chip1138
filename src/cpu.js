@@ -39,10 +39,11 @@ class CPU {
         this[operand1.toLowerCase()] = regValue1 + regValue2;
       }
 
+
       if (mnemonic === 'SUB') {
-        this.f = 0b11;
+        this.f = 0b100;
         const testVal = this[operand1.toLowerCase()];
-        console.log(testVal)
+        console.log('SUB', testVal, this.f)
       }
 
       if (length === 2 && this.opcodeArray.length === 2) {
