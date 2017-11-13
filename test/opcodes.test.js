@@ -104,4 +104,33 @@ describe('CPU can run OPCODES:', () => {
       expect(cpu.f & 0b1).to.eql(0);
     });
   }); // ADD
+
+  describe('SUB:', () => {
+    // Test LD opcodes that load from the next byte into a register.
+    loadOpcodes = filter(OPCODE, {mnemonic: 'SUB', length: 1});
+    // temp limit to single register
+    loadOpcodes = filter(loadOpcodes, ({operand1}) => operand1.length === 1);
+
+    loadOpcodes.forEach(function(opcode) {
+      const { addr, mnemonic, operand1 } = opcode;
+      const register = operand1.toLowerCase();
+
+      it(`${mnemonic} A, ${operand1}; Subtracts register ${register} from register a [${addr}]`, () => {
+        cpu.a = 0x29;
+        cpu[register] = 0x11;
+        cpu.processOpcode(parseInt(addr, 16));
+
+        expect(cpu[register]).to.eql(0x18);
+      });
+
+      it(`${mnemonic} A, ${operand1}; Sets the Add/Subtract Flag n [${addr}]`, () => {
+        cpu.a = 0x29;
+        cpu[register] = 0x11;
+        cpu.processOpcode(parseInt(addr, 16));
+
+        expect(cpu.f & 0b10).to.eql(1);
+      });
+    });
+
+  }); // SUB
 });
