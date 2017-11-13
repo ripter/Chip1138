@@ -137,6 +137,7 @@ var CPU = function () {
 
     // an array to store the opcodes in between calls in order to know how to process
     this.opcodeArray = [];
+    this.data = 0;
   }
 
   _createClass(CPU, [{
@@ -165,7 +166,7 @@ var CPU = function () {
       // Check our opcode's length...
       var sortOpcodes = function sortOpcodes() {
         if (length === 1) {
-          console.log('mnemonic', mnemonic);
+          // console.log('mnemonic', mnemonic);
 
           if (regValue1 === regValue2) {
             _this[operand1.toLowerCase()] = regValue1;
@@ -173,10 +174,18 @@ var CPU = function () {
           _this[operand1.toLowerCase()] = regValue1 + regValue2;
         }
 
+        /*
+        /* fullCarry: 0b1
+        /* halfCarry: 0b10
+        /* subtract: 0b100
+        /* zero: 0b1000
+         */
         if (mnemonic === 'SUB') {
           _this.f = 4;
-          var testVal = _this[operand1.toLowerCase()];
-          console.log('SUB', testVal, _this.f);
+          console.log('f reg === ' + _this.f);
+          var subSum = _this[operand1.toLowerCase()];
+          _this[operand1.toLowerCase()] = subSum;
+          // console.log('SUB', testVal, this.f);
         }
 
         if (length === 2 && _this.opcodeArray.length === 2) {
@@ -185,12 +194,16 @@ var CPU = function () {
             var opcode2 = _this.opcodeArray[1];
 
             // console.log(`Opcode ${opcode2}, `)
-            var data = _this[operand1.toLowerCase()] + opcode2;
-            if (data >= 0xff) {
+            if (mnemonic === 'ADD') {
+              _this.data = _this[operand1.toLowerCase()] + opcode2;
+            }
+
+            if (_this.data >= 0xff) {
               // console.log( `this "F" ${data}`);
               _this.f = 1;
             }
-            if (data < 0xff) {
+
+            if (_this.data < 0xff) {
               // console.log( `this "F" ${data}`);
               _this.f = 0;
             }

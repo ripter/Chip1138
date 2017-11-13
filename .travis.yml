@@ -1,9 +1,13 @@
 language: node_js
 node_js:
+<<<<<<< HEAD
   - "9.0"
+=======
+  - "9.0.0"
+>>>>>>> edited travis.yml to try to get things installed, oh, that wont work...
 before_script:
-  - npm i -g istanbul
+  # - npm i -g istanbul
 script: npm run build
 after_success:
-  - npm run coveralls
+  # - npm run coveralls
 sudo: false
