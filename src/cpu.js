@@ -31,7 +31,7 @@ class CPU {
     // Check our opcode's length...
     const sortOpcodes = () => {
       if (length === 1) {
-        console.log('mnemonic', mnemonic)
+        // console.log('mnemonic', mnemonic);
 
         if (regValue1 === regValue2 ) {
           this[operand1.toLowerCase()] = regValue1;
@@ -42,8 +42,8 @@ class CPU {
 
       if (mnemonic === 'SUB') {
         this.f = 0b100;
-        const testVal = this[operand1.toLowerCase()];
-        console.log('SUB', testVal, this.f)
+        // const testVal = this[operand1.toLowerCase()];
+        // console.log('SUB', testVal, this.f);
       }
 
       if (length === 2 && this.opcodeArray.length === 2) {
