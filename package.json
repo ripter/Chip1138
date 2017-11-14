@@ -7,7 +7,7 @@
     "cover": "./node_modules/istanbul/lib/cli.js cover _mocha",
     "start": "",
     "clean": "rm -rf node_modules dist",
-    "build": "npm run clean && npm i && webpack -p",
+    "build": "npm run clean && npm i && npm run lint && npm test && webpack -p --progress --colors",
     "dev": "webpack --progress --colors -d --watch",
     "lint": "",
     "test": "mocha"
