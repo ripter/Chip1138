@@ -3,7 +3,7 @@ node_js:
   - "9.0.0"
 add_ons:
   apt:
-    package:
+    packages:
       - libusb-1.0.0-dev
       - python-btchip
 before_install:
