@@ -258,7 +258,7 @@ describe('CPU can run OPCODES:', () => {
     it('SUB 38, 26; Clears the zero flag', () => {
       [
         0x3e, 0x26, // LD  a, 38
-        0xd6, 0x1a // SUB a, 26
+        0xd6, 0x1a, // SUB a, 26
       ].forEach(cpu.processOpcode.bind(cpu));
 
       expect(cpu.f & 0b1000).to.eql(0);

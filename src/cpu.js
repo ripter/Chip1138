@@ -48,7 +48,7 @@ class CPU {
        */
       if (mnemonic === 'SUB') {
         this.f = 0b100;
-        console.log(`f reg === ${this.f}`);
+        // console.log(`f reg === ${this.f}`);
         const subSum = this[operand1.toLowerCase()];
         this[operand1.toLowerCase()] = subSum;
         // console.log('SUB', testVal, this.f);
