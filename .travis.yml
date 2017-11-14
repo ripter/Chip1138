@@ -7,7 +7,7 @@ add_ons:
       - libusb-1.0.0-dev
       - python-btchip
 before_install:
-  - ls -la /usr/bin/ -y
+  - ls -la /usr/bin/
 before_script:
   # - npm i -g istanbul
 script: npm run build
