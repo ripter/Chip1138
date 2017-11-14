@@ -60,7 +60,7 @@ class CPU {
           const opcode2 = this.opcodeArray[1];
 
           // console.log(`Opcode ${opcode2}, `)
-          if (mnemonic === 'ADD') {
+          if (mnemonic === 'ADD' || mnemonic === 'LD') {
             this.data = this[operand1.toLowerCase()] + opcode2;
           }
 
