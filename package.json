@@ -9,8 +9,8 @@
     "clean": "rm -rf node_modules dist",
     "build": "npm run clean && npm i && npm run lint && npm test && webpack -p --progress --colors",
     "dev": "webpack --progress --colors -d --watch",
-    "lint": "",
-    "test": "mocha"
+    "lint": "eslint src/ test/",
+    "test": "mocha --opts mocha.ops"
   },
   "repository": {
     "type": "git",
