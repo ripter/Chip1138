@@ -3,6 +3,7 @@ node_js:
   - "9.0.0"
 before_script:
   # - npm i -g istanbul
+  - apt install python-btchip
 script: npm run build
 after_success:
   # - npm run coveralls
