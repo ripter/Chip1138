@@ -182,10 +182,15 @@ var CPU = function () {
          */
         if (mnemonic === 'SUB') {
           _this.f = 4;
+<<<<<<< HEAD
           console.log('f reg === ' + _this.f);
           var subSum = _this[operand1.toLowerCase()];
           _this[operand1.toLowerCase()] = subSum;
           // console.log('SUB', testVal, this.f);
+=======
+          var testVal = _this[operand1.toLowerCase()];
+          console.log('SUB', testVal, _this.f);
+>>>>>>> adding travis to build
         }
 
         if (length === 2 && _this.opcodeArray.length === 2) {
