@@ -1,16 +1,16 @@
 {
   "name": "chip1138",
   "version": "0.0.1",
-  "description": "A fantasy chip",
+  "description": "A fantasy gaming chip",
   "main": "src/index.js",
   "scripts": {
     "cover": "./node_modules/istanbul/lib/cli.js cover _mocha",
     "start": "",
     "clean": "rm -rf node_modules dist",
-    "build": "npm run clean && npm i && webpack -p --progress --colors",
+    "build": "npm run clean && npm i && npm test && webpack -p --progress --colors",
     "dev": "webpack --progress --colors -d --watch",
-    "lint": "",
-    "test": "mocha"
+    "lint": "eslint src/ test/",
+    "test": "mocha --opts mocha.ops src test"
   },
   "repository": {
     "type": "git",

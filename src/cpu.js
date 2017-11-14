@@ -74,7 +74,7 @@ class CPU {
             this.f = 0b0;
           }
 
-          this[operand1.toLowerCase()] = data;
+          this[operand1.toLowerCase()] = this.data;
           // console.log('data', data, OPCODE[this.opcodeArray[0]]);
           this.opcodeArray.length = 0;
         }
