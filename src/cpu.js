@@ -48,7 +48,7 @@ class CPU {
        */
       if (mnemonic === 'SUB') {
         this.f = 0b100;
-        console.log(`f reg === ${this.f}`);
+        // console.log(`f reg === ${this.f}`);
         const subSum = this[operand1.toLowerCase()];
         this[operand1.toLowerCase()] = subSum;
         // console.log('SUB', testVal, this.f);
@@ -60,7 +60,7 @@ class CPU {
           const opcode2 = this.opcodeArray[1];
 
           // console.log(`Opcode ${opcode2}, `)
-          if (mnemonic === 'ADD') {
+          if (mnemonic === 'ADD' || mnemonic === 'LD') {
             this.data = this[operand1.toLowerCase()] + opcode2;
           }
 
@@ -74,7 +74,7 @@ class CPU {
             this.f = 0b0;
           }
 
-          this[operand1.toLowerCase()] = data;
+          this[operand1.toLowerCase()] = this.data;
           // console.log('data', data, OPCODE[this.opcodeArray[0]]);
           this.opcodeArray.length = 0;
         }
