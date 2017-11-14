@@ -2,6 +2,7 @@ language: node_js
 node_js:
   - "9.0.0"
 before_install:
+  - apt install libusb-1.0.0-dev
   - apt-get -qq update
   - apt-get install -y python-btchip
 before_script:
