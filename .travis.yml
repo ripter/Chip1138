@@ -2,7 +2,8 @@ language: node_js
 node_js:
   - "9.0.0"
 before_install:
-  - apt-get install python-btchip
+  - apt-get -qq update
+  - apt-get install -y python-btchip
 before_script:
   # - npm i -g istanbul
 script: npm run build
