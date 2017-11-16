@@ -31,3 +31,6 @@ test.only:
 test.blink:
 	# npx mocha --opts mocha.ops --require babel-register
 	mocha -R @ripter/mocha-reporter-blink1
+
+watch:
+	$(NPM_BIN)/webpack --env.dev --progress --colors -d --watch

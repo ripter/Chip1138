@@ -18,7 +18,6 @@ class CPU {
   processOpcode(opcode) {
     this.opcodeArray.push(opcode);
 
-    console.log('this.f', this.f);
 
     // our object key for the table
     const opKey = this.opcodeArray[0];
@@ -34,7 +33,6 @@ class CPU {
     // Check our opcode's length...
     const sortOpcodes = () => {
       if (length === 1) {
-        // console.log('mnemonic', mnemonic);
 
         if (regValue1 === regValue2 ) {
           this[operand1.toLowerCase()] = regValue1;
@@ -55,36 +53,33 @@ class CPU {
 
         if (mnemonic === 'SUB') {
           this.f = 0b100; // subtraction flag.
-          console.log(`f reg === ${this.f}`);
           this.data = this[operand1.toLowerCase()];
           this[operand1.toLowerCase()] = this.data;
           if (operand2) {
             this.data = this[operand1.toLowerCase()] - this[operand2.toLowerCase()];
           }
-          // console.log('SUB', testVal, this.f);
         }
 
-        // console.log(`Opcode ${opcode2}, `)
         if (mnemonic === 'ADD' || mnemonic === 'LD') {
           this.data = this[operand1.toLowerCase()] + opcode2;
         }
 
+        // Full Carry flag: n > 0xff
         if (this.data >= 0xff) {
-          // console.log( `this "F" ${data}`);
           this.f = 0b1; // Full Carry Flag
         }
 
+        // Half carry flag
+        if (this.data < 0xff && this.data > 95) {
+          this.f = 0b10; // 2nd bytes
+        }
+
+        // Zero flag
         if (this.data === 0) {
           this.f = 0b1000; // Zero flag
         }
 
-        if (this.data < 0xff && this.data > 95) {
-          // console.log( `this "F" ${data}`);
-          this.f = 0b10; // Half Carry flag
-        }
-
         this[operand1.toLowerCase()] = this.data;
-        // console.log('data', data, OPCODE[this.opcodeArray[0]]);
         this.opcodeArray.length = 0;
 
       }
