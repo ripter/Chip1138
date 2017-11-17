@@ -30,7 +30,7 @@ class CPU {
       regValue2 = this[operand2.toLowerCase()];
     }
 
-    // Check our opcode's length...
+    // Check our opcode's length. If we have a 1, we aren't doing another pass so go ahead and process these now.
     const sortOpcodes = () => {
       if (length === 1) {
 
@@ -43,14 +43,41 @@ class CPU {
       /*
       /* fullCarry: 0b1
       /* halfCarry: 0b10
-      /* subtract: 0b100
-      /* zero: 0b1000
-       */
+      /* subtract:  0b100
+      /* zero:      0b1000
+      /**/
 
       if (length === 2 && this.opcodeArray.length === 2) {
 
-        const opcode2 = this.opcodeArray[1];
+        const opcodeArray = this.opcodeArray;
 
+        opcodeArray.reduce((val, indx, arr) => {
+
+          if(indx === 0) {
+            this.data = OPCODE[val];
+            console.log('Opcode...', val, OPCODE[val]);
+
+            const { operand1, operand2, mnemonic, length } = this.data;
+
+            if (length === 1) { // Single addr ccodes first
+
+              // Mainly just checking A === A.
+              if (regValue1 === regValue2 ) {
+                this[operand1.toLowerCase()] = regValue1;
+              }
+              this[operand1.toLowerCase()] = regValue1 + regValue2;
+            }
+
+            console.log('THIS REducers', this.data);
+            if (mnemonic === 'SUB') {
+              console.log('SUB', this.data);
+
+            }
+          }
+          return val;
+        });
+
+        // Subtract commands...
         if (mnemonic === 'SUB') {
           this.f = 0b100; // subtraction flag.
           this.data = this[operand1.toLowerCase()];
@@ -79,6 +106,7 @@ class CPU {
           this.f = 0b1000; // Zero flag
         }
 
+        // Assign our accumulated value to register
         this[operand1.toLowerCase()] = this.data;
         this.opcodeArray.length = 0;
 
