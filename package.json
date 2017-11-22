@@ -7,10 +7,10 @@
     "cover": "./node_modules/istanbul/lib/cli.js cover _mocha",
     "start": "",
     "clean": "rm -rf node_modules dist",
-    "build": "npm run clean && npm i && webpack -p",
+    "build": "npm run clean && npm i && npm run lint && npm test && webpack -p --progress --colors",
     "dev": "webpack --progress --colors -d --watch",
-    "lint": "",
-    "test": "mocha"
+    "lint": "eslint src/ test/",
+    "test": "mocha --opts mocha.opts"
   },
   "repository": {
     "type": "git",
@@ -39,7 +39,6 @@
     "webpack-dev-server": "^2.8.2"
   },
   "dependencies": {
-    "@ripter/mocha-reporter-blink1": "0.0.1",
     "babel-cli": "^6.26.0",
     "document-register-element": "^1.7.0",
     "lodash.filter": "^4.6.0",

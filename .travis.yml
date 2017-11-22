@@ -1,9 +1,15 @@
 language: node_js
 node_js:
-  - "9.0"
+  - "9.0.0"
+add_ons:
+  apt:
+    packages:
+      
+before_install:
+
 before_script:
-  - npm i -g istanbul
+  # - npm i -g istanbul
 script: npm run build
 after_success:
-  - npm run coveralls
+  # - npm run coveralls
 sudo: false
