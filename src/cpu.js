@@ -32,6 +32,7 @@ class CPU {
 
     // Check our opcode's length. If we have a 1, we aren't doing another pass so go ahead and process these now.
     const sortOpcodes = () => {
+<<<<<<< Updated upstream
       if (length === 1) {
 
         if (regValue1 === regValue2 ) {
@@ -39,6 +40,8 @@ class CPU {
         }
         this[operand1.toLowerCase()] = regValue1 + regValue2;
       }
+=======
+>>>>>>> Stashed changes
 
       /*
       /* fullCarry: 0b1
@@ -50,6 +53,7 @@ class CPU {
       if (length === 2 && this.opcodeArray.length === 2) {
 
         const opcodeArray = this.opcodeArray;
+<<<<<<< Updated upstream
 
         opcodeArray.reduce((val, indx, arr) => {
 
@@ -77,6 +81,35 @@ class CPU {
           return val;
         });
 
+=======
+
+        opcodeArray.reduce((val, indx, arr) => {
+
+          if(indx === 0) {
+            this.data = OPCODE[val];
+            console.log('Opcode...', val, OPCODE[val]);
+
+            const { operand1, operand2, mnemonic, length } = this.data;
+
+            if (length === 1) { // Single addr ccodes first
+
+              // Mainly just checking A === A.
+              if (regValue1 === regValue2 ) {
+                this[operand1.toLowerCase()] = regValue1;
+              }
+              this[operand1.toLowerCase()] = regValue1 + regValue2;
+            }
+
+            console.log('THIS REducers', this.data);
+            if (mnemonic === 'SUB') {
+              console.log('SUB', this.data);
+
+            }
+          }
+          return val;
+        });
+
+>>>>>>> Stashed changes
         // Subtract commands...
         if (mnemonic === 'SUB') {
           this.f = 0b100; // subtraction flag.
