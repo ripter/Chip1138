@@ -77,13 +77,13 @@ class CPU {
           // console.log('data', data, OPCODE[this.opcodeArray[0]]);
           this.opcodeArray.length = 0;
         }
-        
-        if (data < 0xff){
+
+        if (this.data < 0xff){
           // console.log( `this "F" ${data}`);
           this.f = 0b0;
         }
 
-        this[operand1.toLowerCase()] = data;
+        this[operand1.toLowerCase()] = this.data;
         // console.log('data', data, OPCODE[this.opcodeArray[0]]);
         this.opcodeArray.length = 0;
       }
