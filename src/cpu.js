@@ -14,6 +14,10 @@ class CPU {
     this.data = 0;
   }
 
+  add() {
+
+  }
+
   processOpcode(opcode) {
     this.opcodeArray.push(opcode);
 
@@ -45,38 +49,38 @@ class CPU {
       /* subtract: 0b100
       /* zero: 0b1000
        */
-      if (mnemonic === 'SUB') {
-        this.f = 0b100;
-        // console.log(`f reg === ${this.f}`);
-        const subSum = this[operand1.toLowerCase()];
+      console.log('Mnemonic...',mnemonic.toLowerCase(), this.f)
+      if (mnemonic.toLowerCase() === 'sub') {
+        const subMask = 0b100;
+        this.f = this.f | subMask;
+        console.log(`f reg === ${this.f}`);
+        const subSum = this[operand1.toLowerCase()] - regValue2;
         this[operand1.toLowerCase()] = subSum;
-        // console.log('SUB', testVal, this.f);
+        console.log('SUB', this.f);
       }
 
       if (length === 2 && this.opcodeArray.length === 2) {
 
-        if (this.opcodeArray.length === 2) {
-          const opcode2 = this.opcodeArray[1];
+        const opcode2 = this.opcodeArray[1];
 
-          // console.log(`Opcode ${opcode2}, `)
-          if (mnemonic === 'ADD' || mnemonic === 'LD') {
-            this.data = this[operand1.toLowerCase()] + opcode2;
-          }
-
-          if (this.data >= 0xff) {
-            // console.log( `this "F" ${data}`);
-            this.f = 0b1;
-          }
-
-          if (this.data < 0xff) {
-            // console.log( `this "F" ${data}`);
-            this.f = 0b0;
-          }
-
-          this[operand1.toLowerCase()] = this.data;
-          // console.log('data', data, OPCODE[this.opcodeArray[0]]);
-          this.opcodeArray.length = 0;
+        // console.log(`Opcode ${opcode2}, `)
+        if (mnemonic === 'ADD' || mnemonic === 'LD') {
+          this.data = this[operand1.toLowerCase()] + opcode2;
         }
+
+        if (this.data >= 0xff) {
+          // console.log( `this "F" ${data}`);
+          this.f = 0b1;
+        }
+
+        if (this.data < 0xff) {
+          // console.log( `this "F" ${data}`);
+          this.f = 0b0;
+        }
+
+        this[operand1.toLowerCase()] = this.data;
+        // console.log('data', data, OPCODE[this.opcodeArray[0]]);
+        this.opcodeArray.length = 0;
 
         if (this.data < 0xff){
           // console.log( `this "F" ${data}`);
