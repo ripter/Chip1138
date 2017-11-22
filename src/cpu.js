@@ -48,24 +48,22 @@ class CPU {
 
       if (length === 2 && this.opcodeArray.length === 2) {
 
-        if (this.opcodeArray.length === 2) {
-          const opcode2 = this.opcodeArray[1];
+        const opcode2 = this.opcodeArray[1];
 
-          // console.log(`Opcode ${opcode2}, `)
-          const data = this[operand1.toLowerCase()] + opcode2;
-          if (data >= 0xff) {
-            // console.log( `this "F" ${data}`);
-            this.f = 0b1;
-          }
-          if (data < 0xff){
-            // console.log( `this "F" ${data}`);
-            this.f = 0b0;
-          }
-
-          this[operand1.toLowerCase()] = data;
-          // console.log('data', data, OPCODE[this.opcodeArray[0]]);
-          this.opcodeArray.length = 0;
+        // console.log(`Opcode ${opcode2}, `)
+        const data = this[operand1.toLowerCase()] + opcode2;
+        if (data >= 0xff) {
+          // console.log( `this "F" ${data}`);
+          this.f = 0b1;
         }
+        if (data < 0xff){
+          // console.log( `this "F" ${data}`);
+          this.f = 0b0;
+        }
+
+        this[operand1.toLowerCase()] = data;
+        // console.log('data', data, OPCODE[this.opcodeArray[0]]);
+        this.opcodeArray.length = 0;
       }
     };
 
