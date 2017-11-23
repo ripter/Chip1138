@@ -32,7 +32,6 @@ class CPU {
 
     // Check our opcode's length. If we have a 1, we aren't doing another pass so go ahead and process these now.
     const sortOpcodes = () => {
-<<<<<<< Updated upstream
       if (length === 1) {
 
         if (regValue1 === regValue2 ) {
@@ -40,8 +39,6 @@ class CPU {
         }
         this[operand1.toLowerCase()] = regValue1 + regValue2;
       }
-=======
->>>>>>> Stashed changes
 
       /*
       /* fullCarry: 0b1
@@ -53,7 +50,6 @@ class CPU {
       if (length === 2 && this.opcodeArray.length === 2) {
 
         const opcodeArray = this.opcodeArray;
-<<<<<<< Updated upstream
 
         opcodeArray.reduce((val, indx, arr) => {
 
@@ -81,35 +77,6 @@ class CPU {
           return val;
         });
 
-=======
-
-        opcodeArray.reduce((val, indx, arr) => {
-
-          if(indx === 0) {
-            this.data = OPCODE[val];
-            console.log('Opcode...', val, OPCODE[val]);
-
-            const { operand1, operand2, mnemonic, length } = this.data;
-
-            if (length === 1) { // Single addr ccodes first
-
-              // Mainly just checking A === A.
-              if (regValue1 === regValue2 ) {
-                this[operand1.toLowerCase()] = regValue1;
-              }
-              this[operand1.toLowerCase()] = regValue1 + regValue2;
-            }
-
-            console.log('THIS REducers', this.data);
-            if (mnemonic === 'SUB') {
-              console.log('SUB', this.data);
-
-            }
-          }
-          return val;
-        });
-
->>>>>>> Stashed changes
         // Subtract commands...
         if (mnemonic === 'SUB') {
           this.f = 0b100; // subtraction flag.
@@ -120,29 +87,50 @@ class CPU {
           }
         }
 
+      /* subtract: 0b100
+      /* zero: 0b1000
+       */
+      console.log('Mnemonic...',mnemonic.toLowerCase(), this.f)
+      if (mnemonic.toLowerCase() === 'sub') {
+        const subMask = 0b100;
+        this.f = this.f | subMask;
+        console.log(`f reg === ${this.f}`);
+        const subSum = this[operand1.toLowerCase()] - regValue2;
+        this[operand1.toLowerCase()] = subSum;
+        console.log('SUB', this.f);
+      }
+
+      if (length === 2 && this.opcodeArray.length === 2) {
+
+        const opcode2 = this.opcodeArray[1];
+
+        // console.log(`Opcode ${opcode2}, `)
         if (mnemonic === 'ADD' || mnemonic === 'LD') {
           this.data = this[operand1.toLowerCase()] + opcode2;
         }
 
-        // Full Carry flag: n > 0xff
         if (this.data >= 0xff) {
-          this.f = 0b1; // Full Carry Flag
+          // console.log( `this "F" ${data}`);
+          this.f = 0b1;
         }
 
-        // Half carry flag
-        if (this.data < 0xff && this.data > 95) {
-          this.f = 0b10; // 2nd bytes
+        if (this.data < 0xff) {
+          // console.log( `this "F" ${data}`);
+          this.f = 0b0;
         }
 
-        // Zero flag
-        if (this.data === 0) {
-          this.f = 0b1000; // Zero flag
-        }
-
-        // Assign our accumulated value to register
         this[operand1.toLowerCase()] = this.data;
+        // console.log('data', data, OPCODE[this.opcodeArray[0]]);
         this.opcodeArray.length = 0;
 
+        if (this.data < 0xff){
+          // console.log( `this "F" ${data}`);
+          this.f = 0b0;
+        }
+
+        this[operand1.toLowerCase()] = this.data;
+        // console.log('data', data, OPCODE[this.opcodeArray[0]]);
+        this.opcodeArray.length = 0;
       }
     };
 
@@ -318,8 +306,6 @@ class CPU {
   set sp (value) {
     this.memory16bit[4] = value;
   }
-
-
 }
 
 export default CPU;

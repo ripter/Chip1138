@@ -10,7 +10,7 @@
     "build": "npm run clean && npm i && npm run lint && npm test && webpack -p --progress --colors",
     "dev": "webpack --progress --colors -d --watch",
     "lint": "eslint src/ test/",
-    "test": "mocha --opts mocha.ops"
+    "test": "mocha --opts mocha.opts"
   },
   "repository": {
     "type": "git",
@@ -26,13 +26,17 @@
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-plugin-istanbul": "^3.0.0",
-    "babel-preset-env": "^1.6.1",
-    "eslint": "^4.11.0",
+    "babel-preset-env": "^1.6.0",
+    "coveralls": "^2.11.15",
+    "eslint": "^4.7.2",
     "expect.js": "^0.3.1",
     "jsdom": "11.3.0",
     "jsdom-global": "3.0.2",
-    "webpack": "^3.8.1",
-    "webpack-dev-server": "^2.9.4"
+    "istanbul": "^0.4.5",
+    "mocha-lcov-reporter": "^1.2.0",
+    "nyc": "^10.0.0-candidate.2",
+    "webpack": "^3.6.0",
+    "webpack-dev-server": "^2.8.2"
   },
   "dependencies": {
     "babel-cli": "^6.26.0",
