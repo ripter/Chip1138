@@ -11,13 +11,15 @@ class CPU {
 
     // an array to store the opcodes in between calls in order to know how to process
     this.opcodeArray = [];
-    this.data = 0b0000;
+    this.data = 0;
+  }
+
+  add() {
 
   }
 
   processOpcode(opcode) {
     this.opcodeArray.push(opcode);
-
 
     // our object key for the table
     const opKey = this.opcodeArray[0];
@@ -30,9 +32,10 @@ class CPU {
       regValue2 = this[operand2.toLowerCase()];
     }
 
-    // Check our opcode's length. If we have a 1, we aren't doing another pass so go ahead and process these now.
+    // Check our opcode's length...
     const sortOpcodes = () => {
       if (length === 1) {
+        // console.log('mnemonic', mnemonic);
 
         if (regValue1 === regValue2 ) {
           this[operand1.toLowerCase()] = regValue1;
@@ -43,50 +46,6 @@ class CPU {
       /*
       /* fullCarry: 0b1
       /* halfCarry: 0b10
-      /* subtract:  0b100
-      /* zero:      0b1000
-      /**/
-
-      if (length === 2 && this.opcodeArray.length === 2) {
-
-        const opcodeArray = this.opcodeArray;
-
-        opcodeArray.reduce((val, indx, arr) => {
-
-          if(indx === 0) {
-            this.data = OPCODE[val];
-            console.log('Opcode...', val, OPCODE[val]);
-
-            const { operand1, operand2, mnemonic, length } = this.data;
-
-            if (length === 1) { // Single addr ccodes first
-
-              // Mainly just checking A === A.
-              if (regValue1 === regValue2 ) {
-                this[operand1.toLowerCase()] = regValue1;
-              }
-              this[operand1.toLowerCase()] = regValue1 + regValue2;
-            }
-
-            console.log('THIS REducers', this.data);
-            if (mnemonic === 'SUB') {
-              console.log('SUB', this.data);
-
-            }
-          }
-          return val;
-        });
-
-        // Subtract commands...
-        if (mnemonic === 'SUB') {
-          this.f = 0b100; // subtraction flag.
-          this.data = this[operand1.toLowerCase()];
-          this[operand1.toLowerCase()] = this.data;
-          if (operand2) {
-            this.data = this[operand1.toLowerCase()] - this[operand2.toLowerCase()];
-          }
-        }
-
       /* subtract: 0b100
       /* zero: 0b1000
        */

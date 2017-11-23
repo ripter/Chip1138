@@ -23,10 +23,10 @@ lint: node_modules/
 	npx eslint src/ test/
 
 test: lint
-	npx mocha --opts mocha.ops
+	npx mocha --opts mocha.opts
 
 test.only:
-	npx mocha --opts mocha.ops
+	npx mocha --opts mocha.opts
 
 test.blink:
 	# npx mocha --opts mocha.ops --require babel-register
