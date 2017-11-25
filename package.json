@@ -30,7 +30,6 @@
     "webpack-dev-server": "^2.8.2"
   },
   "dependencies": {
-    "@ripter/mocha-reporter-blink1": "0.0.1",
     "babel-cli": "^6.26.0",
     "document-register-element": "^1.7.0",
     "lodash.filter": "^4.6.0",
