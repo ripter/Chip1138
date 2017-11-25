@@ -7,10 +7,10 @@
     "cover": "./node_modules/istanbul/lib/cli.js cover _mocha",
     "start": "",
     "clean": "rm -rf node_modules dist",
-    "build": "npm run clean && npm i && npm run lint && npm test && webpack -p --progress --colors",
+    "build": "make build",
     "dev": "webpack --progress --colors -d --watch",
-    "lint": "eslint src/ test/",
-    "test": "mocha --opts mocha.opts"
+    "lint": "make lint",
+    "test": "make test"
   },
   "repository": {
     "type": "git",
