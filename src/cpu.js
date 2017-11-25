@@ -14,8 +14,13 @@ class CPU {
     this.data = 0;
   }
 
-  add() {
-
+  /* ADD: takes 2 aruguements, gets register values and sets register with sum of values
+   *
+   */
+  add(keyA = 'a', keyB = 'a') {
+    const valueA = this[keyA];
+    const valueB = typeof keyB === 'string' ? this[keyB]: keyB;
+    this[keyA] = valueA + valueB;
   }
 
   processOpcode(opcode) {
@@ -23,40 +28,48 @@ class CPU {
 
     // our object key for the table
     const opKey = this.opcodeArray[0];
-    const {length, operand1, operand2, mnemonic} = OPCODE[opKey];
+    const { length, operand1, operand2, mnemonic } = OPCODE[opKey];
+    const keyA = operand1.toLowerCase();
+    const keyB = operand2.toLowerCase();
 
-    const regValue1 = this[operand1.toLowerCase()];
+    // const regValue1 = this[keyA];
     let regValue2;
 
     if (operand2) {
-      regValue2 = this[operand2.toLowerCase()];
+      regValue2 = this[keyB];
     }
 
     // Check our opcode's length...
     const sortOpcodes = () => {
-      if (length === 1) {
-        // console.log('mnemonic', mnemonic);
-
-        if (regValue1 === regValue2 ) {
-          this[operand1.toLowerCase()] = regValue1;
+      if (mnemonic === 'ADD') {
+        if (length === 1) {
+          console.log(`Key A: ${keyA} \n\n Key B: ${keyB}`);
+          this.add(keyA, keyB);
+          // console.log('mnemonic', mnemonic);
         }
-        this[operand1.toLowerCase()] = regValue1 + regValue2;
+
+        if (length === 2) {
+          // TODO: get valueB
+          this.add(keyA, valueB);
+        }
       }
 
+
+
       /*
-      /* fullCarry: 0b1
-      /* halfCarry: 0b10
-      /* subtract: 0b100
+      /* fullCarry: 0b0001
+      /* halfCarry: 0b0010
+      /* subtract: 0b0100
       /* zero: 0b1000
        */
-      console.log('Mnemonic...',mnemonic.toLowerCase(), this.f)
-      if (mnemonic.toLowerCase() === 'sub') {
-        const subMask = 0b100;
+      // console.log('Mnemonic...',mnemonic.toLowerCase(), this.f)
+      if (mnemonic === 'SUB') {
+        const subMask = 0b0100;
         this.f = this.f | subMask;
-        console.log(`f reg === ${this.f}`);
+        // console.log(`f reg === ${this.f}`);
         const subSum = this[operand1.toLowerCase()] - regValue2;
-        this[operand1.toLowerCase()] = subSum;
-        console.log('SUB', this.f);
+        this[keyA] = subSum;
+        // console.log('SUB', this.f);
       }
 
       if (length === 2 && this.opcodeArray.length === 2) {
@@ -65,17 +78,17 @@ class CPU {
 
         // console.log(`Opcode ${opcode2}, `)
         if (mnemonic === 'ADD' || mnemonic === 'LD') {
-          this.data = this[operand1.toLowerCase()] + opcode2;
+          // this.data = this[keyA] + opcode2;
         }
 
         if (this.data >= 0xff) {
           // console.log( `this "F" ${data}`);
-          this.f = 0b1;
+          this.f = 0b0001;
         }
 
         if (this.data < 0xff) {
           // console.log( `this "F" ${data}`);
-          this.f = 0b0;
+          this.f = 0b0000;
         }
 
         this[operand1.toLowerCase()] = this.data;
@@ -84,7 +97,7 @@ class CPU {
 
         if (this.data < 0xff){
           // console.log( `this "F" ${data}`);
-          this.f = 0b0;
+          this.f = 0b0000;
         }
 
         this[operand1.toLowerCase()] = this.data;

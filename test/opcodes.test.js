@@ -31,7 +31,7 @@ describe('CPU can run OPCODES:', () => {
     });
   });
 
-  describe('ADD:', () => {
+  describe.only('ADD:', () => {
     // Test LD opcodes that load from the next byte into a register.
     loadOpcodes = filter(OPCODE, {mnemonic: 'ADD', length: 1});
     // temp limit to single register
