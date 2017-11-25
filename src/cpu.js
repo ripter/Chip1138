@@ -33,17 +33,16 @@ class CPU {
     const keyB = operand2.toLowerCase();
 
     // const regValue1 = this[keyA];
-    let regValue2;
+    let valueB;
 
     if (operand2) {
-      regValue2 = this[keyB];
+      valueB = this[keyB];
     }
 
     // Check our opcode's length...
     const sortOpcodes = () => {
       if (mnemonic === 'ADD') {
         if (length === 1) {
-          console.log(`Key A: ${keyA} \n\n Key B: ${keyB}`);
           this.add(keyA, keyB);
           // console.log('mnemonic', mnemonic);
         }
@@ -67,14 +66,14 @@ class CPU {
         const subMask = 0b0100;
         this.f = this.f | subMask;
         // console.log(`f reg === ${this.f}`);
-        const subSum = this[operand1.toLowerCase()] - regValue2;
+        const subSum = this[operand1.toLowerCase()] - valueB;
         this[keyA] = subSum;
         // console.log('SUB', this.f);
       }
 
       if (length === 2 && this.opcodeArray.length === 2) {
 
-        const opcode2 = this.opcodeArray[1];
+        // const opcode2 = this.opcodeArray[1];
 
         // console.log(`Opcode ${opcode2}, `)
         if (mnemonic === 'ADD' || mnemonic === 'LD') {
