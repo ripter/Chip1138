@@ -67,7 +67,7 @@ describe('CPU can run OPCODES:', () => {
       });
     });
 
-    it('ADD A, 0x33; Adds register a to register a [0xc6]', () => {
+    it.only('ADD A, 0x33; Adds register a to register a [0xc6]', () => {
       cpu.a = 0x23;
       cpu.processOpcode(0xc6);
       cpu.processOpcode(0x33);

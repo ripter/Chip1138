@@ -14,13 +14,16 @@ class CPU {
     this.data = 0;
   }
 
-  /* ADD: takes 2 aruguements, gets register values and sets register with sum of values
-   *
+  /*
+   * ADD: takes 2 aruguements, gets register values and sets register with sum of values
    */
   add(keyA = 'a', keyB = 'a') {
     const valueA = this[keyA];
+    // console.log('key A:', keyA);
+
     const valueB = typeof keyB === 'string' ? this[keyB]: keyB;
     this[keyA] = valueA + valueB;
+    console.log('key a:', this[keyA]);
   }
 
   processOpcode(opcode) {
@@ -35,10 +38,13 @@ class CPU {
     // const regValue1 = this[keyA];
     let valueB;
 
-    if (operand2) {
+    if (!operand2) {
       valueB = this[keyB];
     }
 
+    console.log(operand2.length)
+
+    console.log('Opera 2:', operand2);
     // Check our opcode's length...
     const sortOpcodes = () => {
       if (mnemonic === 'ADD') {
@@ -47,9 +53,11 @@ class CPU {
           // console.log('mnemonic', mnemonic);
         }
 
-        if (length === 2) {
+        if (length === 2 && this.opcodeArray.length === 2) {
           // TODO: get valueB
-          this.add(keyA, valueB);
+          const opcodeByte = this.opcodeArray[1];
+          console.log('calling ADD w opCodeByte', opcodeByte);
+          this.add(keyA, opcodeByte);
         }
       }
 
