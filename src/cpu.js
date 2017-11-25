@@ -20,7 +20,20 @@ class CPU {
   add(keyA = 'a', keyB = 'a') {
     const valueA = this[keyA];
     const valueB = typeof keyB === 'string' ? this[keyB]: keyB;
+    const subAddMask = 0b0000;
+    const fullMask = 0b0001;
     this[keyA] = valueA + valueB;
+    this.f = this.f & subAddMask;
+    if (this[keyA] >= 0xff) {
+      this.f = this.f | fullMask;
+    }
+    else {
+      this.f = this.f & 0b0;
+    }
+  }
+
+  ld() {
+    
   }
 
   processOpcode(opcode) {
