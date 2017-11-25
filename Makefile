@@ -1,10 +1,12 @@
-.PHONY: all build dev-server server plop lint test test.only
+.PHONY: all build deploy dev-server server plop lint test test.only
 NPM_BIN=./node_modules/.bin
 
 all: build lint server
 
 build: node_modules/
 	npx webpack
+
+deploy: test build
 
 dev-server: build
 	npx webpack-dev-server --open
