@@ -32,8 +32,11 @@ class CPU {
     }
   }
 
-  ld() {
-    
+  ld(keyA) {
+    if (this.opcodeArray.length === 2) {
+      console.log(`our Array... ${this.opcodeArray}`);
+      this[keyA] = this.opcodeArray[1];
+    }
   }
 
   processOpcode(opcode) {
@@ -53,6 +56,7 @@ class CPU {
 
     // Check our opcode's length...
     const sortOpcodes = () => {
+      debugger;
       if (mnemonic === 'ADD') {
         if (length === 1) {
           this.add(keyA, keyB);
@@ -66,6 +70,11 @@ class CPU {
         }
       }
 
+      if (mnemonic === 'LD') {
+        this.ld(keyA);
+        return;
+      }
+
       /*
       /* fullCarry: 0b0001
       /* halfCarry: 0b0010
@@ -76,7 +85,7 @@ class CPU {
       if (mnemonic === 'SUB') {
         const subMask = 0b0100;
         this.f = this.f | subMask;
-        const subSum = this[operand1.toLowerCase()] - valueB;
+        const subSum = this[keyA] - valueB;
         this[keyA] = subSum;
       }
 
@@ -90,14 +99,14 @@ class CPU {
           this.f = 0b0000;
         }
 
-        this[operand1.toLowerCase()] = this.data;
+        this[keyA] = this.data;
         this.opcodeArray.length = 0;
 
         if (this.data < 0xff){
           this.f = 0b0000;
         }
 
-        this[operand1.toLowerCase()] = this.data;
+        this[keyA] = this.data;
         this.opcodeArray.length = 0;
       }
     };
