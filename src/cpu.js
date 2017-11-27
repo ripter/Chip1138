@@ -20,16 +20,27 @@ class CPU {
   add(keyA = 'a', keyB = 'a') {
     const valueA = this[keyA];
     const valueB = typeof keyB === 'string' ? this[keyB]: keyB;
+
     const subAddMask = 0b0000;
     const fullMask = 0b0001;
     this[keyA] = valueA + valueB;
     this.f = this.f & subAddMask;
-    if (this[keyA] >= 0xff) {
-      this.f = this.f | fullMask;
+
+    console.log('Our register value', this[keyA]);
+    if (this[keyA] >= 0xfe) {
+      debugger;
+      this.f = this.f & fullMask;
+      return;
     }
-    else {
-      this.f = this.f & 0b0;
-    }
+    this.f = this.f & subAddMask;
+  }
+
+  sub(keyA, valueB) {
+    debugger;
+    const subMask = 0b0100;
+    this.f = this.f | subMask;
+    const subSum = this[keyA] - valueB;
+    this[keyA] = subSum;
   }
 
   ld(keyA) {
@@ -53,25 +64,34 @@ class CPU {
     if (!operand2) {
       valueB = this[keyB];
     }
-
+    if (operand2) {
+      valueB = keyB;
+    }
+console.log('OUR OBJECT', OPCODE[opKey]);
     // Check our opcode's length...
     const sortOpcodes = () => {
-      debugger;
-      if (mnemonic === 'ADD') {
-        if (length === 1) {
+      if (length === 1) {
+        debugger;
+        if (mnemonic === 'ADD') {
           this.add(keyA, keyB);
+          console.log('our flags...', mnemonic, this.f);
           return;
         }
+      }
 
-        if (length === 2 && this.opcodeArray.length === 2) {
+      if (length === 2 && this.opcodeArray.length === 2) {
+        debugger;
+        if (mnemonic === 'ADD') {
           const opcodeByte = this.opcodeArray[1];
           this.add(keyA, opcodeByte);
+          console.log('our flags...', mnemonic, this.f);
           return;
         }
       }
 
       if (mnemonic === 'LD') {
         this.ld(keyA);
+        console.log('our flags...', mnemonic, this.f);
         return;
       }
 
@@ -83,32 +103,31 @@ class CPU {
        */
 
       if (mnemonic === 'SUB') {
-        const subMask = 0b0100;
-        this.f = this.f | subMask;
-        const subSum = this[keyA] - valueB;
-        this[keyA] = subSum;
+        debugger;
+        console.log('Sub', keyA, valueB);
+        this.sub(keyA);
       }
 
-      if (length === 2 && this.opcodeArray.length === 2) {
-
-        if (this.data >= 0xff) {
-          this.f = 0b0001;
-        }
-
-        if (this.data < 0xff) {
-          this.f = 0b0000;
-        }
-
-        this[keyA] = this.data;
-        this.opcodeArray.length = 0;
-
-        if (this.data < 0xff){
-          this.f = 0b0000;
-        }
-
-        this[keyA] = this.data;
-        this.opcodeArray.length = 0;
-      }
+      // if (length === 2 && this.opcodeArray.length === 2) {
+      //   debugger;
+      //   if (this.data >= 0xff) {
+      //     this.f = 0b0001;
+      //   }
+      //
+      //   if (this.data < 0xff) {
+      //     this.f = 0b0000;
+      //   }
+      //
+      //   this[keyA] = this.data;
+      //   this.opcodeArray.length = 0;
+      //
+      //   if (this.data < 0xff){
+      //     this.f = 0b0000;
+      //   }
+      //
+      //   this[keyA] = this.data;
+      //   this.opcodeArray.length = 0;
+      // }
     };
 
     sortOpcodes();
