@@ -26,26 +26,22 @@ class CPU {
     this[keyA] = valueA + valueB;
     this.f = this.f & subAddMask;
 
-    console.log('Our register value', this[keyA]);
     if (this[keyA] >= 0xfe) {
-      debugger;
       this.f = this.f & fullMask;
       return;
     }
     this.f = this.f & subAddMask;
   }
 
-  sub(keyA, valueB) {
-    debugger;
+  sub(keyA) {
     const subMask = 0b0100;
-    this.f = this.f | subMask;
-    const subSum = this[keyA] - valueB;
+    this.f = subMask;
+    const subSum = this.a - this[keyA];
     this[keyA] = subSum;
   }
 
   ld(keyA) {
     if (this.opcodeArray.length === 2) {
-      console.log(`our Array... ${this.opcodeArray}`);
       this[keyA] = this.opcodeArray[1];
     }
   }
@@ -57,41 +53,41 @@ class CPU {
     const opKey = this.opcodeArray[0];
     const { length, operand1, operand2, mnemonic } = OPCODE[opKey];
     const keyA = operand1.toLowerCase();
-    const keyB = operand2.toLowerCase();
+    // const keyB = operand2.toLowerCase();
 
-    let valueB;
+    let keyB;
 
-    if (!operand2) {
-      valueB = this[keyB];
-    }
+    // if (!operand2) {
+    //   valueB = this[keyB];
+    // }
     if (operand2) {
-      valueB = keyB;
+      keyB = operand2.toLowerCase();
     }
-console.log('OUR OBJECT', OPCODE[opKey]);
+
     // Check our opcode's length...
     const sortOpcodes = () => {
+
+      if (mnemonic === 'SUB') {
+        this.sub(keyA);
+      }
+
       if (length === 1) {
-        debugger;
         if (mnemonic === 'ADD') {
           this.add(keyA, keyB);
-          console.log('our flags...', mnemonic, this.f);
           return;
         }
       }
 
       if (length === 2 && this.opcodeArray.length === 2) {
-        debugger;
         if (mnemonic === 'ADD') {
           const opcodeByte = this.opcodeArray[1];
           this.add(keyA, opcodeByte);
-          console.log('our flags...', mnemonic, this.f);
           return;
         }
       }
 
       if (mnemonic === 'LD') {
         this.ld(keyA);
-        console.log('our flags...', mnemonic, this.f);
         return;
       }
 
@@ -102,14 +98,7 @@ console.log('OUR OBJECT', OPCODE[opKey]);
       /* zero: 0b1000
        */
 
-      if (mnemonic === 'SUB') {
-        debugger;
-        console.log('Sub', keyA, valueB);
-        this.sub(keyA);
-      }
-
       // if (length === 2 && this.opcodeArray.length === 2) {
-      //   debugger;
       //   if (this.data >= 0xff) {
       //     this.f = 0b0001;
       //   }
