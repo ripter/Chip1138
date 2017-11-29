@@ -38,6 +38,7 @@ class CPU {
     this.f = subMask;
     const subSum = this.a - this[keyA];
     this[keyA] = subSum;
+    console.log('SUB FLAGS:', this.f)
   }
 
   ld(keyA) {

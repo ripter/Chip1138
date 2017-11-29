@@ -85,7 +85,7 @@ describe('CPU can run OPCODES:', () => {
       opcodes.forEach(function(opcode) {
         cpu.processOpcode(opcode);
       });
-      expect(cpu.f | 0b1).to.eql(1);
+      expect(cpu.f & 0b1).to.eql(1);
     });
 
     it('ADD 255, 254; Unsets the carry flag', () => {
@@ -114,14 +114,15 @@ describe('CPU can run OPCODES:', () => {
       const { addr, mnemonic, operand1 } = opcode;
       const register = operand1.toLowerCase();
       it(`${mnemonic} A, ${operand1}; Subtracts register ${register} from register a [${addr}]`, () => {
-        cpu.a = cpu.a || 0x29;
+        let diff = 0x18;
         if (register === 'a') {
-          return; // TODO: remove once you fix the test... just to get around `A minus A` test bug
+          diff = 0;
         }
-        cpu[register] = cpu[register] || 0x11; // was failing the reg.a minus reg.a test.
+        cpu.a = 0x29;
+        cpu[register] = 0x11;
         cpu.processOpcode(parseInt(addr, 16));
 
-        expect(cpu[register]).to.eql(0x18); // TODO: dynamically set this value. We're getting false negative on the reg
+        expect(cpu[register]).to.eql(diff);
       });
 
       it(`${mnemonic} A, ${operand1}; Sets the Add/Subtract Flag n [${addr}]`, () => {
