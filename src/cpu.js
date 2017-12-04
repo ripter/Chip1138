@@ -12,6 +12,20 @@ class CPU {
     // an array to store the opcodes in between calls in order to know how to process
     this.opcodeArray = [];
     this.data = 0;
+
+    /*
+    /* fullCarry: 0b0001
+    /* halfCarry: 0b0010
+    /* subtract: 0b0100
+    /* zero: 0b1000
+     */
+
+    this.masks = {
+      full: '0b0001',
+      half: '0b0010',
+      sub: '0b0100',
+      zero: '0b1000',
+    };
   }
 
   /*
@@ -21,52 +35,53 @@ class CPU {
     const valueA = this[keyA];
     const valueB = typeof keyB === 'string' ? this[keyB]: keyB;
 
-    const subAddMask = 0b0000;
-    const fullMask = 0b0001;
     this[keyA] = valueA + valueB;
-    this.f = this.f & subAddMask;
-
-    if (this[keyA] >= 0xfe) {
-      this.f = this.f & fullMask;
-      return;
+    this.f = this.f & this.masks.sub;
+    if (this[keyA] > 509) {
+      this.f = this.f | this.masks.full;
     }
-    this.f = this.f & subAddMask;
+    else {
+      this.f = this.f & 0b0000;
+    }
+    this.f = this.f & this.masks.sub;
+    this.opcodeArray.length = 0;
   }
 
   sub(keyA) {
-    const subMask = 0b0100;
-    this.f = subMask;
+    this.f = this.masks.sub;
     const subSum = this.a - this[keyA];
     this[keyA] = subSum;
-    console.log('SUB FLAGS:', this.f)
+    this.opcodeArray.length = 0;
   }
 
   ld(keyA) {
     if (this.opcodeArray.length === 2) {
       this[keyA] = this.opcodeArray[1];
     }
+    if(this.opcodeArray[1] > 0xfe) {
+      this.f = this.masks.full;
+    }
+    if (this.opcodeArray[0] === 62 && this.opcodeArray.length >= 3) {
+      // console.log('Array....', this.opcodeArray)
+    }
   }
 
   processOpcode(opcode) {
     this.opcodeArray.push(opcode);
-
     // our object key for the table
     const opKey = this.opcodeArray[0];
     const { length, operand1, operand2, mnemonic } = OPCODE[opKey];
     const keyA = operand1.toLowerCase();
-    // const keyB = operand2.toLowerCase();
 
     let keyB;
 
-    // if (!operand2) {
-    //   valueB = this[keyB];
-    // }
     if (operand2) {
       keyB = operand2.toLowerCase();
     }
 
     // Check our opcode's length...
     const sortOpcodes = () => {
+      let opLength = this.opcodeArray.length;
 
       if (mnemonic === 'SUB') {
         this.sub(keyA);
@@ -79,58 +94,21 @@ class CPU {
         }
       }
 
-      if (length === 2 && this.opcodeArray.length === 2) {
+      if (length === 2 && opLength === 2) {
         if (mnemonic === 'ADD') {
           const opcodeByte = this.opcodeArray[1];
           this.add(keyA, opcodeByte);
           return;
         }
+
+        if (mnemonic === 'LD') {
+          this.ld(keyA);
+          return;
+        }
       }
-
-      if (mnemonic === 'LD') {
-        this.ld(keyA);
-        return;
-      }
-
-      /*
-      /* fullCarry: 0b0001
-      /* halfCarry: 0b0010
-      /* subtract: 0b0100
-      /* zero: 0b1000
-       */
-
-      // if (length === 2 && this.opcodeArray.length === 2) {
-      //   if (this.data >= 0xff) {
-      //     this.f = 0b0001;
-      //   }
-      //
-      //   if (this.data < 0xff) {
-      //     this.f = 0b0000;
-      //   }
-      //
-      //   this[keyA] = this.data;
-      //   this.opcodeArray.length = 0;
-      //
-      //   if (this.data < 0xff){
-      //     this.f = 0b0000;
-      //   }
-      //
-      //   this[keyA] = this.data;
-      //   this.opcodeArray.length = 0;
-      // }
     };
 
     sortOpcodes();
-
-    // if (this.opcodeArray.length === 2) {
-    //   const currentOpcode = OPCODE[this.opcodeArray[0]];
-    //   const data = this.opcodeArray[1];
-    //   this[currentOpcode.operand1.toLowerCase()] = data;
-    //
-    //   // The preferred method to empty an array. As opposed to
-    //   // this.opcodeArray = [], which is creating a new, empty array.
-    //   this.opcodeArray.length = 0;
-    // }
   }
 
   get a() {

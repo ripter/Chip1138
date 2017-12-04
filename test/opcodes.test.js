@@ -77,8 +77,8 @@ describe('CPU can run OPCODES:', () => {
 
     it('ADD 255, 255; Sets the carry flag', () => {
       const opcodes = [
-        0x3e, 0xff, // LD  a, 255
-        0x87, // ADD a, a
+        0x3e, 0xff, // LD  a, 255 (62, 255)
+        0x87, // ADD a, a (135)
       ];
 
       // run the opcodes
@@ -91,7 +91,7 @@ describe('CPU can run OPCODES:', () => {
     it('ADD 255, 254; Unsets the carry flag', () => {
       const opcodes = [
         0x3e, 0xff, // LD  a, 255
-        0x6, 0xf2, // LD  b, 254
+        0x6, 0xf2, // LD  b, 242
         0x80, // ADD a, b
       ];
 
