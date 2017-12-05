@@ -49,7 +49,7 @@ class CPU {
 
   sub(keyA) {
     // this.f = this.masks.sub;
-    this.f = this.f | 0b100; // set the bit on flag using a bitwise or 
+    this.f = this.f | 0b100; // set the bit on flag using a bitwise or
     const subSum = this.a - this[keyA];
     this[keyA] = subSum;
     this.opcodeArray.length = 0;
@@ -104,8 +104,8 @@ class CPU {
 
         if (mnemonic === 'LD') {
           if (operand2 && operand2 === 'd8') {
-            console.log(OPCODE[opKey]);
-            debugger;
+            // console.log(OPCODE[opKey]);
+            // debugger;
           }
           this.ld(keyA);
           return;
