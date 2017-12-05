@@ -103,6 +103,10 @@ class CPU {
         }
 
         if (mnemonic === 'LD') {
+          if (operand2 && operand2 === 'd8') {
+            console.log(OPCODE[opKey]);
+            debugger;
+          }
           this.ld(keyA);
           return;
         }
