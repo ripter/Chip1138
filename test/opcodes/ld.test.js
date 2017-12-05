@@ -2,6 +2,7 @@ import expect from 'expect.js';
 import filter from 'lodash.filter';
 import CPU from '../../src/cpu.js';
 import OPCODE from '../../const/opcode.js';
+import { addTestData } from '../utils.js';
 
 
 describe.only('OPCODE: LD', () => {
@@ -13,21 +14,22 @@ describe.only('OPCODE: LD', () => {
   });
 
 
-  describe('loads 8-bit value into 8-bit register', () => {
+  describe('loads 8-bit value into 8-bit register.', () => {
     opcodes = filter(OPCODE, {mnemonic: 'LD', length: 2, operand2: 'd8'});
     // limit to opcodes that work with 8-bit registers
     opcodes = filter(opcodes, ({operand1}) => operand1.length === 1 );
+    // make the data eaiser to work with.
+    opcodes = opcodes.map(addTestData);
 
     // Create a test for each opcode
     opcodes.forEach(function(opcode) {
       const randomByte = 0|Math.random()*256;
-      const { addr, mnemonic, operand1 } = opcode;
-      const register = operand1.toLowerCase();
+      const {mnemonic, register1, register2, operand1, operand2, addr, byte} = opcode;
 
-      it(`${mnemonic} ${operand1}, ${randomByte}; loads ${randomByte} into register ${register}  [${addr}]`, () => {
-        cpu.processOpcode(parseInt(addr, 16)); // LD Opcode
+      it(`${mnemonic} ${operand1}, ${randomByte}; loads 0x${randomByte.toString(16)} into register ${register1}  [${addr}]`, () => {
+        cpu.processOpcode(byte); // LD Opcode
         cpu.processOpcode(randomByte); // random 8-bit value
-        expect(cpu[register]).to.eql(randomByte);
+        expect(cpu[register1]).to.eql(randomByte);
       });
     });
   }); // loads 8-bit value into 8-bit register
@@ -37,12 +39,7 @@ describe.only('OPCODE: LD', () => {
     // limit to opcodes that work with 8-bit registers
     opcodes = filter(opcodes, ({operand1, operand2}) => operand1.length === 1 && operand2.length === 1);
     // make the data eaiser to work with.
-    opcodes = opcodes.map((opcode) => {
-      opcode.register1 = opcode.operand1.toLowerCase();
-      opcode.register2 = opcode.operand2.toLowerCase();
-      opcode.byte = parseInt(opcode.addr, 16);
-      return opcode;
-    });
+    opcodes = opcodes.map(addTestData);
 
     // Create a test for each opcode
     opcodes.forEach(function(opcode) {
@@ -58,6 +55,28 @@ describe.only('OPCODE: LD', () => {
         cpu.processOpcode(byte);
         // check that register1 now has the value from register2
         expect(cpu[register1]).to.eql(randomByte2);
+      });
+    });
+  }); // copies value from one register into another register.
+
+
+  describe.only('loads 16-bit value into 16-bit register', () => {
+    opcodes = filter(OPCODE, {mnemonic: 'LD', length: 3, operand2: 'd16'});
+    // limit to opcodes that work with basic 16-bit registers
+    opcodes = filter(opcodes, ({operand1}) => operand1.length === 2 );
+    // make the data eaiser to work with.
+    opcodes = opcodes.map(addTestData);
+
+    console.log(opcodes);
+    // Create a test for each opcode
+    opcodes.forEach(function(opcode) {
+      const randomByte = 0|Math.random()*65535;
+      const {mnemonic, register1, register2, operand1, operand2, addr, byte} = opcode;
+
+      it(`${mnemonic} ${operand1}, ${randomByte}; loads 0x${randomByte.toString(16)} into register ${register1}  [${addr}]`, () => {
+        cpu.processOpcode(byte); // LD Opcode
+        cpu.processOpcode(randomByte); // random 8-bit value
+        expect(cpu[register1]).to.eql(randomByte);
       });
     });
   }); // loads 8-bit value into 8-bit register
