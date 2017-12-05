@@ -113,26 +113,30 @@ describe('CPU can run OPCODES:', () => {
     loadOpcodes.forEach(function(opcode) {
       const { addr, mnemonic, operand1 } = opcode;
       const register = operand1.toLowerCase();
+
       it(`${mnemonic} A, ${operand1}; Subtracts register ${register} from register a [${addr}]`, () => {
-        let diff = 0x18;
+        cpu.a = 0x29;
+        cpu[register] = 0x11;
+        cpu.processOpcode(parseInt(addr, 16));
+
+        // a - a = 0
         if (register === 'a') {
-          diff = 0;
+          expect(cpu[register]).to.eql(0);
         }
+        else {
+          expect(cpu[register]).to.eql(0x18);
+        }
+      });
+
+      // Subtract Flag (N):
+      // This bit is set if a subtraction was performed in the last math instruction.
+      it(`${mnemonic} A, ${operand1}; Sets the Subtract Flag N [${addr}]`, () => {
         cpu.a = 0x29;
         cpu[register] = 0x11;
         cpu.processOpcode(parseInt(addr, 16));
 
-        expect(cpu[register]).to.eql(diff);
+        expect(cpu.f & 0b100).to.eql(0b100);
       });
-
-      it(`${mnemonic} A, ${operand1}; Sets the Add/Subtract Flag n [${addr}]`, () => {
-        cpu.a = 0x29;
-        cpu[register] = 0x11;
-        cpu.processOpcode(parseInt(addr, 16));
-
-        expect(cpu.f & 0b0100).to.eql(0b0100);
-      });
-    });
-
+    }); // end forEach opcode
   }); // SUB
 });
