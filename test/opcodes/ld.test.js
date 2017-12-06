@@ -5,7 +5,7 @@ import OPCODE from '../../const/opcode.js';
 import { addTestData } from '../utils.js';
 
 
-describe.only('OPCODE: LD', () => {
+describe('OPCODE: LD', () => {
   let cpu, opcodes;
 
   beforeEach(() => {
