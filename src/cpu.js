@@ -36,7 +36,7 @@ class CPU {
     const valueB = typeof keyB === 'string' ? this[keyB]: keyB;
 
     this[keyA] = valueA + valueB;
-    this.f = this.f | 0b0000; // reset back to correct value after tests
+    this.f = this.f & ~this.masks.sub; // reset back to correct value after tests
     if (this[keyA] >= 254) {
       this.f = this.f | this.masks.full;
     }
