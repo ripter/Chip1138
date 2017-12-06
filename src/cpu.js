@@ -55,12 +55,18 @@ class CPU {
     this.opcodeArray.length = 0;
   }
 
-  ld(keyA) {
+  ld(keyA, keyB, length) {
     if (this.opcodeArray.length === 2) {
       this[keyA] = this.opcodeArray[1];
     }
+    // we might not need this one anymore.
+    // remove after checking in old branch
     if(this.opcodeArray[1] >= 0xfe) {
       this.f = this.f | this.masks.full;
+    }
+
+    if (length === 1) {
+      this[keyA] = this[keyB];
     }
     this.opcodeArray.length = 0;
   }
@@ -79,35 +85,36 @@ class CPU {
     }
 
     // Check our opcode's length...
-    const sortOpcodes = () => {
-      let opLength = this.opcodeArray.length;
+    let opLength = this.opcodeArray.length;
 
-      if (mnemonic === 'SUB') {
-        this.sub(keyA);
+    if (mnemonic === 'SUB') {
+      this.sub(keyA);
+    }
+
+    if (length === 1) {
+      if (mnemonic === 'ADD') {
+        this.add(keyA, keyB);
+        return;
       }
-
-      if (length === 1) {
-        if (mnemonic === 'ADD') {
-          this.add(keyA, keyB);
-          return;
+      if (mnemonic === 'LD') {
+        if (keyB) {
+          this.ld(keyA, keyB, length);
         }
       }
+    }
 
-      if (length === 2 && opLength === 2) {
-        if (mnemonic === 'ADD') {
-          const opcodeData = this.opcodeArray[1];
-          this.add(keyA, opcodeData);
-          return;
-        }
-
-        if (mnemonic === 'LD') {
-          this.ld(keyA);
-          return;
-        }
+    if (length === 2 && opLength === 2) {
+      if (mnemonic === 'ADD') {
+        const opcodeData = this.opcodeArray[1];
+        this.add(keyA, opcodeData);
+        return;
       }
-    };
 
-    sortOpcodes();
+      if (mnemonic === 'LD') {
+        this.ld(keyA);
+        return;
+      }
+    }
   }
 
   get a() {
