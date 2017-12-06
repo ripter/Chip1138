@@ -39,7 +39,6 @@ class CPU {
     this.f = this.f | 0b0000; // reset back to correct value after tests
     if (this[keyA] >= 254) {
       this.f = this.f | this.masks.full;
-      debugger;
     }
     else {
       this.f = this.f & 0b0000;
