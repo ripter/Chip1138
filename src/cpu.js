@@ -21,10 +21,10 @@ class CPU {
      */
 
     this.masks = {
-      full: '0b0001',
-      half: '0b0010',
-      sub: '0b0100',
-      zero: '0b1000',
+      full: 0b0001,
+      half: 0b0010,
+      sub: 0b0100,
+      zero: 0b1000,
     };
   }
 
@@ -37,7 +37,7 @@ class CPU {
 
     this[keyA] = valueA + valueB;
     this.f = this.f & this.masks.sub;
-    if (this[keyA] > 509) {
+    if (this[keyA] >= 254) {
       this.f = this.f | this.masks.full;
     }
     else {
@@ -49,7 +49,7 @@ class CPU {
 
   sub(keyA) {
     // this.f = this.masks.sub;
-    this.f = this.f | 0b100; // set the bit on flag using a bitwise or 
+    this.f = this.f | 0b100; // set the bit on flag using a bitwise or
     const subSum = this.a - this[keyA];
     this[keyA] = subSum;
     this.opcodeArray.length = 0;
@@ -59,12 +59,11 @@ class CPU {
     if (this.opcodeArray.length === 2) {
       this[keyA] = this.opcodeArray[1];
     }
-    if(this.opcodeArray[1] > 0xfe) {
-      this.f = this.masks.full;
+    if(this.opcodeArray[1] == 0xff) {
+      debugger;
+      this.f = this.f | this.masks.full;
     }
-    if (this.opcodeArray[0] === 62 && this.opcodeArray.length >= 3) {
-      // console.log('Array....', this.opcodeArray)
-    }
+    this.opcodeArray.length = 0;
   }
 
   processOpcode(opcode) {
@@ -97,16 +96,12 @@ class CPU {
 
       if (length === 2 && opLength === 2) {
         if (mnemonic === 'ADD') {
-          const opcodeByte = this.opcodeArray[1];
-          this.add(keyA, opcodeByte);
+          const opcodeData = this.opcodeArray[1];
+          this.add(keyA, opcodeData);
           return;
         }
 
         if (mnemonic === 'LD') {
-          if (operand2 && operand2 === 'd8') {
-            console.log(OPCODE[opKey]);
-            debugger;
-          }
           this.ld(keyA);
           return;
         }
