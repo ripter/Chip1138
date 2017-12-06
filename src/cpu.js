@@ -36,14 +36,15 @@ class CPU {
     const valueB = typeof keyB === 'string' ? this[keyB]: keyB;
 
     this[keyA] = valueA + valueB;
-    this.f = this.f & this.masks.sub;
+    this.f = this.f | 0b0000; // reset back to correct value after tests
     if (this[keyA] >= 254) {
       this.f = this.f | this.masks.full;
+      debugger;
     }
     else {
       this.f = this.f & 0b0000;
     }
-    this.f = this.f & this.masks.sub;
+    // this.f = this.f & this.masks.sub;
     this.opcodeArray.length = 0;
   }
 
@@ -59,8 +60,7 @@ class CPU {
     if (this.opcodeArray.length === 2) {
       this[keyA] = this.opcodeArray[1];
     }
-    if(this.opcodeArray[1] == 0xff) {
-      debugger;
+    if(this.opcodeArray[1] >= 0xfe) {
       this.f = this.f | this.masks.full;
     }
     this.opcodeArray.length = 0;
