@@ -23,10 +23,10 @@ describe.only('OPCODE: LD', () => {
 
     // Create a test for each opcode
     opcodes.forEach(function(opcode) {
-      const randomByte = 0|Math.random()*256;
+      const randomByte = 0|Math.random()*0xff;
       const {mnemonic, register1, register2, operand1, operand2, addr, byte} = opcode;
 
-      it(`${mnemonic} ${operand1}, ${randomByte}; loads 0x${randomByte.toString(16)} into register ${register1}  [${addr}]`, () => {
+      it(`${mnemonic} ${operand1}, 0x${randomByte.toString(16)}; load into register ${register1} [${addr}]`, () => {
         cpu.processOpcode(byte); // LD Opcode
         cpu.processOpcode(randomByte); // random 8-bit value
         expect(cpu[register1]).to.eql(randomByte);
@@ -45,8 +45,8 @@ describe.only('OPCODE: LD', () => {
     opcodes.forEach(function(opcode) {
       const {mnemonic, register1, register2, addr, byte} = opcode;
       it(`${mnemonic}; replaces value at cpu.${register1} with value at cpu.${register2}  [${addr}]`, () => {
-        const randomByte1 = 0|Math.random()*256;
-        const randomByte2 = 0|Math.random()*256;
+        const randomByte1 = 0|Math.random()*0xff;
+        const randomByte2 = 0|Math.random()*0xff;
         // set old data in register1 so we can tell if it changed
         cpu[register1] = randomByte1;
         // set the new data in register2
@@ -60,20 +60,19 @@ describe.only('OPCODE: LD', () => {
   }); // copies value from one register into another register.
 
 
-  describe.only('loads 16-bit value into 16-bit register', () => {
+  describe('loads 16-bit value into 16-bit register', () => {
     opcodes = filter(OPCODE, {mnemonic: 'LD', length: 3, operand2: 'd16'});
     // limit to opcodes that work with basic 16-bit registers
     opcodes = filter(opcodes, ({operand1}) => operand1.length === 2 );
     // make the data eaiser to work with.
     opcodes = opcodes.map(addTestData);
 
-    console.log(opcodes);
     // Create a test for each opcode
     opcodes.forEach(function(opcode) {
-      const randomByte = 0|Math.random()*65535;
+      const randomByte = 0|Math.random()*0xffff;
       const {mnemonic, register1, register2, operand1, operand2, addr, byte} = opcode;
 
-      it(`${mnemonic} ${operand1}, ${randomByte}; loads 0x${randomByte.toString(16)} into register ${register1}  [${addr}]`, () => {
+      it(`${mnemonic} ${operand1}, 0x${randomByte.toString(16)}; load into register ${register1}  [${addr}]`, () => {
         cpu.processOpcode(byte); // LD Opcode
         cpu.processOpcode(randomByte); // random 8-bit value
         expect(cpu[register1]).to.eql(randomByte);
