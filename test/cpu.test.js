@@ -103,7 +103,7 @@ describe('CPU', () => {
 
     it('af is 16-bit', () => {
       cpu.a = byte1;
-      cpu.f = byte2;
+      cpu.f = byte2; 
       expect(cpu.af).to.eql((byte1 << 4) | byte2);
     });
 
