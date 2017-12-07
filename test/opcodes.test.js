@@ -65,7 +65,7 @@ describe('CPU can run OPCODES:', () => {
       opcodes.forEach(function(opcode) {
         cpu.processOpcode(opcode);
       });
-      expect(cpu.f & 0b1).to.eql(1);
+      expect(cpu.f & 0b1).to.eql(0b1);
     });
 
     it('ADD 255, 254; Unsets the carry flag', () => {

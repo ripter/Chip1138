@@ -5,7 +5,7 @@ import OPCODE from '../../const/opcode.js';
 import { addTestData } from '../utils.js';
 
 
-describe.only('OPCODE: LD', () => {
+describe('OPCODE: LD', () => {
   let cpu, opcodes;
 
   beforeEach(() => {
@@ -24,7 +24,7 @@ describe.only('OPCODE: LD', () => {
     // Create a test for each opcode
     opcodes.forEach(function(opcode) {
       const randomByte = 0|Math.random()*0xff;
-      const {mnemonic, register1, register2, operand1, operand2, addr, byte} = opcode;
+      const {mnemonic, register1, operand1, addr, byte} = opcode;
 
       it(`${mnemonic} ${operand1}, 0x${randomByte.toString(16)}; load into register ${register1} [${addr}]`, () => {
         cpu.processOpcode(byte); // LD Opcode
@@ -70,7 +70,7 @@ describe.only('OPCODE: LD', () => {
     // Create a test for each opcode
     opcodes.forEach(function(opcode) {
       const randomByte = 0|Math.random()*0xffff;
-      const {mnemonic, register1, register2, operand1, operand2, addr, byte} = opcode;
+      const {mnemonic, register1, operand1, addr, byte} = opcode;
 
       it(`${mnemonic} ${operand1}, 0x${randomByte.toString(16)}; load into register ${register1}  [${addr}]`, () => {
         cpu.processOpcode(byte); // LD Opcode
