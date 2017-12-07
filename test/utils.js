@@ -8,3 +8,7 @@ export function addTestData(opcode) {
   opcode.byte = parseInt(opcode.addr, 16);
   return opcode;
 }
+
+export function random8bit() {
+  return 0|Math.random()*0x100;
+}

@@ -1,5 +1,6 @@
 import expect from 'expect.js';
 import CPU from '../src/cpu.js';
+import { random8bit } from './utils.js';
 
 describe('CPU', () => {
   let cpu;
@@ -91,6 +92,39 @@ describe('CPU', () => {
       expect(cpu.altL).to.eql(0xff); // largest 8-bit number
     });
   }); // alternate registers
+
+  describe('combined registers', () => {
+    let byte1, byte2;
+
+    beforeEach(() => {
+      byte1 = random8bit();
+      byte2 = random8bit();
+    });
+
+    it('af is 16-bit', () => {
+      cpu.a = byte1;
+      cpu.f = byte2;
+      expect(cpu.af).to.eql((byte1 << 4) | byte2);
+    });
+
+    it('bc is 16-bit', () => {
+      cpu.b = byte1;
+      cpu.c = byte2;
+      expect(cpu.bc).to.eql((byte1 << 4) | byte2);
+    });
+
+    it('de is 16-bit', () => {
+      cpu.d = byte1;
+      cpu.e = byte2;
+      expect(cpu.de).to.eql((byte1 << 4) | byte2);
+    });
+
+    it('hl is 16-bit', () => {
+      cpu.h = byte1;
+      cpu.l = byte2;
+      expect(cpu.hl).to.eql((byte1 << 4) | byte2);
+    });
+  }); // combined registers
 
   describe('special registers', () => {
     it('i is 16-bit', () => {
