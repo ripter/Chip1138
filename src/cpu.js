@@ -21,10 +21,10 @@ class CPU {
      */
 
     this.masks = {
-      full: '0b0001',
-      half: '0b0010',
-      sub: '0b0100',
-      zero: '0b1000',
+      full: 0b0001,
+      half: 0b0010,
+      sub: 0b0100,
+      zero: 0b1000,
     };
   }
 
@@ -36,14 +36,14 @@ class CPU {
     const valueB = typeof keyB === 'string' ? this[keyB]: keyB;
 
     this[keyA] = valueA + valueB;
-    this.f = this.f & this.masks.sub;
-    if (this[keyA] > 509) {
+    this.f = this.f & ~this.masks.sub; // reset back to correct value after tests
+    if (this[keyA] >= 254) {
       this.f = this.f | this.masks.full;
     }
     else {
       this.f = this.f & 0b0000;
     }
-    this.f = this.f & this.masks.sub;
+    // this.f = this.f & this.masks.sub;
     this.opcodeArray.length = 0;
   }
 
@@ -55,16 +55,20 @@ class CPU {
     this.opcodeArray.length = 0;
   }
 
-  ld(keyA) {
+  ld(keyA, keyB, length) {
     if (this.opcodeArray.length === 2) {
       this[keyA] = this.opcodeArray[1];
     }
-    if(this.opcodeArray[1] > 0xfe) {
-      this.f = this.masks.full;
+    // we might not need this one anymore.
+    // remove after checking in old branch
+    if(this.opcodeArray[1] >= 0xfe) {
+      this.f = this.f | this.masks.full;
     }
-    if (this.opcodeArray[0] === 62 && this.opcodeArray.length >= 3) {
-      // console.log('Array....', this.opcodeArray)
+
+    if (length === 1) {
+      this[keyA] = this[keyB];
     }
+    this.opcodeArray.length = 0;
   }
 
   processOpcode(opcode) {
@@ -81,39 +85,36 @@ class CPU {
     }
 
     // Check our opcode's length...
-    const sortOpcodes = () => {
-      let opLength = this.opcodeArray.length;
+    let opLength = this.opcodeArray.length;
 
-      if (mnemonic === 'SUB') {
-        this.sub(keyA);
+    if (mnemonic === 'SUB') {
+      this.sub(keyA);
+    }
+
+    if (length === 1) {
+      if (mnemonic === 'ADD') {
+        this.add(keyA, keyB);
+        return;
       }
-
-      if (length === 1) {
-        if (mnemonic === 'ADD') {
-          this.add(keyA, keyB);
-          return;
+      if (mnemonic === 'LD') {
+        if (keyB) {
+          this.ld(keyA, keyB, length);
         }
       }
+    }
 
-      if (length === 2 && opLength === 2) {
-        if (mnemonic === 'ADD') {
-          const opcodeByte = this.opcodeArray[1];
-          this.add(keyA, opcodeByte);
-          return;
-        }
-
-        if (mnemonic === 'LD') {
-          if (operand2 && operand2 === 'd8') {
-            // console.log(OPCODE[opKey]);
-            // debugger;
-          }
-          this.ld(keyA);
-          return;
-        }
+    if (length === 2 && opLength === 2) {
+      if (mnemonic === 'ADD') {
+        const opcodeData = this.opcodeArray[1];
+        this.add(keyA, opcodeData);
+        return;
       }
-    };
 
-    sortOpcodes();
+      if (mnemonic === 'LD') {
+        this.ld(keyA);
+        return;
+      }
+    }
   }
 
   get a() {
