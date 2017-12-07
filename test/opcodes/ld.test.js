@@ -2,7 +2,7 @@ import expect from 'expect.js';
 import filter from 'lodash.filter';
 import CPU from '../../src/cpu.js';
 import OPCODE from '../../const/opcode.js';
-import { addTestData } from '../utils.js';
+import { addTestData, random8bit, random16bit } from '../utils.js';
 
 
 describe('OPCODE: LD', () => {
@@ -23,7 +23,7 @@ describe('OPCODE: LD', () => {
 
     // Create a test for each opcode
     opcodes.forEach(function(opcode) {
-      const randomByte = 0|Math.random()*0xff;
+      const randomByte = random8bit();
       const {mnemonic, register1, operand1, addr, byte} = opcode;
 
       it(`${mnemonic} ${operand1}, 0x${randomByte.toString(16)}; load into register ${register1} [${addr}]`, () => {
@@ -45,8 +45,8 @@ describe('OPCODE: LD', () => {
     opcodes.forEach(function(opcode) {
       const {mnemonic, register1, register2, addr, byte} = opcode;
       it(`${mnemonic}; replaces value at cpu.${register1} with value at cpu.${register2}  [${addr}]`, () => {
-        const randomByte1 = 0|Math.random()*0xff;
-        const randomByte2 = 0|Math.random()*0xff;
+        const randomByte1 = random8bit();
+        const randomByte2 = random8bit();
         // set old data in register1 so we can tell if it changed
         cpu[register1] = randomByte1;
         // set the new data in register2
@@ -69,7 +69,7 @@ describe('OPCODE: LD', () => {
 
     // Create a test for each opcode
     opcodes.forEach(function(opcode) {
-      const randomByte = 0|Math.random()*0xffff;
+      const randomByte = random16bit();
       const {mnemonic, register1, operand1, addr, byte} = opcode;
 
       it(`${mnemonic} ${operand1}, 0x${randomByte.toString(16)}; load into register ${register1}  [${addr}]`, () => {

@@ -12,3 +12,7 @@ export function addTestData(opcode) {
 export function random8bit() {
   return 0|Math.random()*0x100;
 }
+
+export function random16bit() {
+  return 0|Math.random()*0x10000;
+}
