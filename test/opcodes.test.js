@@ -77,22 +77,21 @@ describe('CPU can run OPCODES:', () => {
 
     it('ADD 255, 255; Sets the carry flag', () => {
       const opcodes = [
-        0x3e, 0xff, // LD  a, 255
-        0x87, // ADD a, a
+        0x3e, 0xff, // LD  a, 255 (62, 255)
+        0x87, // ADD a, a (135)
       ];
 
       // run the opcodes
       opcodes.forEach(function(opcode) {
         cpu.processOpcode(opcode);
       });
-
       expect(cpu.f & 0b1).to.eql(1);
     });
 
     it('ADD 255, 254; Unsets the carry flag', () => {
       const opcodes = [
         0x3e, 0xff, // LD  a, 255
-        0x6, 0xf2, // LD  b, 254
+        0x6, 0xf2, // LD  b, 242
         0x80, // ADD a, b
       ];
 
@@ -104,4 +103,40 @@ describe('CPU can run OPCODES:', () => {
       expect(cpu.f & 0b1).to.eql(0);
     });
   }); // ADD
+
+  describe('SUB:', () => {
+    // Test LD opcodes that load from the next byte into a register.
+    loadOpcodes = filter(OPCODE, {mnemonic: 'SUB', length: 1});
+    // temp limit to single register
+    loadOpcodes = filter(loadOpcodes, ({operand1}) => operand1.length === 1);
+
+    loadOpcodes.forEach(function(opcode) {
+      const { addr, mnemonic, operand1 } = opcode;
+      const register = operand1.toLowerCase();
+
+      it(`${mnemonic} A, ${operand1}; Subtracts register ${register} from register a [${addr}]`, () => {
+        cpu.a = 0x29;
+        cpu[register] = 0x11;
+        cpu.processOpcode(parseInt(addr, 16));
+
+        // a - a = 0
+        if (register === 'a') {
+          expect(cpu[register]).to.eql(0);
+        }
+        else {
+          expect(cpu[register]).to.eql(0x18);
+        }
+      });
+
+      // Subtract Flag (N):
+      // This bit is set if a subtraction was performed in the last math instruction.
+      it(`${mnemonic} A, ${operand1}; Sets the Subtract Flag N [${addr}]`, () => {
+        cpu.a = 0x29;
+        cpu[register] = 0x11;
+        cpu.processOpcode(parseInt(addr, 16));
+
+        expect(cpu.f & 0b100).to.eql(0b100);
+      });
+    }); // end forEach opcode
+  }); // SUB
 });
