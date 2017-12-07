@@ -78,6 +78,16 @@ describe('OPCODE: LD', () => {
         expect(cpu[register1]).to.eql(randomByte);
       });
     });
+
+
+    it('LD SP, HL; loads value at cpu.hl into cpu.sp [0xf9]', () => {
+      const randomByte = random16bit();
+      cpu.hl = randomByte;
+      cpu.sp = 0;
+      cpu.processOpcode(0xf9);
+      expect(cpu.sp).to.eql(randomByte);
+    });
   }); // loads 8-bit value into 8-bit register
+
 
 }); // OPCODE: LD
