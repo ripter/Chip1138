@@ -101,28 +101,48 @@ describe('CPU', () => {
       byte2 = random8bit();
     });
 
-    it('af is 16-bit', () => {
+    it('read af [16-bit]', () => {
       cpu.a = byte1;
       cpu.f = byte2;
       expect(cpu.af).to.eql((byte1 << 8) | byte2);
     });
+    it('write af [16-bit]', () => {
+      cpu.af = (byte1 << 8) | byte2;
+      expect(cpu.a).to.eql(byte1);
+      expect(cpu.f).to.eql(byte2);
+    });
 
-    it('bc is 16-bit', () => {
+    it('read bc [16-bit]', () => {
       cpu.b = byte1;
       cpu.c = byte2;
       expect(cpu.bc).to.eql((byte1 << 8) | byte2);
     });
+    it('write bc [16-bit]', () => {
+      cpu.bc = (byte1 << 8) | byte2;
+      expect(cpu.b).to.eql(byte1);
+      expect(cpu.c).to.eql(byte2);
+    });
 
-    it('de is 16-bit', () => {
+    it('read de [16-bit]', () => {
       cpu.d = byte1;
       cpu.e = byte2;
       expect(cpu.de).to.eql((byte1 << 8) | byte2);
     });
+    it('write de [16-bit]', () => {
+      cpu.de = (byte1 << 8) | byte2;
+      expect(cpu.d).to.eql(byte1);
+      expect(cpu.e).to.eql(byte2);
+    });
 
-    it('hl is 16-bit', () => {
+    it('read hl [16-bit]', () => {
       cpu.h = byte1;
       cpu.l = byte2;
       expect(cpu.hl).to.eql((byte1 << 8) | byte2);
+    });
+    it('write hl [16-bit]', () => {
+      cpu.hl = (byte1 << 8) | byte2;
+      expect(cpu.h).to.eql(byte1);
+      expect(cpu.l).to.eql(byte2);
     });
   }); // combined registers
 
