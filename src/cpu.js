@@ -63,11 +63,9 @@ class CPU {
     if (length === 1) {
       this[keyA] = this[keyB];
     }
-console.log(keyA, keyB, length)
+
     if (length === 3) {
       this.keyA = this.opcodeArray[1];
-      console.log('our input value is:', this.opcodeArray[1]);
-      debugger;
     }
     this.opcodeArray.length = 0;
   }
