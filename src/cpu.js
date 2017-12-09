@@ -63,11 +63,9 @@ class CPU {
     if (length === 1) {
       this[keyA] = this[keyB];
     }
-console.log(keyA, keyB, length)
+
     if (length === 3) {
       this.keyA = this.opcodeArray[1];
-      console.log('our input value is:', this.opcodeArray[1]);
-      debugger;
     }
     this.opcodeArray.length = 0;
   }
@@ -186,11 +184,11 @@ console.log(keyA, keyB, length)
   get af() {
     const bitA = this.a;
     const bitF = this.f;
-    return (bitA << 4) | bitF;
+    return (bitA << 8) | bitF;
   }
   set af(value) {
     const bitA = value & 0xff;
-    const bitF =((bitA >> 4) | 0xff);
+    const bitF = (bitA >> 8) & 0xff;
     this.a = bitA;
     this.f = bitF;
   }
@@ -198,10 +196,10 @@ console.log(keyA, keyB, length)
   get bc() {
     const bitB = this.b;
     const bitC = this.c;
-    return (bitB << 4) | bitC;
+    return (bitB << 8) | bitC;
   }
   set bc(value) {
-    const bitB = ((value >> 4) & 0xff);
+    const bitB = ((value >> 8) & 0xff);
     const bitC = value & 0xff;
     this.b = bitB;
     this.c = bitC;
@@ -210,11 +208,11 @@ console.log(keyA, keyB, length)
   get de() {
     const bitD = this.d;
     const bitE = this.e;
-    return (((bitD & 0xff) << 4) | (bitE & 0xff));
+    return (bitD << 8) | bitE;
   }
   set de(value) {
     const bitD = value & 0xff;
-    const bitE =((bitD >> 4) | 0xff);
+    const bitE =((bitD >> 8) | 0xff);
     this.d = bitD;
     this.e = bitE;
   }
@@ -222,11 +220,11 @@ console.log(keyA, keyB, length)
   get hl() {
     const bitH = this.h;
     const bitL = this.l;
-    return (bitH << 4) | bitL;
+    return (bitH << 8) | bitL;
   }
   set hl(value) {
     const bitH = value & 0xff;
-    const bitL =((bitH >> 4) | 0xff);
+    const bitL =((bitH >> 8) | 0xff);
     this.h = bitH;
     this.l = bitL;
   }

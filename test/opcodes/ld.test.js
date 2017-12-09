@@ -74,7 +74,8 @@ describe('OPCODE: LD', () => {
 
       it(`${mnemonic} ${operand1}, 0x${randomByte.toString(16)}; load into register ${register1}  [${addr}]`, () => {
         cpu.processOpcode(byte); // LD Opcode
-        cpu.processOpcode(randomByte); // random 8-bit value
+        cpu.processOpcode(randomByte >> 8);   // Split the 16-bit into two 8-bits
+        cpu.processOpcode(randomByte & 0xff); 
         expect(cpu[register1]).to.eql(randomByte);
       });
     });
