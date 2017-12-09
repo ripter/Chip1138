@@ -1,4 +1,3 @@
-import 'document-register-element';
 import CPU from './cpu.js';
 
 const cpu = new CPU();

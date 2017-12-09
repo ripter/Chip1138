@@ -103,26 +103,26 @@ describe('CPU', () => {
 
     it('af is 16-bit', () => {
       cpu.a = byte1;
-      cpu.f = byte2; 
-      expect(cpu.af).to.eql((byte1 << 4) | byte2);
+      cpu.f = byte2;
+      expect(cpu.af).to.eql((byte1 << 8) | byte2);
     });
 
     it('bc is 16-bit', () => {
       cpu.b = byte1;
       cpu.c = byte2;
-      expect(cpu.bc).to.eql((byte1 << 4) | byte2);
+      expect(cpu.bc).to.eql((byte1 << 8) | byte2);
     });
 
     it('de is 16-bit', () => {
       cpu.d = byte1;
       cpu.e = byte2;
-      expect(cpu.de).to.eql((byte1 << 4) | byte2);
+      expect(cpu.de).to.eql((byte1 << 8) | byte2);
     });
 
     it('hl is 16-bit', () => {
       cpu.h = byte1;
       cpu.l = byte2;
-      expect(cpu.hl).to.eql((byte1 << 4) | byte2);
+      expect(cpu.hl).to.eql((byte1 << 8) | byte2);
     });
   }); // combined registers
 
