@@ -187,8 +187,8 @@ class CPU {
     return (bitA << 8) | bitF;
   }
   set af(value) {
-    const bitA = value & 0xff;
-    const bitF = (bitA >> 8) & 0xff;
+    const bitA = (value >> 8) & 0xff;
+    const bitF = value & 0xff;
     this.a = bitA;
     this.f = bitF;
   }
@@ -199,7 +199,7 @@ class CPU {
     return (bitB << 8) | bitC;
   }
   set bc(value) {
-    const bitB = ((value >> 8) & 0xff);
+    const bitB = (value >> 8) & 0xff;
     const bitC = value & 0xff;
     this.b = bitB;
     this.c = bitC;
@@ -211,8 +211,8 @@ class CPU {
     return (bitD << 8) | bitE;
   }
   set de(value) {
-    const bitD = value & 0xff;
-    const bitE =((bitD >> 8) | 0xff);
+    const bitD = (value >> 8) & 0xff;
+    const bitE = value & 0xff;
     this.d = bitD;
     this.e = bitE;
   }
@@ -223,8 +223,8 @@ class CPU {
     return (bitH << 8) | bitL;
   }
   set hl(value) {
-    const bitH = value & 0xff;
-    const bitL =((bitH >> 8) | 0xff);
+    const bitH = (value >> 8) & 0xff;
+    const bitL = value & 0xff;
     this.h = bitH;
     this.l = bitL;
   }
