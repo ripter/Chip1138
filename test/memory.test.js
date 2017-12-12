@@ -22,7 +22,7 @@ describe('Memory', () => {
   });
 
   it('can read ROM TITLE', () => {
-    const actual = memory.readROMRange(0x0134, 0x142);
+    const actual = memory.readROMRange(0x0134, 0x13c);
     const expected = new new Uint8Array([0x46, 0x4c, 0x41, 0x50, 0x50, 0x59, 0x42, 0x4f, 0x59]);
     expect(actual).to.eql(expected);
   });
