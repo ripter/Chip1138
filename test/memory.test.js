@@ -3,7 +3,7 @@ import Memory from '../src/memory.js';
 // import { random8bit } from './utils.js';
 import rom from '../roms/flappyboy.json';
 
-describe.only('Memory', () => {
+describe('Memory', () => {
   let memory;
 
   beforeEach(() => {
