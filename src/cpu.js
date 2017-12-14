@@ -29,9 +29,19 @@ class CPU {
   }
 
   /*
+  * RESET: tssts length and opcode length, resets this.opcodeArray;
+   */
+  reset(length) {
+    console.log(`reset? ${this.opcodeArray.length} == ${length}`)
+    if (this.opcodeArray.length === length) {
+      this.opcodeArray.length = 0;
+    }
+  }
+
+  /*
    * ADD: takes 2 aruguements, gets register values and sets register with sum of values
    */
-  add(keyA = 'a', keyB = 'a') {
+  add(keyA = 'a', keyB = 'a', length) {
     const valueA = this[keyA];
     const valueB = typeof keyB === 'string' ? this[keyB]: keyB;
 
@@ -44,19 +54,20 @@ class CPU {
       this.f = this.f & 0b0000;
     }
     // this.f = this.f & this.masks.sub;
-    this.opcodeArray.length = 0;
+    this.reset(length);
   }
 
-  sub(keyA) {
+  sub(keyA, length) {
     // this.f = this.masks.sub;
     this.f = this.f | 0b100; // set the bit on flag using a bitwise or
     const subSum = this.a - this[keyA];
     this[keyA] = subSum;
-    this.opcodeArray.length = 0;
+    this.reset(length);
   }
 
   ld(keyA, keyB, length) {
-    if (this.opcodeArray.length === 2) {
+    const opLength = this.opcodeArray.length;
+    if (opLength === 2) {
       this[keyA] = this.opcodeArray[1];
     }
 
@@ -64,10 +75,11 @@ class CPU {
       this[keyA] = this[keyB];
     }
 
-    if (length === 3) {
-      this.keyA = this.opcodeArray[1];
+    if (opLength === 3) {
+      console.log('LD array value @ ', this[keyA], this.opcodeArray);
+      this[keyA] = this.opcodeArray.slice(1);
     }
-    this.opcodeArray.length = 0;
+    this.reset(length);
   }
 
   processOpcode(opcode) {
@@ -84,15 +96,15 @@ class CPU {
     }
 
     // Check our opcode's length...
-    let opLength = this.opcodeArray.length;
+    const opLength = this.opcodeArray.length;
 
     if (mnemonic === 'SUB') {
-      this.sub(keyA);
+      this.sub(keyA, length);
     }
 
     if (length === 1) {
       if (mnemonic === 'ADD') {
-        this.add(keyA, keyB);
+        this.add(keyA, keyB, length);
         return;
       }
       if (mnemonic === 'LD') {
@@ -106,20 +118,28 @@ class CPU {
       if (length === 2) {
         if (mnemonic === 'ADD') {
           const opcodeData = this.opcodeArray[1];
-          this.add(keyA, opcodeData);
+          this.add(keyA, opcodeData, length);
           return;
         }
 
         if (mnemonic === 'LD') {
-          this.ld(keyA);
+          this.ld(keyA, keyB, length);
           return;
         }
       }
 
-      if (mnemonic === 'LD') {
-        this.ld(keyA, length);
+      if (length === 3) {
+        debugger;
+        console.log('LENGTH == LD:', this.opcodeArray.length, length);
+        if (opLength === 3) {
+          if (mnemonic === 'LD') {
+            debugger;
+            this.ld(keyA, keyB, length);
+          }
+        }
       }
     }
+    this.reset(length);
   }
 
   // 8 Bit regsiters
@@ -199,8 +219,8 @@ class CPU {
     return (bitB << 8) | bitC;
   }
   set bc(value) {
-    const bitB = (value >> 8) & 0xff;
-    const bitC = value & 0xff;
+    const bitB = value[0];
+    const bitC = value[1];
     this.b = bitB;
     this.c = bitC;
   }
