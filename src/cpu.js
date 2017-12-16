@@ -29,9 +29,19 @@ class CPU {
   }
 
   /*
+  * RESET: tssts length and opcode length, resets this.opcodeArray;
+   */
+  reset(length) {
+    // console.log(`reset? ${this.opcodeArray.length} == ${length}`)
+    if (this.opcodeArray.length === length) {
+      this.opcodeArray.length = 0;
+    }
+  }
+
+  /*
    * ADD: takes 2 aruguements, gets register values and sets register with sum of values
    */
-  add(keyA = 'a', keyB = 'a') {
+  add(keyA = 'a', keyB = 'a', length) {
     const valueA = this[keyA];
     const valueB = typeof keyB === 'string' ? this[keyB]: keyB;
 
@@ -44,25 +54,40 @@ class CPU {
       this.f = this.f & 0b0000;
     }
     // this.f = this.f & this.masks.sub;
-    this.opcodeArray.length = 0;
+    this.reset(length);
   }
 
-  sub(keyA) {
+  sub(keyA, length) {
     // this.f = this.masks.sub;
     this.f = this.f | 0b100; // set the bit on flag using a bitwise or
     const subSum = this.a - this[keyA];
     this[keyA] = subSum;
-    this.opcodeArray.length = 0;
+    this.reset(length);
   }
 
-  ld(keyA) {
-    if (this.opcodeArray.length === 2) {
+  ld(keyA, keyB, length) {
+    const opLength = this.opcodeArray.length;
+    if (opLength === 2) {
       this[keyA] = this.opcodeArray[1];
     }
-    if(this.opcodeArray[1] >= 0xfe) {
-      this.f = this.f | this.masks.full;
+
+    if (length === 1) {
+      this[keyA] = this[keyB];
     }
-    this.opcodeArray.length = 0;
+
+    // console.log('Length pre check', opLength);
+    if (length === 3 && opLength === 3) {
+      const firstBit = this.opcodeArray[1];
+      const secondBit = this.opcodeArray[2];
+      if (keyA === 'sp') {
+        this[keyA] = (firstBit << 8) | secondBit;
+      }
+      else {
+        this[keyA[0]] = firstBit;
+        this[keyA[1]] = secondBit;
+      }
+    }
+    this.reset(length);
   }
 
   processOpcode(opcode) {
@@ -79,37 +104,53 @@ class CPU {
     }
 
     // Check our opcode's length...
-    const sortOpcodes = () => {
-      let opLength = this.opcodeArray.length;
+    const opLength = this.opcodeArray.length;
 
-      if (mnemonic === 'SUB') {
-        this.sub(keyA);
-      }
-
+    if (mnemonic === 'SUB') {
+      this.sub(keyA, length);
+    }
+    if (mnemonic === 'ADD') {
       if (length === 1) {
-        if (mnemonic === 'ADD') {
-          this.add(keyA, keyB);
-          return;
-        }
+        this.add(keyA, keyB, length);
+        return;
       }
+      if (opLength === 2 && length === 2) {
+        const opcodeData = this.opcodeArray[1];
+        this.add(keyA, opcodeData, length);
+        return;
+      }
+    }
+    if (mnemonic === 'LD') {
+      if (keyB) {
+        this.ld(keyA, keyB, length);
+      }
+    }
 
-      if (length === 2 && opLength === 2) {
+    if (opLength === 2) {
+      if (length === 2) {
         if (mnemonic === 'ADD') {
           const opcodeData = this.opcodeArray[1];
-          this.add(keyA, opcodeData);
+          this.add(keyA, opcodeData, length);
           return;
         }
-
         if (mnemonic === 'LD') {
-          this.ld(keyA);
+          this.ld(keyA, keyB, length);
           return;
         }
       }
-    };
 
-    sortOpcodes();
+      if (length === 3) {
+        if (opLength === 3) {
+          if (mnemonic === 'LD') {
+            this.ld(keyA, keyB, length);
+          }
+        }
+      }
+    }
+    this.reset(length);
   }
 
+  // 8 Bit regsiters
   get a() {
     return this.memory8bit[0];
   }
@@ -166,6 +207,57 @@ class CPU {
     this.memory8bit[7] = value;
   }
 
+  // combined 16 bit registers
+  // combining 2 8 bit registers to hold 16 bits
+  get af() {
+    const bitA = this.a;
+    const bitF = this.f;
+    return (bitA << 8) | bitF;
+  }
+  set af(value) {
+    const bitA = (value >> 8) & 0xff;
+    const bitF = value & 0xff;
+    this.a = bitA;
+    this.f = bitF;
+  }
+
+  get bc() {
+    const bitB = this.b;
+    const bitC = this.c;
+    return (bitB << 8) | bitC;
+  }
+  set bc(value) {
+    const bitB = (value >> 8) & 0xff;
+    const bitC = value & 0xff;
+    this.b = bitB;
+    this.c = bitC;
+  }
+
+  get de() {
+    const bitD = this.d;
+    const bitE = this.e;
+    return (bitD << 8) | bitE;
+  }
+  set de(value) {
+    const bitD = (value >> 8) & 0xff;
+    const bitE = value & 0xff;
+    this.d = bitD;
+    this.e = bitE;
+  }
+
+  get hl() {
+    const bitH = this.h;
+    const bitL = this.l;
+    return (bitH << 8) | bitL;
+  }
+  set hl(value) {
+    const bitH = (value >> 8) & 0xff;
+    const bitL = value & 0xff;
+    this.h = bitH;
+    this.l = bitL;
+  }
+
+  // Alternate register
   get altA() {
     return this.memory8bit[8];
   }
@@ -262,6 +354,7 @@ class CPU {
     this.memory16bit[3] = value;
   }
 
+  // Stack pointer, 16 bits
   get sp () {
     return this.memory16bit[4];
   }

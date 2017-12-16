@@ -11,26 +11,6 @@ describe('CPU can run OPCODES:', () => {
     cpu = new CPU();
   });
 
-  describe('LD:', () => {
-    // Test LD opcodes that load from the next byte into a register.
-    loadOpcodes = filter(OPCODE, {mnemonic: 'LD', length: 2, operand2: 'd8'});
-    // temp limit to single register
-    loadOpcodes = filter(loadOpcodes, ({operand1}) => operand1.length === 1 );
-
-    // test that each opcode can load an 8-bit value into a register
-    loadOpcodes.forEach(function(opcode) {
-      const randomByte = 0|Math.random()*256;
-      const { addr, mnemonic, operand1 } = opcode;
-      const register = operand1.toLowerCase();
-
-      it(`${mnemonic} ${operand1}, ${randomByte}; loads ${randomByte} into register ${register}  [${addr}]`, () => {
-        cpu.processOpcode(parseInt(addr, 16));
-        cpu.processOpcode(randomByte);
-        expect(cpu[register]).to.eql(randomByte);
-      });
-    });
-  });
-
   describe('ADD:', () => {
     // Test LD opcodes that load from the next byte into a register.
     loadOpcodes = filter(OPCODE, {mnemonic: 'ADD', length: 1});
@@ -85,7 +65,7 @@ describe('CPU can run OPCODES:', () => {
       opcodes.forEach(function(opcode) {
         cpu.processOpcode(opcode);
       });
-      expect(cpu.f & 0b1).to.eql(1);
+      expect(cpu.f & 0b1).to.eql(0b1);
     });
 
     it('ADD 255, 254; Unsets the carry flag', () => {

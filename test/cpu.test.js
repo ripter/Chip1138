@@ -1,5 +1,6 @@
 import expect from 'expect.js';
 import CPU from '../src/cpu.js';
+import { random8bit } from './utils.js';
 
 describe('CPU', () => {
   let cpu;
@@ -91,6 +92,59 @@ describe('CPU', () => {
       expect(cpu.altL).to.eql(0xff); // largest 8-bit number
     });
   }); // alternate registers
+
+  describe('combined registers', () => {
+    let byte1, byte2;
+
+    beforeEach(() => {
+      byte1 = random8bit();
+      byte2 = random8bit();
+    });
+
+    it('read af [16-bit]', () => {
+      cpu.a = byte1;
+      cpu.f = byte2;
+      expect(cpu.af).to.eql((byte1 << 8) | byte2);
+    });
+    it('write af [16-bit]', () => {
+      cpu.af = (byte1 << 8) | byte2;
+      expect(cpu.a).to.eql(byte1);
+      expect(cpu.f).to.eql(byte2);
+    });
+
+    it('read bc [16-bit]', () => {
+      cpu.b = byte1;
+      cpu.c = byte2;
+      expect(cpu.bc).to.eql((byte1 << 8) | byte2);
+    });
+    it('write bc [16-bit]', () => {
+      cpu.bc = (byte1 << 8) | byte2;
+      expect(cpu.b).to.eql(byte1);
+      expect(cpu.c).to.eql(byte2);
+    });
+
+    it('read de [16-bit]', () => {
+      cpu.d = byte1;
+      cpu.e = byte2;
+      expect(cpu.de).to.eql((byte1 << 8) | byte2);
+    });
+    it('write de [16-bit]', () => {
+      cpu.de = (byte1 << 8) | byte2;
+      expect(cpu.d).to.eql(byte1);
+      expect(cpu.e).to.eql(byte2);
+    });
+
+    it('read hl [16-bit]', () => {
+      cpu.h = byte1;
+      cpu.l = byte2;
+      expect(cpu.hl).to.eql((byte1 << 8) | byte2);
+    });
+    it('write hl [16-bit]', () => {
+      cpu.hl = (byte1 << 8) | byte2;
+      expect(cpu.h).to.eql(byte1);
+      expect(cpu.l).to.eql(byte2);
+    });
+  }); // combined registers
 
   describe('special registers', () => {
     it('i is 16-bit', () => {
