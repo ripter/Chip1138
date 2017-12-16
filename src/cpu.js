@@ -29,9 +29,19 @@ class CPU {
   }
 
   /*
+  * RESET: tssts length and opcode length, resets this.opcodeArray;
+   */
+  reset(length) {
+    // console.log(`reset? ${this.opcodeArray.length} == ${length}`)
+    if (this.opcodeArray.length === length) {
+      this.opcodeArray.length = 0;
+    }
+  }
+
+  /*
    * ADD: takes 2 aruguements, gets register values and sets register with sum of values
    */
-  add(keyA = 'a', keyB = 'a') {
+  add(keyA = 'a', keyB = 'a', length) {
     const valueA = this[keyA];
     const valueB = typeof keyB === 'string' ? this[keyB]: keyB;
 
@@ -44,19 +54,20 @@ class CPU {
       this.f = this.f & 0b0000;
     }
     // this.f = this.f & this.masks.sub;
-    this.opcodeArray.length = 0;
+    this.reset(length);
   }
 
-  sub(keyA) {
+  sub(keyA, length) {
     // this.f = this.masks.sub;
     this.f = this.f | 0b100; // set the bit on flag using a bitwise or
     const subSum = this.a - this[keyA];
     this[keyA] = subSum;
-    this.opcodeArray.length = 0;
+    this.reset(length);
   }
 
   ld(keyA, keyB, length) {
-    if (this.opcodeArray.length === 2) {
+    const opLength = this.opcodeArray.length;
+    if (opLength === 2) {
       this[keyA] = this.opcodeArray[1];
     }
 
@@ -64,10 +75,19 @@ class CPU {
       this[keyA] = this[keyB];
     }
 
-    if (length === 3) {
-      this.keyA = this.opcodeArray[1];
+    // console.log('Length pre check', opLength);
+    if (length === 3 && opLength === 3) {
+      const firstBit = this.opcodeArray[1];
+      const secondBit = this.opcodeArray[2];
+      if (keyA === 'sp') {
+        this[keyA] = (firstBit << 8) | secondBit;
+      }
+      else {
+        this[keyA[0]] = firstBit;
+        this[keyA[1]] = secondBit;
+      }
     }
-    this.opcodeArray.length = 0;
+    this.reset(length);
   }
 
   processOpcode(opcode) {
@@ -84,21 +104,25 @@ class CPU {
     }
 
     // Check our opcode's length...
-    let opLength = this.opcodeArray.length;
+    const opLength = this.opcodeArray.length;
 
     if (mnemonic === 'SUB') {
-      this.sub(keyA);
+      this.sub(keyA, length);
     }
-
-    if (length === 1) {
-      if (mnemonic === 'ADD') {
-        this.add(keyA, keyB);
+    if (mnemonic === 'ADD') {
+      if (length === 1) {
+        this.add(keyA, keyB, length);
         return;
       }
-      if (mnemonic === 'LD') {
-        if (keyB) {
-          this.ld(keyA, keyB, length);
-        }
+      if (opLength === 2 && length === 2) {
+        const opcodeData = this.opcodeArray[1];
+        this.add(keyA, opcodeData, length);
+        return;
+      }
+    }
+    if (mnemonic === 'LD') {
+      if (keyB) {
+        this.ld(keyA, keyB, length);
       }
     }
 
@@ -106,20 +130,24 @@ class CPU {
       if (length === 2) {
         if (mnemonic === 'ADD') {
           const opcodeData = this.opcodeArray[1];
-          this.add(keyA, opcodeData);
+          this.add(keyA, opcodeData, length);
           return;
         }
-
         if (mnemonic === 'LD') {
-          this.ld(keyA);
+          this.ld(keyA, keyB, length);
           return;
         }
       }
 
-      if (mnemonic === 'LD') {
-        this.ld(keyA, length);
+      if (length === 3) {
+        if (opLength === 3) {
+          if (mnemonic === 'LD') {
+            this.ld(keyA, keyB, length);
+          }
+        }
       }
     }
+    this.reset(length);
   }
 
   // 8 Bit regsiters
@@ -187,8 +215,8 @@ class CPU {
     return (bitA << 8) | bitF;
   }
   set af(value) {
-    const bitA = value & 0xff;
-    const bitF = (bitA >> 8) & 0xff;
+    const bitA = (value >> 8) & 0xff;
+    const bitF = value & 0xff;
     this.a = bitA;
     this.f = bitF;
   }
@@ -199,7 +227,7 @@ class CPU {
     return (bitB << 8) | bitC;
   }
   set bc(value) {
-    const bitB = ((value >> 8) & 0xff);
+    const bitB = (value >> 8) & 0xff;
     const bitC = value & 0xff;
     this.b = bitB;
     this.c = bitC;
@@ -211,8 +239,8 @@ class CPU {
     return (bitD << 8) | bitE;
   }
   set de(value) {
-    const bitD = value & 0xff;
-    const bitE =((bitD >> 8) | 0xff);
+    const bitD = (value >> 8) & 0xff;
+    const bitE = value & 0xff;
     this.d = bitD;
     this.e = bitE;
   }
@@ -223,8 +251,8 @@ class CPU {
     return (bitH << 8) | bitL;
   }
   set hl(value) {
-    const bitH = value & 0xff;
-    const bitL =((bitH >> 8) | 0xff);
+    const bitH = (value >> 8) & 0xff;
+    const bitL = value & 0xff;
     this.h = bitH;
     this.l = bitL;
   }
