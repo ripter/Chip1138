@@ -79,8 +79,6 @@ class CPU {
     if (length === 3 && opLength === 3) {
       const firstBit = this.opcodeArray[1];
       const secondBit = this.opcodeArray[2];
-
-      // SP stands for special... der... sp is it's own 16bit reg and needs special handling
       if (keyA === 'sp') {
         this[keyA] = (firstBit << 8) | secondBit;
       }
@@ -88,9 +86,6 @@ class CPU {
         this[keyA[0]] = firstBit;
         this[keyA[1]] = secondBit;
       }
-
-      let hex = firstBit.toString(16);
-      let hex1 = secondBit.toString(16);
     }
     this.reset(length);
   }
@@ -117,13 +112,13 @@ class CPU {
     if (mnemonic === 'ADD') {
       if (length === 1) {
         this.add(keyA, keyB, length);
-      return;
+        return;
       }
       if (opLength === 2 && length === 2) {
         const opcodeData = this.opcodeArray[1];
         this.add(keyA, opcodeData, length);
         return;
-      };
+      }
     }
     if (mnemonic === 'LD') {
       if (keyB) {
@@ -147,7 +142,6 @@ class CPU {
       if (length === 3) {
         if (opLength === 3) {
           if (mnemonic === 'LD') {
-            debugger;
             this.ld(keyA, keyB, length);
           }
         }
@@ -161,7 +155,6 @@ class CPU {
     return this.memory8bit[0];
   }
   set a(value) {
-    console.log('value in "A" setter:', value.toString(16));
     this.memory8bit[0] = value;
   }
 
@@ -169,7 +162,6 @@ class CPU {
     return this.memory8bit[1];
   }
   set b(value) {
-    console.log('value in "A" setter:', value.toString(16));
     this.memory8bit[1] = value;
   }
 
