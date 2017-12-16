@@ -32,7 +32,7 @@ class CPU {
   * RESET: tssts length and opcode length, resets this.opcodeArray;
    */
   reset(length) {
-    console.log(`reset? ${this.opcodeArray.length} == ${length}`)
+    // console.log(`reset? ${this.opcodeArray.length} == ${length}`)
     if (this.opcodeArray.length === length) {
       this.opcodeArray.length = 0;
     }
@@ -75,9 +75,22 @@ class CPU {
       this[keyA] = this[keyB];
     }
 
-    if (opLength === 3) {
-      console.log('LD array value @ ', this[keyA], this.opcodeArray);
-      this[keyA] = this.opcodeArray.slice(1);
+    // console.log('Length pre check', opLength);
+    if (length === 3 && opLength === 3) {
+      const firstBit = this.opcodeArray[1];
+      const secondBit = this.opcodeArray[2];
+
+      // SP stands for special... der... sp is it's own 16bit reg and needs special handling
+      if (keyA === 'sp') {
+        this[keyA] = (firstBit << 8) | secondBit;
+      }
+      else {
+        this[keyA[0]] = firstBit;
+        this[keyA[1]] = secondBit;
+      }
+
+      let hex = firstBit.toString(16);
+      let hex1 = secondBit.toString(16);
     }
     this.reset(length);
   }
@@ -101,16 +114,20 @@ class CPU {
     if (mnemonic === 'SUB') {
       this.sub(keyA, length);
     }
-
-    if (length === 1) {
-      if (mnemonic === 'ADD') {
+    if (mnemonic === 'ADD') {
+      if (length === 1) {
         this.add(keyA, keyB, length);
-        return;
+      return;
       }
-      if (mnemonic === 'LD') {
-        if (keyB) {
-          this.ld(keyA, keyB, length);
-        }
+      if (opLength === 2 && length === 2) {
+        const opcodeData = this.opcodeArray[1];
+        this.add(keyA, opcodeData, length);
+        return;
+      };
+    }
+    if (mnemonic === 'LD') {
+      if (keyB) {
+        this.ld(keyA, keyB, length);
       }
     }
 
@@ -121,7 +138,6 @@ class CPU {
           this.add(keyA, opcodeData, length);
           return;
         }
-
         if (mnemonic === 'LD') {
           this.ld(keyA, keyB, length);
           return;
@@ -129,8 +145,6 @@ class CPU {
       }
 
       if (length === 3) {
-        debugger;
-        console.log('LENGTH == LD:', this.opcodeArray.length, length);
         if (opLength === 3) {
           if (mnemonic === 'LD') {
             debugger;
@@ -147,6 +161,7 @@ class CPU {
     return this.memory8bit[0];
   }
   set a(value) {
+    console.log('value in "A" setter:', value.toString(16));
     this.memory8bit[0] = value;
   }
 
@@ -154,6 +169,7 @@ class CPU {
     return this.memory8bit[1];
   }
   set b(value) {
+    console.log('value in "A" setter:', value.toString(16));
     this.memory8bit[1] = value;
   }
 
@@ -219,8 +235,8 @@ class CPU {
     return (bitB << 8) | bitC;
   }
   set bc(value) {
-    const bitB = value[0];
-    const bitC = value[1];
+    const bitB = (value >> 8) & 0xff;
+    const bitC = value & 0xff;
     this.b = bitB;
     this.c = bitC;
   }
