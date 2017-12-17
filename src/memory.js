@@ -3,15 +3,25 @@ import loadROM from './utils/loadROM.js';
 
 class Memory {
 
-  constuctor(rom) {
+  constructor(rom) {
 
-      if (!rom) {
-        throw new Error('requires ROM');
-      }
+    if (!rom) {
+      throw new Error('requires ROM');
+    }
+
+    this.data = loadROM(rom);
   }
 
-  readROM() {
-    this.data;
+  readROM(value) {
+    debugger;
+    let romValue;
+    if (typeof value != 'number') {
+      romValue = this.data;
+    }
+    else {
+      romValue = this.data[value];
+    }
+    return romValue;
   }
 
   readROMRange() {
