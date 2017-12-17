@@ -13,7 +13,6 @@ class Memory {
   }
 
   readROM(value) {
-    debugger;
     let romValue;
     if (typeof value != 'number') {
       romValue = this.data;
@@ -24,8 +23,18 @@ class Memory {
     return romValue;
   }
 
-  readROMRange() {
+  readROMRange(range) {
     // range to read from
+    if (!range) {
+      throw new Error('please provide a range to return');
+    }
+    const low = arguments[0];
+    const high = arguments[1];
+    const length = high - low + 1;
+    const tempArray = this.data.slice(low, high + 1);
+    let rangeArray = new Uint8Array(length);
+    rangeArray.set(tempArray);
+    return rangeArray;
   }
 
 }
