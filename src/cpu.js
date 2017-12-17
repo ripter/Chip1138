@@ -2,6 +2,11 @@
  * Virtual CPU for the Gameboy Color; a modified z80
  */
 import { OPCODE } from '../const/opcode.js';
+// import loadROM from './utils/loadROM.js';
+// import rom from '../roms/flappyboy.json';
+//
+// const game = loadROM(rom);
+// console.log('Type of ROM ', typeof game);
 
 class CPU {
   constructor() {
