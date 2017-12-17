@@ -5,9 +5,7 @@ class Memory {
 
   constuctor(rom) {
 
-    this.error = () => {
-
-      if (typeof rom != 'object') {
+      if (!rom) {
         throw new Error('requires ROM');
       }
       this.data = loadROM(rom);
