@@ -1,6 +1,6 @@
 import expect from 'expect.js';
 import Memory from '../src/memory.js';
-// import { random8bit } from './utils.js';
+import { random8bit } from './utils.js';
 import rom from '../roms/flappyboy.json';
 
 describe('Memory', () => {
@@ -19,6 +19,13 @@ describe('Memory', () => {
   it('can read from the ROM', () => {
     const actual = memory.readROM(0x0000);
     expect(actual).to.eql(0xc9);
+  });
+
+  it('can write to the ROM', () => {
+    const byte = random8bit();
+    memory.writeROM(0x0000, byte);
+    const actual = memory.readROM(0x0000);
+    expect(actual).to.eql(byte);
   });
 
   it('can read ROM TITLE', () => {
