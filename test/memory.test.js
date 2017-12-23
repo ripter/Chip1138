@@ -1,6 +1,6 @@
 import expect from 'expect.js';
 import Memory from '../src/memory.js';
-import { random8bit } from './utils.js';
+import { random8bit, randomInt } from './utils.js';
 import rom from '../roms/flappyboy.json';
 
 describe('Memory', () => {
@@ -33,4 +33,33 @@ describe('Memory', () => {
     const expected = new Uint8Array([0x46, 0x4c, 0x41, 0x50, 0x50, 0x59, 0x42, 0x4f, 0x59]);
     expect(actual).to.eql(expected);
   });
+
+
+  describe('8 kilobyte Internal Echo', () => {
+    const bank1 = [0xE000, 0xFE00];
+    const bank2 = [0xC000, 0xDE00];
+
+    // We don't want to test each and every bit, that's 8k of tests!
+    // Just pick a few at random.
+
+    for(let i=0; i < 10; i++) {
+      const bank1Addr = randomInt(bank1[0], bank1[1]);
+      const bank2Addr = randomInt(bank2[0], bank2[1]);
+
+      it(`write to 0x${bank1Addr.toString(16)} bank1 updates 0x${bank2Addr.toString(16)}`, () => {
+        const byte = random8bit();
+        memory.writeROM(bank1Addr, byte);
+        const actual = memory.readROM(bank2Addr);
+        expect(actual).to.eql(byte);
+      });
+
+      it(`write to 0x${bank2Addr.toString(16)} bank1 updates 0x${bank1Addr.toString(16)}`, () => {
+        const byte = random8bit();
+        memory.writeROM(bank2Addr);
+        const actual = memory.readROM(bank1Addr);
+        expect(actual).to.eql(byte);
+      });
+    }
+
+  }); //
 });
