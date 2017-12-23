@@ -18,9 +18,11 @@ class Memory {
     if (typeof address != 'number') {
       romValue = this.data; // returns the whole ROM loaded in
     }
+
     else {
       romValue = this.data[address];
     }
+
     return romValue;
   }
 
@@ -43,6 +45,11 @@ class Memory {
     // set the values of tempArray into rangeArray
     rangeArray.set(tempArray);
     return rangeArray;
+  }
+
+  writeROM(address, data) {
+    const romValue = data;
+    this.data[address] = romValue;
   }
 
 }
