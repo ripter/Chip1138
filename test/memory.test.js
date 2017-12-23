@@ -38,13 +38,15 @@ describe('Memory', () => {
   describe('8 kilobyte Internal Echo', () => {
     const bank1 = [0xE000, 0xFE00];
     const bank2 = [0xC000, 0xDE00];
+    const length = bank1[1] - bank2[0];
 
     // We don't want to test each and every bit, that's 8k of tests!
     // Just pick a few at random.
 
-    for(let i=0; i < 10; i++) {
-      const bank1Addr = randomInt(bank1[0], bank1[1]);
-      const bank2Addr = randomInt(bank2[0], bank2[1]);
+    for(let i=0; i < 5; i++) {
+      const offset = randomInt(0, length);
+      const bank1Addr = bank1[0] + offset;
+      const bank2Addr = bank2[0] + offset;
 
       it(`write to 0x${bank1Addr.toString(16)} bank1 updates 0x${bank2Addr.toString(16)}`, () => {
         const byte = random8bit();
