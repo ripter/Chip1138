@@ -35,9 +35,10 @@ describe('Memory', () => {
   });
 
   it('can read from internal echo', () => {
-    memory.writeROM(0xf92e, 0xca00);
+    const byte = random8bit();
+    memory.writeROM(0xf92e, byte);
     const actual = memory.readROM(0xf92e);
-    expect(actual).to.eql(0xca00);
+    expect(actual).to.eql(byte);
   });
 
 
