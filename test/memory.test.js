@@ -48,14 +48,14 @@ describe('Memory', () => {
       const bank1Addr = bank1[0] + offset;
       const bank2Addr = bank2[0] + offset;
 
-      it(`write to 0x${bank1Addr.toString(16)} bank1 updates 0x${bank2Addr.toString(16)}`, () => {
+      it(`writes to 0x${bank1Addr.toString(16)} bank1 updates 0x${bank2Addr.toString(16)}`, () => {
         const byte = random8bit();
         memory.writeROM(bank1Addr, byte);
         const actual = memory.readROM(bank2Addr);
         expect(actual).to.eql(byte);
       });
 
-      it(`write to 0x${bank2Addr.toString(16)} bank1 updates 0x${bank1Addr.toString(16)}`, () => {
+      it(`writes to 0x${bank2Addr.toString(16)} bank1 updates 0x${bank1Addr.toString(16)}`, () => {
         const byte = random8bit();
         memory.writeROM(bank2Addr);
         const actual = memory.readROM(bank1Addr);
