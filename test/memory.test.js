@@ -34,6 +34,12 @@ describe('Memory', () => {
     expect(actual).to.eql(expected);
   });
 
+  it('can read from internal echo', () => {
+    memory.writeROM(0xf92e, 0xca00);
+    const actual = memory.readROM(0xf92e);
+    expect(actual).to.eql(0xca00);
+  });
+
 
   describe('8 kilobyte Internal Echo', () => {
     const bank1 = [0xE000, 0xFE00];
@@ -52,6 +58,7 @@ describe('Memory', () => {
         const byte = random8bit();
         memory.writeROM(bank1Addr, byte);
         const actual = memory.readROM(bank2Addr);
+        console.log('wrote', byte, 'read', actual);
         expect(actual).to.eql(byte);
       });
 
