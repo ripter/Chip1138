@@ -59,9 +59,10 @@ class Memory {
     // const hexAddress = (address - 0x2000).toString(16);
 
     console.log(`Address: ${(address).toString(16)}, Echo: ${(echoAddress).toString(16)}`);
-
+    debugger;
     this.data[echoAddress] = data;
     this.data[address] = data;
+    debugger;
   }
 
 }

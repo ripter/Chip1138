@@ -28,6 +28,20 @@ describe('Memory', () => {
     expect(actual).to.eql(byte);
   });
 
+  it('addresses no longer work at >= 0x8000', () => {
+    const byte = random8bit();
+    memory.writeROM(0x8000, byte);
+    const actual = memory.readROM(0x8000);
+    expect(actual).to.eql(undefined);
+  });
+
+  it('addresses work < 0x8000', () => {
+    const byte = random8bit();
+    memory.writeROM(0x7fff, byte);
+    const actual = memory.readROM(0x7fff);
+    expect(actual).to.eql(byte);
+  });
+
   it('can read ROM TITLE', () => {
     const actual = memory.readROMRange(0x0134, 0x13c);
     const expected = new Uint8Array([0x46, 0x4c, 0x41, 0x50, 0x50, 0x59, 0x42, 0x4f, 0x59]);
