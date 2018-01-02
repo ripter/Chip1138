@@ -14,13 +14,13 @@ class Memory {
 
   readROM(address) {
     let romValue;
-    debugger;
     // if we used `if (!value)...` we would get a hit on 0 since it's falsey.
     if (typeof address != 'number') {
       // this could throw an error or return the whole rom. I chose return rom to avoid errors
       romValue = this.data; // returns the whole ROM loaded in
     }
     else {
+      console.log('readROM', `0x${address.toString(16)}`, `length 0x${this.data.length.toString(16)}`);
       // get our data at the given address in
       romValue = this.data[address];
     }
