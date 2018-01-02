@@ -8,8 +8,13 @@ class Memory {
     if (!rom) {
       throw new Error('requires ROM');
     }
+    this.data = new Array(0xffff);
+    debugger;
 
-    this.data = loadROM(rom);
+    this.rom = loadROM(rom);
+    this.data = this.data.map((current, index) => {
+      return this.rom[index];
+    });
   }
 
   readROM(address) {
@@ -47,7 +52,7 @@ class Memory {
     const tempArray = this.data.slice(low, high + 1);
 
     // create out new typed array
-    let rangeArray = new Uint8Array(length);
+    let rangeArray = new Uint16Array(length);
 
     // set the values of tempArray into rangeArray
     rangeArray.set(tempArray);

@@ -28,14 +28,14 @@ describe('Memory', () => {
     expect(actual).to.eql(byte);
   });
 
-  it.only('addresses work >= 0x8000', () => {
+  it('addresses work >= 0x8000', () => {
     const byte = random8bit();
     memory.writeROM(0x8000, byte);
     const actual = memory.readROM(0x8000);
     expect(actual).to.eql(byte);
   });
 
-  it.only('addresses work < 0x8000', () => {
+  it('addresses work < 0x8000', () => {
     const byte = random8bit();
     memory.writeROM(0x7fff, byte);
     const actual = memory.readROM(0x7fff);
@@ -48,7 +48,7 @@ describe('Memory', () => {
     expect(actual).to.eql(expected);
   });
 
-  it.only('can read from internal echo', () => {
+  it('can read from internal echo', () => {
     const byte = random8bit();
     memory.writeROM(0xf92e, byte);
     const actual = memory.readROM(0xf92e);
