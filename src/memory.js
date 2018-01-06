@@ -4,16 +4,18 @@ import loadROM from './utils/loadROM.js';
 class Memory {
 
   constructor(rom) {
-
+debugger;
     if (!rom) {
       throw new Error('requires ROM');
     }
-    this.data = new Array(0xffff);
+    this.data = new Uint16Array(0xffff);
     debugger;
 
     this.rom = loadROM(rom);
-    this.data = this.data.map((current, index) => {
-      return this.rom[index];
+    // this.data = romArray.set(this.rom);
+
+    this.rom.forEach((curr, index) => {
+      this.data[index] = curr;
     });
   }
 
