@@ -57,7 +57,7 @@ describe('Memory', () => {
   });
 
 
-  describe.only('8 kilobyte Internal Echo', () => {
+  describe('8 kilobyte Internal Echo', () => {
     const bank1 = [0xE000, 0xFE00];
     const bank2 = [0xC000, 0xDE00];
     const length = bank1[1] - bank1[0];
@@ -73,15 +73,15 @@ describe('Memory', () => {
         const byte = random8bit();
         memory.writeROM(bank1Addr, byte);
         const actual = memory.readROM(bank2Addr);
-        console.log('bank1','wrote', byte, 'read', actual);
+        // console.log('bank1','wrote', byte, 'read', actual);
         expect(actual).to.eql(byte);
       });
 
       it(`writes to 0x${bank2Addr.toString(16)} bank2 updates 0x${bank1Addr.toString(16)}`, () => {
         const byte = random8bit();
-        memory.writeROM(bank2Addr);
+        memory.writeROM(bank2Addr, byte);
         const actual = memory.readROM(bank1Addr);
-        console.log('bank2','wrote', byte, 'read', actual);
+        // console.log('bank2','wrote', byte, 'read', actual);
         expect(actual).to.eql(byte);
       });
     }
