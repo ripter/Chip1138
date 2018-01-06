@@ -171,5 +171,18 @@ describe('CPU', () => {
       cpu.sp = 0xfffff; // 1048575 should overflow on 16-bit
       expect(cpu.sp).to.eql(0xffff); // largest 16-bit number
     });
+
+    it('sp defaults to 0xFFFE', () => {
+      expect(cpu.sp).to.eql(0xfffe); // largest 16-bit number
+    });
+
+    it('pc is 16-bit', () => {
+      cpu.pc = 0xfffff; // 1048575 should overflow on 16-bit
+      expect(cpu.pc).to.eql(0xffff); // largest 16-bit number
+    });
+
+    it('pc defaults to 0x0100', () => {
+      expect(cpu.pc).to.eql(0x0100); // default in the docs
+    });
   }); // special registers
 });
