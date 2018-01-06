@@ -2,6 +2,7 @@ import expect from 'expect.js';
 import Memory from '../src/memory.js';
 import { random8bit, randomInt } from './utils.js';
 import rom from '../roms/flappyboy.json';
+import { CART_TYPE } from '../const/cartType.js';
 
 describe('Memory', () => {
   let memory;
@@ -73,17 +74,28 @@ describe('Memory', () => {
         const byte = random8bit();
         memory.writeROM(bank1Addr, byte);
         const actual = memory.readROM(bank2Addr);
-        console.log('wrote', byte, 'read', actual);
         expect(actual).to.eql(byte);
       });
 
-      it(`writes to 0x${bank2Addr.toString(16)} bank1 updates 0x${bank1Addr.toString(16)}`, () => {
+      it(`writes to 0x${bank2Addr.toString(16)} bank2 updates 0x${bank1Addr.toString(16)}`, () => {
         const byte = random8bit();
         memory.writeROM(bank2Addr);
         const actual = memory.readROM(bank1Addr);
         expect(actual).to.eql(byte);
       });
     }
+  }); // 8 kilobyte Internal Echo
 
-  }); //
+  describe('Cartridge Type', () => {
+    // set the 16-bits that describes the Cartridge type, then test that the memory object returns the correct type.
+    Object.keys(CART_TYPE).forEach((name) => {
+      const byte = CART_TYPE[name];
+
+      it(`${name} is set when address 0x0147 has value 0x${(byte).toString(16)}`, () => {
+        memory.writeROM(0x0147, byte);
+        expect(memory.cartType).to.eql(CART_TYPE.ROM_ONLY);
+      });
+    });
+
+  });
 });
