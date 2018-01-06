@@ -8,7 +8,6 @@ class Memory {
       throw new Error('requires ROM');
     }
     this.data = new Uint16Array(0xffff);
-    debugger;
 
     this.rom = loadROM(rom);
     // this.data = romArray.set(this.rom);
@@ -71,13 +70,11 @@ class Memory {
     if (address > 0xe000 && address < 0xfe00) {
       echoAddress = address - 0x2000;
       // console.log('Minus:', this.hexConverter(address), '-', this.hexConverter(echoAddress));
-      console.log(`Minus: address: 0x${address.toString(16)}, echoAddress: 0x${echoAddress.toString(16)}, data: ${data}`)
       this.data[echoAddress] = data;
     }
 
     if (address > 0xc000 && address < 0xde00) {
       echoAddress = address + 0x2000;
-      console.log(`Plus: address: 0x${address.toString(16)}, echoAddress: 0x${echoAddress.toString(16)}, data: ${data}`)
       // console.log('Plus:', this.hexConverter(address), '+', this.hexConverter(echoAddress));
       this.data[echoAddress] = data;
     }
