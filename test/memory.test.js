@@ -74,6 +74,7 @@ describe('Memory', () => {
         const byte = random8bit();
         memory.writeROM(bank1Addr, byte);
         const actual = memory.readROM(bank2Addr);
+        console.log('bank1','wrote', byte, 'read', actual);
         expect(actual).to.eql(byte);
       });
 
@@ -81,6 +82,7 @@ describe('Memory', () => {
         const byte = random8bit();
         memory.writeROM(bank2Addr);
         const actual = memory.readROM(bank1Addr);
+        console.log('bank2','wrote', byte, 'read', actual);
         expect(actual).to.eql(byte);
       });
     }

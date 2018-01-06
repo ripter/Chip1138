@@ -4,7 +4,6 @@ import loadROM from './utils/loadROM.js';
 class Memory {
 
   constructor(rom) {
-debugger;
     if (!rom) {
       throw new Error('requires ROM');
     }
@@ -27,7 +26,6 @@ debugger;
       romValue = this.data; // returns the whole ROM loaded in
     }
     else {
-      console.log('readROM', `0x${address.toString(16)}`, `length 0x${this.data.length.toString(16)}`);
       // get our data at the given address in
       romValue = this.data[address];
     }
@@ -61,15 +59,28 @@ debugger;
     return rangeArray;
   }
 
-  writeROM(address, data) {
-    const echoAddress = address > 0xfe00 ? address - 0x2000 : address + 0x2000;
-    // const hexAddress = (address - 0x2000).toString(16);
+  hexConverter(value) {
+    return value.toString(16);
+  }
 
-    console.log(`Address: ${(address).toString(16)}, Echo: ${(echoAddress).toString(16)}`);
-    debugger;
-    this.data[echoAddress] = data;
+  writeROM(address, data) {
+    // const echoAddress = address > 0xfe00 ? address - 0x2000 : address + 0x2000;
+    // const hexAddress = (address - 0x2000).toString(16);
+    let echoAddress;
+
+    if (address > 0xe000 && address < 0xfe00) {
+      echoAddress = address - 0x2000;
+      console.log('Minus:', this.hexConverter(address), '-', this.hexConverter(echoAddress));
+      this.data[echoAddress] = data;
+    }
+
+    if (address > 0xc000 && address < 0xde00) {
+      echoAddress = address + 0x2000;
+      console.log('Plus:', this.hexConverter(address), '+', this.hexConverter(echoAddress));
+      this.data[echoAddress] = data;
+    }
+
     this.data[address] = data;
-    debugger;
   }
 
 }
