@@ -57,14 +57,13 @@ describe('Memory', () => {
   });
 
 
-  describe('8 kilobyte Internal Echo', () => {
+  describe.only('8 kilobyte Internal Echo', () => {
     const bank1 = [0xE000, 0xFE00];
     const bank2 = [0xC000, 0xDE00];
-    const length = bank1[1] - bank2[0];
+    const length = bank1[1] - bank1[0];
 
     // We don't want to test each and every bit, that's 8k of tests!
     // Just pick a few at random.
-
     for(let i=0; i < 5; i++) {
       const offset = randomInt(0, length);
       const bank1Addr = bank1[0] + offset;
@@ -88,7 +87,7 @@ describe('Memory', () => {
     }
   }); // 8 kilobyte Internal Echo
 
-  describe('Cartridge Type', () => {
+  describe.skip('Cartridge Type', () => {
     // set the 16-bits that describes the Cartridge type, then test that the memory object returns the correct type.
     Object.keys(CART_TYPE).forEach((name) => {
       const byte = CART_TYPE[name];

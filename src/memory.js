@@ -70,13 +70,13 @@ class Memory {
 
     if (address > 0xe000 && address < 0xfe00) {
       echoAddress = address - 0x2000;
-      console.log('Minus:', this.hexConverter(address), '-', this.hexConverter(echoAddress));
+      // console.log('Minus:', this.hexConverter(address), '-', this.hexConverter(echoAddress));
       this.data[echoAddress] = data;
     }
 
     if (address > 0xc000 && address < 0xde00) {
       echoAddress = address + 0x2000;
-      console.log('Plus:', this.hexConverter(address), '+', this.hexConverter(echoAddress));
+      // console.log('Plus:', this.hexConverter(address), '+', this.hexConverter(echoAddress));
       this.data[echoAddress] = data;
     }
 
