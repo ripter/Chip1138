@@ -87,14 +87,14 @@ describe('Memory', () => {
     }
   }); // 8 kilobyte Internal Echo
 
-  describe.skip('Cartridge Type', () => {
+  describe('Cartridge Type', () => {
     // set the 16-bits that describes the Cartridge type, then test that the memory object returns the correct type.
     Object.keys(CART_TYPE).forEach((name) => {
       const byte = CART_TYPE[name];
 
       it(`${name} is set when address 0x0147 has value 0x${(byte).toString(16)}`, () => {
         memory.writeROM(0x0147, byte);
-        expect(memory.cartType).to.eql(CART_TYPE.ROM_ONLY);
+        expect(memory.cartType).to.eql(byte);
       });
     });
 
