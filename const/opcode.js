@@ -1851,7 +1851,7 @@ export const OPCODE = {
   },
 
 
-  /*
+  // unsorted
   0x0: {
   mnemonic: 'NOP',
   length: 1,
@@ -3823,7 +3823,6 @@ flags: [
 addr: '0xff',
 operand1: '38H'
 }
-*/
 };
 export default OPCODE;
 
