@@ -1,5 +1,5 @@
-
 import loadROM from './utils/loadROM.js';
+import { CART_TYPE } from '../const/cartType.js';
 
 class Memory {
 
@@ -7,6 +7,7 @@ class Memory {
     if (!rom) {
       throw new Error('requires ROM');
     }
+    this.cartType = CART_TYPE;
     this.data = new Uint16Array(0xffff);
 
     this.rom = loadROM(rom);
@@ -79,6 +80,10 @@ class Memory {
       this.data[echoAddress] = data;
     }
 
+    if (address === 0x0147) {
+      this.cartType = data;
+      
+    }
     this.data[address] = data;
   }
 
