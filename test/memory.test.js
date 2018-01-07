@@ -88,6 +88,10 @@ describe('Memory', () => {
   }); // 8 kilobyte Internal Echo
 
   describe('Cartridge Type', () => {
+    it(`${CART_TYPE.ROM_ONLY} is set when address 0x0147 has value 0x${(0x00).toString(16)}`, () => {
+      expect(memory.cartType).to.eql(CART_TYPE.ROM_ONLY);
+    });
+
     // set the 16-bits that describes the Cartridge type, then test that the memory object returns the correct type.
     Object.keys(CART_TYPE).forEach((name) => {
       const byte = CART_TYPE[name];
