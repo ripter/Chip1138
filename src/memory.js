@@ -7,7 +7,7 @@ class Memory {
     if (!rom) {
       throw new Error('requires ROM');
     }
-    this.cartType = CART_TYPE;
+    this.cartType = CART_TYPE.ROM_ONLY;
     this.data = new Uint16Array(0xffff);
 
     this.rom = loadROM(rom);
@@ -82,7 +82,7 @@ class Memory {
 
     if (address === 0x0147) {
       this.cartType = data;
-      
+
     }
     this.data[address] = data;
   }
