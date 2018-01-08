@@ -13,6 +13,6 @@ function createROM(binary) {
   const base64String = Base64.encode(stringData);
   return {
     data: MEDIATYPE + base64String,
-  }
+  };
 }
 export default createROM;
