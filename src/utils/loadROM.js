@@ -2,13 +2,17 @@ import { Base64 } from 'js-base64';
 const MEDIATYPE = 'data:application/octet-stream;base64,';
 
 /**
- * Loads a ROM JSON into a Uint8Array
+ * Loads a ROM JSON into a Uint16Array
  * @param  {Object} rom - JSON ROM Object
- * @return {Uint8Array} byte array of ROM contents
+ * @return {Uint16Array} byte array of ROM contents
  */
 function loadROM(rom) {
   checkIsValid(rom);
-  const data = Base64.atob(rom.data.substr(MEDIATYPE.length)).split('');
+  // Get juse the data string from the rom, skipping the MEDIATYPE
+  const base64String = rom.data.substr(MEDIATYPE.length);
+  // comvert the base64 string into an array of bytes
+  const data = Base64.atob(base64String).split('');
+  // convert the array of characters into an array of 16-bit values.
   const binary = new Uint16Array(data.map((char) => char.charCodeAt(0)));
   return binary;
 }
