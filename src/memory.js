@@ -7,7 +7,7 @@ class Memory {
     if (!rom) {
       throw new Error('requires ROM');
     }
-    this.cartType = CART_TYPE.ROM_ONLY;
+    // this.cartType = CART_TYPE.ROM_ONLY;
     this.data = new Uint16Array(0xffff);
 
     this.rom = loadROM(rom);
@@ -25,10 +25,12 @@ class Memory {
       // this could throw an error or return the whole rom. I chose return rom to avoid errors
       romValue = this.data; // returns the whole ROM loaded in
     }
+
     else {
       // get our data at the given address in
       romValue = this.data[address];
     }
+
     return romValue;
   }
 
@@ -80,11 +82,19 @@ class Memory {
       this.data[echoAddress] = data;
     }
 
-    if (address === 0x0147) {
-      this.cartType = data;
+    // if (address === 0x0147) {
+    //   this.cartType = data;
+    // }
 
-    }
     this.data[address] = data;
+  }
+
+  get cartType() {
+      return this.readROM(0x0147);
+  }
+
+  set cartType(val) {
+    throw new Error('has only a getter');
   }
 
 }
