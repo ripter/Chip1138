@@ -92,11 +92,6 @@ class Memory {
   get cartType() {
     return this.readROM(0x0147);
   }
-
-  set cartType(val) {
-    throw new Error('has only a getter');
-  }
-
 }
 
 export default Memory;
