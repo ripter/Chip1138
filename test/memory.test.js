@@ -99,7 +99,7 @@ describe('Memory', () => {
       expect(memory.cartType).to.eql(CART_TYPE.ROM_ONLY);
     });
 
-    it(`CART_TYPE.ROM_MBC5_RUMBLE is set when address 0x0147 has value 0x${(0x1c).toString(16)}`, () => {
+    it.skip(`CART_TYPE.ROM_MBC5_RUMBLE is set when address 0x0147 has value 0x${(0x1c).toString(16)}`, () => {
       memory = new Memory(romRumble);
       expect(memory.cartType).to.eql(CART_TYPE.ROM_MBC5_RUMBLE);
     });

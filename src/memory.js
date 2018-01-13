@@ -1,5 +1,5 @@
 import loadROM from './utils/loadROM.js';
-import { CART_TYPE } from '../const/cartType.js';
+// import { CART_TYPE } from '../const/cartType.js';
 
 class Memory {
 
@@ -90,7 +90,7 @@ class Memory {
   }
 
   get cartType() {
-      return this.readROM(0x0147);
+    return this.readROM(0x0147);
   }
 
   set cartType(val) {
