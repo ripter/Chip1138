@@ -113,6 +113,5 @@ describe('Memory', () => {
         expect(memory.cartType).to.eql(byte);
       });
     });
-
   });
 });
