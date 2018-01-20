@@ -187,7 +187,7 @@ describe('CPU', () => {
       expect(cpu.pc).to.eql(0xffff); // largest 16-bit number
     });
 
-    it.only('pc defaults to 0x0100', () => {
+    it('pc defaults to 0x0100', () => {
       expect(cpu.pc).to.eql(0x0100); // default in the docs
     });
   }); // special registers

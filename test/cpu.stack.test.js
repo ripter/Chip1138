@@ -5,7 +5,7 @@ import Memory from '../src/memory.js';
 // import { random8bit } from './utils.js';
 import rom from '../roms/flappyboy.json';
 
-describe.only('CPU Stack', () => {
+describe('CPU Stack', () => {
   let cpu, memory;
 
   beforeEach(() => {
