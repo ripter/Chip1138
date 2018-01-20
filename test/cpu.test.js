@@ -167,6 +167,9 @@ describe('CPU', () => {
       expect(cpu.iy).to.eql(0xffff); // largest 16-bit number
     });
 
+    /*
+      The SP, or Stack Pointer, register points to the current stack position.
+     */
     it('sp is 16-bit', () => {
       cpu.sp = 0xfffff; // 1048575 should overflow on 16-bit
       expect(cpu.sp).to.eql(0xffff); // largest 16-bit number
@@ -176,6 +179,9 @@ describe('CPU', () => {
       expect(cpu.sp).to.eql(0xfffe); // largest 16-bit number
     });
 
+    /*
+      The PC, or Program Counter, register points to the next instruction to be executed in the Game Boy memory.
+     */
     it('pc is 16-bit', () => {
       cpu.pc = 0xfffff; // 1048575 should overflow on 16-bit
       expect(cpu.pc).to.eql(0xffff); // largest 16-bit number
