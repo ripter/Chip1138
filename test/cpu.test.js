@@ -30,6 +30,10 @@ describe('CPU', () => {
       expect(cpu.h).to.eql(0xff); // largest 8-bit number
     });
 
+
+    it('cpu.f defaults to 0xB0', () => {
+      expect(cpu.f).to.eql(0xB0);
+    });
     it('f is 8-bit', () => {
       cpu.f = 0xfff; // 4095 should overflow on 8-bit
       expect(cpu.f).to.eql(0xff); // largest 8-bit number
@@ -112,6 +116,10 @@ describe('CPU', () => {
       expect(cpu.f).to.eql(byte2);
     });
 
+
+    it('cpu.bc defaults to 0x0013', () => {
+      expect(cpu.bc).to.eql(0x0013);
+    });
     it('read bc [16-bit]', () => {
       cpu.b = byte1;
       cpu.c = byte2;
@@ -123,6 +131,9 @@ describe('CPU', () => {
       expect(cpu.c).to.eql(byte2);
     });
 
+    it('cpu.de defaults to 0x00D8', () => {
+      expect(cpu.de).to.eql(0x00D8);
+    });
     it('read de [16-bit]', () => {
       cpu.d = byte1;
       cpu.e = byte2;
@@ -134,6 +145,9 @@ describe('CPU', () => {
       expect(cpu.e).to.eql(byte2);
     });
 
+    it('cpu.hl defaults to 0x014D', () => {
+      expect(cpu.hl).to.eql(0x014d);
+    });
     it('read hl [16-bit]', () => {
       cpu.h = byte1;
       cpu.l = byte2;
@@ -182,12 +196,12 @@ describe('CPU', () => {
     /*
       The PC, or Program Counter, register points to the next instruction to be executed in the Game Boy memory.
      */
-    it.only('pc is 16-bit', () => {
+    it('pc is 16-bit', () => {
       cpu.pc = 0xfffff; // 1048575 should overflow on 16-bit
       expect(cpu.pc).to.eql(0xffff); // largest 16-bit number
     });
 
-    it.only('pc defaults to 0x0100', () => {
+    it('pc defaults to 0x0100', () => {
       expect(cpu.pc).to.eql(0x0100); // default in the docs
     });
   }); // special registers
