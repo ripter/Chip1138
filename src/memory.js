@@ -82,31 +82,15 @@ class Memory {
       this.data[echoAddress] = data;
     }
 
-    // Check for color
-    if (address === 0x0143) {
-      if (data === 0x0080) {
-        this.isColor = true;
-      }
-      else {
-        this.isColor = false;
-      }
-    }
-
-    // check for super
-    if (address === 0x0146) {
-      if (data === 0x0003) {
-        this.isSuper = true;
-      }
-      else {
-        this.isSuper = false;
-      }
-    }
-
-    // if (address === 0x0147) {
-    //   this.cartType = data;
-    // }
-
     this.data[address] = data;
+  }
+
+  get isColor() {
+    return this.readROM(0x0143) === 0x80;
+  }
+
+  get isSuper() {
+    return this.readROM(0x0146) === 0x03;
   }
 
   get cartType() {
