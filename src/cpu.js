@@ -85,7 +85,6 @@ class CPU {
       const firstBit = this.opcodeArray[1];
       const secondBit = this.opcodeArray[2];
       if (keyA === 'sp') {
-        debugger;
         this[keyA] = (firstBit << 8) | secondBit;
       }
       else {
@@ -116,11 +115,11 @@ class CPU {
       this.sub(keyA, length);
     }
 
-    if (mnemonic === 'PUSH') {
-      if (length === 1) {
-
-      }
-    }
+    // if (mnemonic === 'PUSH') {
+    //   if (length === 1) {
+    //
+    //   }
+    // }
 
     if (mnemonic === 'ADD') {
       if (length === 1) {
