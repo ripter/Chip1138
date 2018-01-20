@@ -236,7 +236,7 @@ class CPU {
   get bc() {
     const bitB = this.b;
     const bitC = this.c;
-    return (bitB << 8) | bitC;
+    return (bitB << 8) | bitC || 0x0013;
   }
   set bc(value) {
     const bitB = (value >> 8) & 0xff;
@@ -248,7 +248,7 @@ class CPU {
   get de() {
     const bitD = this.d;
     const bitE = this.e;
-    return (bitD << 8) | bitE;
+    return (bitD << 8) | bitE || 0x00d8;
   }
   set de(value) {
     const bitD = (value >> 8) & 0xff;
@@ -260,7 +260,7 @@ class CPU {
   get hl() {
     const bitH = this.h;
     const bitL = this.l;
-    return (bitH << 8) | bitL;
+    return (bitH << 8) | bitL || 0x014d;
   }
   set hl(value) {
     const bitH = (value >> 8) & 0xff;
