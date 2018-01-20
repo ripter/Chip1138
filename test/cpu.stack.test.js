@@ -19,6 +19,11 @@ describe.only('CPU Stack', () => {
     expect(cpu.sp).to.eql(0xfffe); // largest 16-bit number
   });
 
+  it('pc defaults to 0x0100', () => {
+    expect(cpu.pc).to.eql(0x0100); // default in the docs
+  });
+
+
   /*
     If the AF Register pair contains 0x2233 and the Stack Pointer contains 0x1007,
     then upon the execution of a PUSH AF instruction,
