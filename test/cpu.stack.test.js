@@ -2,7 +2,7 @@
 import expect from 'expect.js';
 import CPU from '../src/cpu.js';
 import Memory from '../src/memory.js';
-import { random8bit } from './utils.js';
+// import { random8bit } from './utils.js';
 import rom from '../roms/flappyboy.json';
 
 describe('CPU Stack', () => {
@@ -22,7 +22,7 @@ describe('CPU Stack', () => {
     memory address 1005h contains 33h,
     and the Stack Pointer contains 1005h.
    */
-  
+
   describe('spec example', () => {
     beforeEach(() => {
       cpu.af = 0x2233;
