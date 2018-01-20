@@ -15,7 +15,7 @@ describe.only('CPU Stack', () => {
     });
   });
 
-  it.only('sp defaults to 0xFFFE', () => {
+  it('sp defaults to 0xFFFE', () => {
     expect(cpu.sp).to.eql(0xfffe); // largest 16-bit number
   });
 

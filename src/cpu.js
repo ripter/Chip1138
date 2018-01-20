@@ -367,6 +367,14 @@ class CPU {
   set sp (value) {
     this.memory16bit[4] = value;
   }
+
+  get pc () {
+    return this.memory16bit[5] || 0x0100;
+  }
+
+  set pc (value) {
+    this.memory16bit[5] = value;
+  }
 }
 
 export default CPU;
