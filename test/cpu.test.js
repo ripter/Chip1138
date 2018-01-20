@@ -10,6 +10,9 @@ describe('CPU', () => {
   });
 
   describe('main registers', () => {
+    it('cpu.a defaults to 0x01', () => {
+      expect(cpu.a).to.eql(0x01);
+    });
     it('a is 8-bit', () => {
       cpu.a = 0xfff; // 4095 should overflow on 8-bit
       expect(cpu.a).to.eql(0xff); // largest 8-bit number
