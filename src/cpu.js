@@ -361,7 +361,7 @@ class CPU {
 
   // Stack pointer, 16 bits
   get sp () {
-    return this.memory16bit[4];
+    return this.memory16bit[4] || 0xFFFE;
   }
 
   set sp (value) {
