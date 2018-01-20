@@ -12,7 +12,7 @@ class CPU {
   constructor() {
     // Create the memory banks
     this.memory8bit = new Uint8Array(18);
-    this.memory16bit = new Uint16Array(5);
+    this.memory16bit = new Uint16Array(6);
 
     // an array to store the opcodes in between calls in order to know how to process
     this.opcodeArray = [];
@@ -114,6 +114,13 @@ class CPU {
     if (mnemonic === 'SUB') {
       this.sub(keyA, length);
     }
+
+    // if (mnemonic === 'PUSH') {
+    //   if (length === 1) {
+    //
+    //   }
+    // }
+
     if (mnemonic === 'ADD') {
       if (length === 1) {
         this.add(keyA, keyB, length);
