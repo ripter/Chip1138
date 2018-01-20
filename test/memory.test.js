@@ -2,6 +2,7 @@ import expect from 'expect.js';
 import Memory from '../src/memory.js';
 import { random8bit, randomInt } from './utils.js';
 import rom from '../roms/flappyboy.json';
+import romRumble from '../roms/flappyboy.rumble.json';
 import { CART_TYPE } from '../const/cartType.js';
 
 describe('Memory', () => {
@@ -88,6 +89,21 @@ describe('Memory', () => {
   }); // 8 kilobyte Internal Echo
 
   describe('Cartridge Type', () => {
+    it('is read only', () => {
+      expect(function() {
+        memory.cartType = CART_TYPE.POCKET_CAMERA;
+      }).to.throwException(/has only a getter/);
+    });
+
+    it(`CART_TYPE.ROM_ONLY is set when address 0x0147 has value 0x${(0x00).toString(16)}`, () => {
+      expect(memory.cartType).to.eql(CART_TYPE.ROM_ONLY);
+    });
+
+    it.skip(`CART_TYPE.ROM_MBC5_RUMBLE is set when address 0x0147 has value 0x${(0x1c).toString(16)}`, () => {
+      memory = new Memory(romRumble);
+      expect(memory.cartType).to.eql(CART_TYPE.ROM_MBC5_RUMBLE);
+    });
+
     // set the 16-bits that describes the Cartridge type, then test that the memory object returns the correct type.
     Object.keys(CART_TYPE).forEach((name) => {
       const byte = CART_TYPE[name];
@@ -97,6 +113,5 @@ describe('Memory', () => {
         expect(memory.cartType).to.eql(byte);
       });
     });
-
   });
 });
