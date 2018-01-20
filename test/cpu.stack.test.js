@@ -15,7 +15,7 @@ describe.only('CPU Stack', () => {
     });
   });
 
-  it('sp defaults to 0xFFFE', () => {
+  it.only('sp defaults to 0xFFFE', () => {
     expect(cpu.sp).to.eql(0xfffe); // largest 16-bit number
   });
 
@@ -32,7 +32,7 @@ describe.only('CPU Stack', () => {
     and the Stack Pointer contains 0x1005.
    */
 
-  describe('spec example', () => {
+  describe('0xF5 PUSH AF;', () => {
     beforeEach(() => {
       cpu.af = 0x2233;
       cpu.sp = 0x1007;
@@ -49,8 +49,33 @@ describe.only('CPU Stack', () => {
       expect(actual).to.eql(0x33);
     });
 
-    it('cpu.sp is 0x1005', () => {
+    it('cpu.sp === 0x1005', () => {
       expect(cpu.sp).to.eql(0x1005);
     });
-  });
+  }); // 0xF5 PUSH AF;
+
+  /*
+    If the Stack Pointer contains 0x1000,
+    memory location 0x1000 contains 0x55,
+    and location 0x1001 contains 0x33,
+    the instruction POP HL
+    results in register pair HL containing 0x3355,
+    and the Stack Pointer containing 0x1002.
+   */
+   describe('POP HL;', () => {
+    beforeEach(() => {
+      cpu.sp = 0x1000;
+      memory.writeROM(0x1000, 0x55);
+      memory.writeROM(0x1001, 0x33);
+      cpu.processOpcode(0xe1); // POP HL
+    });
+
+    it('cpu.hl === 0x3355', () => {
+      expect(cpu.hl).to.eql(0x3355);
+    });
+
+    it('cpu.sp === 0x1002', () => {
+      expect(cpu.sp).to.eql(0x1002);
+    });
+   });
 });
