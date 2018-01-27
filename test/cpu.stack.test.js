@@ -1,4 +1,3 @@
-
 import expect from 'expect.js';
 import CPU from '../src/cpu.js';
 import Memory from '../src/memory.js';
