@@ -32,7 +32,7 @@ describe('CPU Stack', () => {
     and the Stack Pointer contains 0x1005.
    */
 
-  describe.only('0xF5 PUSH AF;', () => {
+  describe('0xF5 PUSH AF;', () => {
     beforeEach(() => {
       cpu.af = 0x2233;
       cpu.sp = 0x1007;

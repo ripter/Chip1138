@@ -2,6 +2,7 @@ import expect from 'expect.js';
 import CPU from '../src/cpu.js';
 import { random8bit } from './utils.js';
 
+
 describe('CPU', () => {
   let cpu;
 
