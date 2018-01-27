@@ -5,3 +5,4 @@ Fantasy CPU
 
 
 Now with Travis
+And coveralls...
