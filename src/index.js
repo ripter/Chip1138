@@ -1,10 +1,12 @@
-// import CPU from './cpu.js';
-// import loadROM from './utils/loadROM.js';
+import CPU from './cpu.js';
+import Memory from './memory.js';
+import loadROM from './utils/loadROM.js';
 // import createROM from './utils/createROM.js';
-// import rom from '../roms/flappyboy.json';
+import rom from '../roms/flappyboy.json';
+// import rom from '../roms/zelda-la.json';
 //
 // window.rom = rom;
-// let romData = window.romData = loadROM(rom);
+let romData = window.romData = loadROM(rom);
 // console.log('loaded romData');
 //
 // romData[0x0147] = 0x1C;
@@ -20,6 +22,16 @@
 //   cpu.processOpcode(opcode);
 // });
 
+
+const memory = window.memory = new Memory(rom);
+const cpu = window.cpu = new CPU({
+  memory,
+});
+
+/*
+The Stack Pointer automatically decrements before it puts something onto the stack so it is perfectly acceptable to assign it a value which points to a memory address which is one location past the end of available RAM.
+*/
+console.log('first byte', `0x${memory.readROM(cpu.sp--).toString(16)}`);
 
 
 // import zelda from '../roms/zelda-la.json';
