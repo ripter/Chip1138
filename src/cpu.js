@@ -2,11 +2,12 @@
  * Virtual CPU for the Gameboy Color; a modified z80
  */
 import { OPCODE } from '../const/opcode.js';
+import Memory from './memory.js';
 // import loadROM from './utils/loadROM.js';
 // import rom from '../roms/flappyboy.json';
 
 class CPU {
-  constructor() {
+  constructor({memory}) {
     // Create the memory banks
     this.memory8bit = new Uint8Array(18);
     this.memory16bit = new Uint16Array(6);
@@ -16,6 +17,8 @@ class CPU {
     this.data = 0;
     this.a = 0x01;
     this.f = 0xb0;
+
+    this.memory = memory;
 
     /*
     /* fullCarry: 0b0001
@@ -158,6 +161,17 @@ class CPU {
         }
       }
     }
+
+    if (mnemonic === 'PUSH') {
+      const address = this.sp - 1;
+      const address2 = address - 1;
+      this.memory.writeROM(address, this.a);
+      this.memory.writeROM(address2, this.f);
+
+      this.sp = this.sp - 2;
+
+    }
+
     this.reset(length);
   }
 
