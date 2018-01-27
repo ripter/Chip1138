@@ -4,9 +4,6 @@
 import { OPCODE } from '../const/opcode.js';
 // import loadROM from './utils/loadROM.js';
 // import rom from '../roms/flappyboy.json';
-//
-// const game = loadROM(rom);
-// console.log('Type of ROM ', typeof game);
 
 class CPU {
   constructor() {
@@ -17,6 +14,8 @@ class CPU {
     // an array to store the opcodes in between calls in order to know how to process
     this.opcodeArray = [];
     this.data = 0;
+    this.a = 0x01;
+    this.f = 0xb0;
 
     /*
     /* fullCarry: 0b0001
