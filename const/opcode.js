@@ -3221,7 +3221,7 @@ export const OPCODE = {
     operand2: 'a16'
   },
   0xc3: {
-    mnemonic: 'JP',
+    mnemonic: 'JUMP',
     length: 3,
     cycles: [
       16

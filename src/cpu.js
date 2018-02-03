@@ -104,7 +104,7 @@ class CPU {
     const keyA = operand1.toLowerCase();
 
     let keyB;
-
+    console.log(mnemonic);
     if (operand2) {
       keyB = operand2.toLowerCase();
     }
@@ -127,7 +127,7 @@ class CPU {
         this.add(keyA, keyB, length);
         return;
       }
-      if (opLength === 2 && length === 2) {
+      if (opLength === 2 && opLength === length) {
         const opcodeData = this.opcodeArray[1];
         this.add(keyA, opcodeData, length);
         return;
@@ -168,8 +168,6 @@ class CPU {
 
       this.memory.writeROM(address, this.a);
       this.memory.writeROM(address2, this.f);
-
-
     }
 
     if (mnemonic === 'POP') {
@@ -179,8 +177,17 @@ class CPU {
 
       this.h = this.memory.readROM(address2);
       this.l = this.memory.readROM(address);
-
       // this.memory.readROM(this[keyA]);
+    }
+
+    if (mnemonic === 'JUMP') {
+      if (opLength === 3) {
+        debugger;
+        console.log(this.opcodeArray);
+        const val = this.opcodeArray[1];
+        const val1 = this.opcodeArray[2];
+        this.pc = (val << 8) | val1;
+      }
     }
 
     this.reset(length);
