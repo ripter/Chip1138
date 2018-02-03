@@ -104,7 +104,6 @@ class CPU {
     const keyA = operand1.toLowerCase();
 
     let keyB;
-    console.log(mnemonic);
     if (operand2) {
       keyB = operand2.toLowerCase();
     }
@@ -182,8 +181,6 @@ class CPU {
 
     if (mnemonic === 'JUMP') {
       if (opLength === 3) {
-        debugger;
-        console.log(this.opcodeArray);
         const val = this.opcodeArray[1];
         const val1 = this.opcodeArray[2];
         this.pc = (val << 8) | val1;
