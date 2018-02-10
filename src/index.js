@@ -1,18 +1,18 @@
-// import CPU from './cpu.js';
-// import Memory from './memory.js';
-// import loadROM from './utils/loadROM.js';
-// import rom from '../roms/flappyboy.json';
-// let romData = window.romData = loadROM(rom);
-//
-//
-// const memory = window.memory = new Memory(rom);
-// const cpu = window.cpu = new CPU({
-//   memory,
-// });
-//
-// cpu.pc = 0x0100;
-// const firstByte = memory.readROM(cpu.pc-1);
-// console.log('first byte', `0x${firstByte.toString(16)}`);
+import CPU from './cpu.js';
+import Memory from './memory.js';
+import loadROM from './utils/loadROM.js';
+import rom from '../roms/flappyboy.json';
+let romData = window.romData = loadROM(rom);
+
+
+const memory = window.memory = new Memory(rom);
+const cpu = window.cpu = new CPU({
+  memory,
+});
+
+cpu.pc = 0x0100;
+const firstByte = memory.readROM(cpu.pc-1);
+console.log('first byte', `0x${firstByte.toString(16)}`);
 
 
 

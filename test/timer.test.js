@@ -13,9 +13,19 @@ describe('timer', () => {
     });
   });
 
-  it('tick() incriments cpu.pc', () => {
-    cpu.tick();
-    expect(cpu.pc).to.eql(0x0101)
+  describe('tick()', () => {
+    it('incriments cpu.pc', () => {
+      cpu.tick();
+      expect(cpu.pc).to.eql(0x0101)
+    });
+
+    it('runs opcode at cpu.pc', () => {
+      cpu.tick();
+      cpu.tick();
+      cpu.tick();
+      expect(cpu.pc).to.eql(0x5001);
+    });
   });
+
 
 });
