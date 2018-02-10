@@ -2,7 +2,7 @@ import expect from 'expect.js';
 import CPU from '../src/cpu.js';
 import Memory from '../src/memory.js';
 import rom from '../roms/flappyboy.json';
- 
+
 describe('timer', () => {
   let cpu, memory;
 
@@ -19,10 +19,10 @@ describe('timer', () => {
       expect(cpu.pc).to.eql(0x0101)
     });
 
-    it('runs opcode at cpu.pc', () => {
-      cpu.tick();
-      cpu.tick();
-      cpu.tick();
+    it('runs opcode at cpu.pc + 1', () => {
+      cpu.tick(); // 0x0101: 0xc3
+      cpu.tick(); // 0x0102: 0x50
+      cpu.tick(); // 0x0103: 0x01
       expect(cpu.pc).to.eql(0x5001);
     });
   });
