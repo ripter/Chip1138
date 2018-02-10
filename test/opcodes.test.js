@@ -151,4 +151,26 @@ describe('CPU can run OPCODES:', () => {
       });
     });
   }); // INC
+
+  describe('DEC', () => {
+    let randomValue;
+
+    beforeEach(() => {
+      randomValue = random8bit();
+    });
+
+    opcodeList = filter(OPCODE, {mnemonic: 'DEC'});
+    opcodeList.forEach(function(opcode) {
+      const { addr, operand1 } = opcode;
+      const register = operand1.toLowerCase();
+      const byte = parseInt(addr, 16);
+
+      it(`[${addr}] DEC ${operand1}; Increments the value at register ${register}`, () => {
+        // Set values we want to add together
+        cpu[register] = randomValue;
+        cpu.processOpcode(byte);
+        expect(cpu[register]).to.eql(randomValue - 1);
+      });
+    });
+  }); // INC
 });
