@@ -5,7 +5,7 @@ import OPCODE from '../const/opcode.js';
 
 
 describe('CPU can run OPCODES:', () => {
-  let cpu, loadOpcodes;
+  let cpu, opcodeList;
 
   beforeEach(() => {
     cpu = new CPU();
@@ -13,12 +13,12 @@ describe('CPU can run OPCODES:', () => {
 
   describe('ADD:', () => {
     // Test LD opcodes that load from the next byte into a register.
-    loadOpcodes = filter(OPCODE, {mnemonic: 'ADD', length: 1});
+    opcodeList = filter(OPCODE, {mnemonic: 'ADD', length: 1});
     // temp limit to single register
-    loadOpcodes = filter(loadOpcodes, ({operand1, operand2}) => operand1.length === 1 && operand2.length === 1 );
+    opcodeList = filter(opcodeList, ({operand1, operand2}) => operand1.length === 1 && operand2.length === 1 );
 
 
-    loadOpcodes.forEach(function(opcode) {
+    opcodeList.forEach(function(opcode) {
       const { addr, mnemonic, operand1, operand2 } = opcode;
       const register = operand1.toLowerCase();
       const register2 = operand2.toLowerCase();
@@ -86,11 +86,11 @@ describe('CPU can run OPCODES:', () => {
 
   describe('SUB:', () => {
     // Test LD opcodes that load from the next byte into a register.
-    loadOpcodes = filter(OPCODE, {mnemonic: 'SUB', length: 1});
+    opcodeList = filter(OPCODE, {mnemonic: 'SUB', length: 1});
     // temp limit to single register
-    loadOpcodes = filter(loadOpcodes, ({operand1}) => operand1.length === 1);
+    opcodeList = filter(opcodeList, ({operand1}) => operand1.length === 1);
 
-    loadOpcodes.forEach(function(opcode) {
+    opcodeList.forEach(function(opcode) {
       const { addr, mnemonic, operand1 } = opcode;
       const register = operand1.toLowerCase();
 
@@ -119,4 +119,13 @@ describe('CPU can run OPCODES:', () => {
       });
     }); // end forEach opcode
   }); // SUB
+
+  describe('JUMP:', () => {
+    it('[0xC3] to address', () => {
+      cpu.processOpcode(0xc3); // JUMP opcode
+      cpu.processOpcode(0x22); // address one
+      cpu.processOpcode(0xaa); // address two
+      expect(cpu.pc).to.eql(0x22aa);
+    });
+  }); // JUMP:
 });

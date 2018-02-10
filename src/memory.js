@@ -82,11 +82,15 @@ class Memory {
       this.data[echoAddress] = data;
     }
 
-    // if (address === 0x0147) {
-    //   this.cartType = data;
-    // }
-
     this.data[address] = data;
+  }
+
+  get isColor() {
+    return this.readROM(0x0143) === 0x80;
+  }
+
+  get isSuper() {
+    return this.readROM(0x0146) === 0x03;
   }
 
   get cartType() {

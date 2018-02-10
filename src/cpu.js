@@ -4,19 +4,20 @@
 import { OPCODE } from '../const/opcode.js';
 // import loadROM from './utils/loadROM.js';
 // import rom from '../roms/flappyboy.json';
-//
-// const game = loadROM(rom);
-// console.log('Type of ROM ', typeof game);
 
 class CPU {
-  constructor() {
+  constructor(options = {}) {
     // Create the memory banks
     this.memory8bit = new Uint8Array(18);
-    this.memory16bit = new Uint16Array(5);
+    this.memory16bit = new Uint16Array(6);
 
     // an array to store the opcodes in between calls in order to know how to process
     this.opcodeArray = [];
     this.data = 0;
+    this.a = 0x01;
+    this.f = 0xb0;
+
+    this.memory = options.memory;
 
     /*
     /* fullCarry: 0b0001
@@ -103,7 +104,6 @@ class CPU {
     const keyA = operand1.toLowerCase();
 
     let keyB;
-
     if (operand2) {
       keyB = operand2.toLowerCase();
     }
@@ -114,12 +114,19 @@ class CPU {
     if (mnemonic === 'SUB') {
       this.sub(keyA, length);
     }
+
+    // if (mnemonic === 'PUSH') {
+    //   if (length === 1) {
+    //
+    //   }
+    // }
+
     if (mnemonic === 'ADD') {
       if (length === 1) {
         this.add(keyA, keyB, length);
         return;
       }
-      if (opLength === 2 && length === 2) {
+      if (opLength === 2 && opLength === length) {
         const opcodeData = this.opcodeArray[1];
         this.add(keyA, opcodeData, length);
         return;
@@ -152,6 +159,34 @@ class CPU {
         }
       }
     }
+
+    if (mnemonic === 'PUSH') {
+      const address = this.sp - 1;
+      const address2 = address - 1;
+      this.sp = this.sp - 2;
+
+      this.memory.writeROM(address, this.a);
+      this.memory.writeROM(address2, this.f);
+    }
+
+    if (mnemonic === 'POP') {
+      const address = this.sp;
+      const address2 = address + 1;
+      this.sp = this.sp + 2;
+
+      this.h = this.memory.readROM(address2);
+      this.l = this.memory.readROM(address);
+      // this.memory.readROM(this[keyA]);
+    }
+
+    if (mnemonic === 'JUMP') {
+      if (opLength === 3) {
+        const val = this.opcodeArray[1];
+        const val1 = this.opcodeArray[2];
+        this.pc = (val << 8) | val1;
+      }
+    }
+
     this.reset(length);
   }
 
@@ -229,7 +264,7 @@ class CPU {
   get bc() {
     const bitB = this.b;
     const bitC = this.c;
-    return (bitB << 8) | bitC;
+    return (bitB << 8) | bitC || 0x0013;
   }
   set bc(value) {
     const bitB = (value >> 8) & 0xff;
@@ -241,7 +276,7 @@ class CPU {
   get de() {
     const bitD = this.d;
     const bitE = this.e;
-    return (bitD << 8) | bitE;
+    return (bitD << 8) | bitE || 0x00d8;
   }
   set de(value) {
     const bitD = (value >> 8) & 0xff;
@@ -253,7 +288,7 @@ class CPU {
   get hl() {
     const bitH = this.h;
     const bitL = this.l;
-    return (bitH << 8) | bitL;
+    return (bitH << 8) | bitL || 0x014d;
   }
   set hl(value) {
     const bitH = (value >> 8) & 0xff;
@@ -361,11 +396,19 @@ class CPU {
 
   // Stack pointer, 16 bits
   get sp () {
-    return this.memory16bit[4];
+    return this.memory16bit[4] || 0xFFFE;
   }
 
   set sp (value) {
     this.memory16bit[4] = value;
+  }
+
+  get pc () {
+    return this.memory16bit[5] || 0x0100;
+  }
+
+  set pc (value) {
+    this.memory16bit[5] = value;
   }
 }
 

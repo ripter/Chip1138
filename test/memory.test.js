@@ -113,6 +113,27 @@ describe('Memory', () => {
         expect(memory.cartType).to.eql(byte);
       });
     });
+  }); // Cartridge Type
 
+  describe('memory.isColor', () => {
+    it(' === true', () => {
+      memory.writeROM(0x0143, 0x80); // this is the only value that means true
+      expect(memory.isColor).to.eql(true);
+    });
+
+    it(' === false', () => {
+      expect(memory.isColor).to.eql(false);
+    });
+  });
+
+  describe('memory.isSuper', () => {
+    it(' === true', () => {
+      memory.writeROM(0x0146, 0x03); // this is the only value that means true
+      expect(memory.isSuper).to.eql(true);
+    });
+
+    it(' === false', () => {
+      expect(memory.isSuper).to.eql(false);
+    });
   });
 });
