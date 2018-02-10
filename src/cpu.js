@@ -197,6 +197,14 @@ class CPU {
       }
     }
 
+    if (mnemonic === 'INC') {
+      this.h += 1;
+    }
+
+    if (mnemonic === 'DEC') {
+      this.h -= 1;
+    }
+
     this.reset(length);
   }
 
