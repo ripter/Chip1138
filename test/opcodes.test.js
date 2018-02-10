@@ -2,6 +2,7 @@ import expect from 'expect.js';
 import filter from 'lodash.filter';
 import CPU from '../src/cpu.js';
 import OPCODE from '../const/opcode.js';
+import { random8bit } from './utils.js';
 
 
 describe('CPU can run OPCODES:', () => {
@@ -128,4 +129,18 @@ describe('CPU can run OPCODES:', () => {
       expect(cpu.pc).to.eql(0x22aa);
     });
   }); // JUMP:
+
+  describe('INC', () => {
+    let randomValue;
+
+    beforeEach(() => {
+      randomValue = random8bit();
+    });
+
+    it('[0x24] INC H', () => {
+      cpu.h = randomValue;
+      cpu.processOpcode(0x24);
+      expect(cpu.h).to.eql(randomValue+1);
+    });
+  });
 });
