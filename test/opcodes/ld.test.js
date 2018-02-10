@@ -1,11 +1,13 @@
 import expect from 'expect.js';
 import filter from 'lodash.filter';
 import CPU from '../../src/cpu.js';
+import Memory from '../../src/memory.js';
 import OPCODE from '../../const/opcode.js';
 import { addTestData, random8bit, random16bit } from '../utils.js';
+import rom from '../../roms/flappyboy.json';
 
 
-describe('OPCODE: LD', () => {
+describe('ld.test.js', () => {
   let cpu, opcodes;
 
   beforeEach(() => {
@@ -91,4 +93,25 @@ describe('OPCODE: LD', () => {
   }); // loads 8-bit value into 8-bit register
 
 
+  describe('using test ROM', () => {
+    let memory;
+
+    beforeEach(() => {
+      memory = new Memory(rom);
+      cpu = new CPU({
+        memory,
+      });
+    });
+
+    // If register pair HL contains the number 75A1h,
+    // and memory address 75A1h contains byte 58h,
+    // the execution of LD H,
+    // (HL) results in 58h in Register H.
+    it('[0x66] LD H, (HL); load the value at (HL) into H', () => {
+      memory.writeROM(0x75a1, 0x58);
+      cpu.hl = 0x75a1;
+      cpu.processOpcode(0x66);
+      expect(cpu.h).to.eql(0x58);
+    });
+  });
 }); // OPCODE: LD

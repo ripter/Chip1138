@@ -11,7 +11,7 @@
 // });
 //
 // cpu.pc = 0x0100;
-// const firstByte = memory.readROM(cpu.pc-1);
+// const firstByte = memory.readROM(cpu.pc+1);
 // console.log('first byte', `0x${firstByte.toString(16)}`);
 
 
