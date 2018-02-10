@@ -137,10 +137,18 @@ describe('CPU can run OPCODES:', () => {
       randomValue = random8bit();
     });
 
-    it('[0x24] INC H', () => {
-      cpu.h = randomValue;
-      cpu.processOpcode(0x24);
-      expect(cpu.h).to.eql(randomValue+1);
+    opcodeList = filter(OPCODE, {mnemonic: 'INC'});
+    opcodeList.forEach(function(opcode) {
+      const { addr, operand1 } = opcode;
+      const register = operand1.toLowerCase();
+      const byte = parseInt(addr, 16);
+
+      it(`[${addr}] INC ${operand1}; Increments the value at register ${register}`, () => {
+        // Set values we want to add together
+        cpu[register] = randomValue;
+        cpu.processOpcode(byte);
+        expect(cpu[register]).to.eql(randomValue + 1);
+      });
     });
-  });
+  }); // INC
 });
