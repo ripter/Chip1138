@@ -96,6 +96,10 @@ class CPU {
     this.reset(length);
   }
 
+  tick() {
+    this.pc +=1;
+  }
+
   processOpcode(opcode) {
     this.opcodeArray.push(opcode);
     // our object key for the table
