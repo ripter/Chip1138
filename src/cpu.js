@@ -98,6 +98,8 @@ class CPU {
 
   tick() {
     this.pc +=1;
+    debugger;
+    this.processOpcode(this.pc);
   }
 
   processOpcode(opcode) {
