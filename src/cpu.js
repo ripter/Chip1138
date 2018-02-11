@@ -198,11 +198,97 @@ class CPU {
     }
 
     if (mnemonic === 'INC') {
-      this.h += 1;
+      let register;
+      switch (opcode) {
+        case 0x3:
+          register = 'bc';
+          break;
+        case 0x4:
+          register = 'b';
+          break;
+        case 0xc:
+          register = 'c';
+          break;
+        case 0x13:
+          register = 'de';
+          break;
+        case 0x14:
+          register = 'd';
+          break;
+        case 0x1c:
+          register = 'e';
+          break;
+        case 0x23:
+          register = 'hl';
+          break;
+        case 0x24:
+          register = 'h';
+          break;
+        case 0x2c:
+          register = 'l';
+          break;
+        case 0x33:
+          register = 'sp';
+          break;
+        case 0x34:
+          register = 'hl'; // return to this TODO: here
+          break;
+        case 0x3c:
+          register = 'a';
+          break;
+        default:
+          // nothing;
+      }
+      this[register] += 1;
+    }
+
+    if (opcode === 0x66) {
+      this.ld(opcode);
     }
 
     if (mnemonic === 'DEC') {
-      this.h -= 1;
+      let register;
+      switch (opcode) {
+        case 0xb:
+          register = 'bc';
+          break;
+        case 0x5:
+          register = 'b';
+          break;
+        case 0xd:
+          register = 'c';
+          break;
+        case 0x1b:
+          register = 'de';
+          break;
+        case 0x15:
+          register = 'd';
+          break;
+        case 0x1d:
+          register = 'e';
+          break;
+        case 0x2b:
+          register = 'hl';
+          break;
+        case 0x25:
+          register = 'h';
+          break;
+        case 0x2d:
+          register = 'l';
+          break;
+        case 0x3b:
+          register = 'sp';
+          break;
+        case 0x35:
+          register = 'hl'; // return to this TODO: here
+          break;
+        case 0x3d:
+          register = 'a';
+          break;
+        default:
+          // nothing;
+      }
+      this[register] -= 1;
     }
 
     this.reset(length);

@@ -26,6 +26,4 @@ describe('timer', () => {
       expect(cpu.pc).to.eql(0x5001);
     });
   });
-
-
 });
