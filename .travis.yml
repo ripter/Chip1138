@@ -1,9 +1,12 @@
 language: node_js
 node_js:
-  - "9.0.0"
+- 9.0.0
 before_script:
-  - npm i -g istanbul
+- npm i -g istanbul
 script: npm run build
 after_success:
-  - npm run coveralls
+- npm run coveralls
 sudo: false
+notifications:
+  slack:
+    secure: Jguozo28I1uy3Y/EN3EkazUmz0i8uS3sYmVYRD8yra6rhdZMp7wryT5isFAfih26K/ZlI7DtSzpB4Qg2hDqE3uqVDs1eE6uiUS4Ge4AFI3BoYFwoHutR7QYOegLAKxCA3DpXNfcYIH2UThjI2lVZY/YRt3PvUzZhOQAEOc+35+AXZ7XglnpJu1CkWna0K/pKCVWneM5XMF01JU+M1cj33iw2kgRX2xdtB7hqOmTcsHVYwJXOSIvV9pBJ1itJrmCPvGaSanp1DCMbKIbd73cd//ebTZnNg093rVLYWjIIUfGVCavmFEQsLkOo899QNr8VNjqD1vWTvUp7ldcy6agvMGelUK+EYNdIOpK4chDZ7/uidDiNtptf8zwcg09ZdV9yJWXdQnr6CJgwqZVtJZ/kZZPpCK5ayH6FUM9GkAxkhLcFfTTAWia7WKJjCFy3iMGeKm2mZfxHizRPL8cTWqGeJ/vCjSRZY+kbdFXzMAgGMhYnM0HjeRFs5BPTBco/Hn6a9U7xsoutmD5/s805yq19cwrMGTY1R5QHIVyPaa/ozX5wTxP/Gv/Bu+0sfmDNV6+H/7Dmf2rhRCS6Va2wfnLal0AOQ96mVKg0mjjpBTeix2bwuhx0bFJ0UWN/6RYGk0BJwpO9PSYM64zHTDgWwa7ETcLoCPSfHOqFgVEMsCKda/E=

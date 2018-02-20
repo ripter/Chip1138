@@ -17,6 +17,13 @@
     "url": "git+https://github.com/ripter/Chip1138.git"
   },
   "author": "",
+  "contributors": [
+    {
+      "name": "skip mcbride",
+      "email": "skip@angerbunny.com",
+      "url": "https://github.com/skipzero",
+    }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/ripter/Chip1138/issues"
