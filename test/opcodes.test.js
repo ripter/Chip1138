@@ -2,14 +2,17 @@ import expect from 'expect.js';
 import filter from 'lodash.filter';
 import CPU from '../src/cpu.js';
 import OPCODE from '../const/opcode.js';
+import Memory from '../src/memory.js';
+import rom from '../roms/flappyboy.json';
 import { random8bit } from './utils.js';
 
 
 describe('CPU can run OPCODES:', () => {
-  let cpu, opcodeList;
+  let cpu, opcodeList, memory;
 
   beforeEach(() => {
-    cpu = new CPU();
+    memory = new Memory(rom);
+    cpu = new CPU(memory);
   });
 
   describe('ADD:', () => {
