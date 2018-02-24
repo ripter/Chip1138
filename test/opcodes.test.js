@@ -227,6 +227,65 @@ describe('CPU can run OPCODES:', () => {
 
         expect(cpu.a).to.eql( 0x50 + randomValue);
       });
+
+    }); // forEach opcode
+
+
+    it('it sets the carry flag', () => {
+      const opcodes = [
+        0x3e, 0xfe, // LD  a, 255 (62, 255)
+        0xce, // ADC a, d8
+        0x02, // value that will carry when added to A
+      ];
+
+      // run the opcodes
+      opcodes.forEach(function(opcode) {
+        cpu.processOpcode(opcode);
+      });
+      expect(cpu.f & 0b1).to.eql(0b1);
+    });
+
+    it('it resets the carry flag', () => {
+      const opcodes = [
+        0x3e, 0xfe, // LD  a, 255 (62, 255)
+        0xce, // ADC a, d8
+        0x01, // value that will not carry when added to A
+      ];
+
+      // run the opcodes
+      opcodes.forEach(function(opcode) {
+        cpu.processOpcode(opcode);
+      });
+      expect(cpu.f & 0b1).to.eql(0);
+    });
+
+
+    it('it sets the half carry flag', () => {
+      const opcodes = [
+        0x3e, 0x0e, // LD  a, 255 (62, 255)
+        0xce, // ADC a, d8
+        0x02, // value that will carry when added to A
+      ];
+
+      // run the opcodes
+      opcodes.forEach(function(opcode) {
+        cpu.processOpcode(opcode);
+      });
+      expect(cpu.f & 0b1).to.eql(0b1);
+    });
+
+    it('it resets the half carry flag', () => {
+      const opcodes = [
+        0x3e, 0x0e, // LD  a, 255 (62, 255)
+        0xce, // ADC a, d8
+        0x01, // value that will not carry when added to A
+      ];
+
+      // run the opcodes
+      opcodes.forEach(function(opcode) {
+        cpu.processOpcode(opcode);
+      });
+      expect(cpu.f & 0b1).to.eql(0);
     });
   });
 });
