@@ -101,7 +101,7 @@ describe('ld.test.js', () => {
     // and memory address 75A1h contains byte 58h,
     // the execution of LD H,
     // (HL) results in 58h in Register H.
-    it('[0x66] LD H, (HL); load the value at (HL) into H', () => {
+    it.only('[0x66] LD H, (HL); load the value at (HL) into H', () => {
       memory.writeROM(0x75a1, 0x58);
       // expect(memory.readROM(0x75a1)).to.eql(0x58);
       cpu.hl = 0x75a1;
