@@ -148,16 +148,19 @@ describe('CPU can run OPCODES:', () => {
       const register = operand1.toLowerCase();
       const byte = parseInt(addr, 16);
 
-      // skip the (HL) for the moment
-      if (register === '(hl)') {
-        return;
-      }
-
-      it(`[${addr}] INC ${operand1}; Increments the value at register ${register}`, () => {
-        // Set values we want to add together
-        cpu[register] = randomValue;
-        cpu.processOpcode(byte);
-        expect(cpu[register]).to.eql(randomValue + 1);
+      it(`[${addr}] INC ${operand1}; Increments the value at ${register}`, () => {
+        if (register === '(hl)') {
+          cpu.hl = 0x0010;
+          memory.writeROM(cpu.hl, randomValue);
+          cpu.processOpcode(byte);
+          expect(memory.readROM(cpu.hl)).to.eql(randomValue + 1);
+        }
+        else {
+          // Set values we want to add together
+          cpu[register] = randomValue;
+          cpu.processOpcode(byte);
+          expect(cpu[register]).to.eql(randomValue + 1);
+        }
       });
     });
   }); // INC
@@ -175,16 +178,18 @@ describe('CPU can run OPCODES:', () => {
       const register = operand1.toLowerCase();
       const byte = parseInt(addr, 16);
 
-      // skip the (HL) for the moment
-      if (register === '(hl)') {
-        return;
-      }
-
-      it(`[${addr}] DEC ${operand1}; Increments the value at register ${register}`, () => {
-        // Set values we want to add together
-        cpu[register] = randomValue;
-        cpu.processOpcode(byte);
-        expect(cpu[register]).to.eql(randomValue - 1);
+      it(`[${addr}] DEC ${operand1}; Decrement the value at ${register}`, () => {
+        if (register === '(hl)') {
+          cpu.hl = 0x0010;
+          memory.writeROM(cpu.hl, randomValue);
+          cpu.processOpcode(byte);
+          expect(memory.readROM(cpu.hl)).to.eql(randomValue - 1);
+        }
+        else {
+          cpu[register] = randomValue;
+          cpu.processOpcode(byte);
+          expect(cpu[register]).to.eql(randomValue - 1);
+        }
       });
     });
   }); // INC
