@@ -8,11 +8,14 @@ import rom from '../../roms/flappyboy.json';
 
 
 describe('ld.test.js', () => {
-  let cpu, opcodes;
+  let cpu, opcodes, memory;
 
   beforeEach(() => {
     // create a new blank CPU for each test.
-    cpu = new CPU();
+    memory = new Memory(rom);
+    cpu = new CPU({
+      memory,
+    });
   });
 
 
@@ -83,7 +86,7 @@ describe('ld.test.js', () => {
     });
 
 
-    it('LD SP, HL; loads value at cpu.hl into cpu.sp [0xf9]', () => {
+    it ('LD SP, HL; loads value at cpu.hl into cpu.sp [0xf9]', () => {
       const randomByte = random16bit();
       cpu.hl = randomByte;
       cpu.sp = 0;
@@ -94,22 +97,18 @@ describe('ld.test.js', () => {
 
 
   describe('using test ROM', () => {
-    let memory;
-
-    beforeEach(() => {
-      memory = new Memory(rom);
-      cpu = new CPU({
-        memory,
-      });
-    });
-
     // If register pair HL contains the number 75A1h,
     // and memory address 75A1h contains byte 58h,
     // the execution of LD H,
     // (HL) results in 58h in Register H.
     it('[0x66] LD H, (HL); load the value at (HL) into H', () => {
       memory.writeROM(0x75a1, 0x58);
+      // expect(memory.readROM(0x75a1)).to.eql(0x58);
       cpu.hl = 0x75a1;
+
+      // expect(cpu.h).to.eql(0x75);
+      // expect(cpu.l).to.eql(0xa1);
+
       cpu.processOpcode(0x66);
       expect(cpu.h).to.eql(0x58);
     });

@@ -1,13 +1,19 @@
 import expect from 'expect.js';
 import CPU from '../src/cpu.js';
 import { random8bit } from './utils.js';
+import Memory from '../src/memory.js';
+import rom from '../roms/flappyboy.json';
 
 
 describe('CPU', () => {
-  let cpu;
+  let cpu, memory;
 
   beforeEach(() => {
-    cpu = new CPU();
+    // create a new blank CPU for each test.
+    memory = new Memory(rom);
+    cpu = new CPU({
+      memory,
+    });
   });
 
   describe('main registers', () => {

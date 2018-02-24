@@ -3,6 +3,8 @@ import filter from 'lodash.filter';
 import CPU from '../src/cpu.js';
 import Memory from '../src/memory.js';
 import OPCODE from '../const/opcode.js';
+import Memory from '../src/memory.js';
+import rom from '../roms/flappyboy.json';
 import { random8bit } from './utils.js';
 import rom from '../roms/flappyboy.json';
 
