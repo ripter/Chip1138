@@ -1,15 +1,20 @@
 import expect from 'expect.js';
 import filter from 'lodash.filter';
 import CPU from '../src/cpu.js';
+import Memory from '../src/memory.js';
 import OPCODE from '../const/opcode.js';
 import { random8bit } from './utils.js';
+import rom from '../roms/flappyboy.json';
 
 
 describe('CPU can run OPCODES:', () => {
-  let cpu, opcodeList;
+  let cpu, opcodeList, memory;
 
   beforeEach(() => {
-    cpu = new CPU();
+    memory = new Memory(rom);
+    cpu = new CPU({
+      memory,
+    });
   });
 
   describe('ADD:', () => {
@@ -143,6 +148,11 @@ describe('CPU can run OPCODES:', () => {
       const register = operand1.toLowerCase();
       const byte = parseInt(addr, 16);
 
+      // skip the (HL) for the moment
+      if (register === '(hl)') {
+        return;
+      }
+
       it(`[${addr}] INC ${operand1}; Increments the value at register ${register}`, () => {
         // Set values we want to add together
         cpu[register] = randomValue;
@@ -165,6 +175,11 @@ describe('CPU can run OPCODES:', () => {
       const register = operand1.toLowerCase();
       const byte = parseInt(addr, 16);
 
+      // skip the (HL) for the moment
+      if (register === '(hl)') {
+        return;
+      }
+
       it(`[${addr}] DEC ${operand1}; Increments the value at register ${register}`, () => {
         // Set values we want to add together
         cpu[register] = randomValue;
@@ -173,4 +188,40 @@ describe('CPU can run OPCODES:', () => {
       });
     });
   }); // INC
+
+  describe('ADC', () => {
+    let randomValue;
+
+    beforeEach(() => {
+      randomValue = random8bit();
+    });
+
+    opcodeList = filter(OPCODE, {mnemonic: 'ADC'});
+    opcodeList.forEach(function(opcode) {
+      const { addr, operand2 } = opcode;
+      const register = operand2.toLowerCase();
+      const byte = parseInt(addr, 16);
+
+      it(`[${addr}] ADC a, ${register}; Adds ${register} to register A`, () => {
+        cpu.a = 0x50;
+
+        // Set values we want to add together
+        if (register === 'd8') {
+          cpu.processOpcode(byte);
+          cpu.processOpcode(randomValue);
+        }
+        else if (register === '(hl)') {
+          cpu.hl = 0x0001;
+          memory.writeROM(cpu.hl, randomValue);
+          cpu.processOpcode(byte);
+        }
+        else {
+          cpu[register] = randomValue;
+          cpu.processOpcode(byte);
+        }
+
+        expect(cpu.a).to.eql( 0x50 + randomValue);
+      });
+    });
+  });
 });
