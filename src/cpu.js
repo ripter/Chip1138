@@ -6,6 +6,11 @@ import { OPCODE } from '../const/opcode.js';
 // import loadROM from './utils/loadROM.js';
 // import rom from '../roms/flappyboy.json';
 
+/**
+ * (HL) === Address in memory. reterieve value using value in HL and do with what you wish
+ */
+
+
 class CPU {
   constructor({ memory }) {
     // Create the memory banks
@@ -185,16 +190,21 @@ class CPU {
         case 0x3b:
           register = 'sp';
           break;
-        case 0x35:
-          register = 'hl'; // return to this TODO: here
-          break;
         case 0x3d:
           register = 'a';
           break;
         default:
           // nothing;
       }
-      this[register] -= 1;
+
+      if (opcode === 0x35) {
+        const address = this.hl;
+        const initialValue = this.memory.readROM(address);
+        this.memory.writeROM(address, initialValue - 1);
+      }
+      else {
+        this[register] -= 1;
+      }
     }  // register == operand1
 
     if (mnemonic === 'LD') {
@@ -247,6 +257,7 @@ class CPU {
         default:
           // nothing;
       }
+
       if (opcode === 0x34) {
         const address = this.hl;
         const initialValue = this.memory.readROM(address);
