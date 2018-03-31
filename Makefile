@@ -21,6 +21,9 @@ node_modules/: package.json
 lint: node_modules/
 	npx eslint src/ test/
 
+debug:
+	$(NPM_BIN)/mocha --opts mocha.opts --inspect-brk
+
 test: lint
 	npx mocha --opts mocha.opts
 

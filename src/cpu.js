@@ -41,7 +41,7 @@ class CPU {
   reset(length) {
     // console.log(`reset? ${this.opcodeArray.length} == ${length}`)
     if (this.opcodeArray.length === length) {
-      this.opcodeArray.length = 0;
+      this.opcodeArray = [];
     }
   }
 
@@ -79,9 +79,9 @@ class CPU {
     }
 
     if (length === 1) {
-      if (keyB === 'hl') {
+      if (keyB === '(hl)') {
+        keyB = keyB.slice(1,2);
         const address = this[keyB];
-        console.log(keyA, keyB, length, address)
         // this[keyA] = this.memory[address];
         // console.log(this.memory.readROM(address));
       }
@@ -90,8 +90,13 @@ class CPU {
       // }
     }
 
+    console.log('LD', keyA, keyB, length);
+    if (keyB === '(hl)') {
+      debugger;
+    }
+
     // console.log('Length pre check', opLength);
-    if (length === 3 && opLength === 3) {
+    if (length === 3 && opLength === length) {
       const firstBit = this.opcodeArray[1];
       const secondBit = this.opcodeArray[2];
       if (keyA === 'sp') {
@@ -132,17 +137,15 @@ class CPU {
         this.add(keyA, keyB, length);
         return;
       }
-      if (opLength === 2 && opLength === length) {
+      if (length === 2 && opLength === length) {
         const opcodeData = this.opcodeArray[1];
         this.add(keyA, opcodeData, length);
         return;
       }
-      if (opLength === 2) {
-        if (length === 2) {
-          const opcodeData = this.opcodeArray[1];
-          this.add(keyA, opcodeData, length);
-          return;
-        }
+      if (length === 2 && opLength === length) {
+        const opcodeData = this.opcodeArray[1];
+        this.add(keyA, opcodeData, length);
+        return;
       }
     }
 
@@ -200,17 +203,6 @@ class CPU {
       // this.ld(opcode);
       if (keyB) {
         this.ld(keyA, keyB, length);
-      }
-      if (opLength === 2) {
-        if (length === 2) {
-          this.ld(keyA, keyB, length);
-          return;
-        }
-      }
-      if (length === 3) {
-        if (opLength === 3) {
-          this.ld(keyA, keyB, length);
-        }
       }
     }
 
