@@ -10,6 +10,9 @@ import { OPCODE } from '../const/opcode.js';
  * (HL) === Address in memory. reterieve value using value in HL and do with what you wish
  */
 
+/**
+ * ADC === Add and carry. check tests for implementation
+ */
 
 class CPU {
   constructor({ memory }) {
