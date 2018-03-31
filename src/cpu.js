@@ -80,14 +80,16 @@ class CPU {
 
     if (length === 1) {
       if (keyB === '(hl)') {
-        keyB = keyB.slice(1,2);
+        debugger;
+        keyB = keyB.slice(1,3);
+        console.log(keyB)
         const address = this[keyB];
-        // this[keyA] = this.memory[address];
-        // console.log(this.memory.readROM(address));
+        this[keyA] = this.memory.readROM(address);
+        console.log('wooooo', this[keyB], this[keyA]);
       }
-      // else {
+      else {
         this[keyA] = this[keyB];
-      // }
+      }
     }
 
     console.log('LD', keyA, keyB, length);
