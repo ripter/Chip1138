@@ -80,7 +80,6 @@ class CPU {
 
     if (length === 1) {
       if (keyB === '(hl)') {
-        debugger;
         keyB = keyB.slice(1,3);
         console.log(keyB)
         const address = this[keyB];
@@ -92,18 +91,15 @@ class CPU {
       }
     }
 
-    console.log('LD', keyA, keyB, length);
-    if (keyB === '(hl)') {
-      debugger;
-    }
-
     // console.log('Length pre check', opLength);
     if (length === 3 && opLength === length) {
       const firstBit = this.opcodeArray[1];
       const secondBit = this.opcodeArray[2];
+
       if (keyA === 'sp') {
         this[keyA] = (firstBit << 8) | secondBit;
       }
+
       else {
         this[keyA[0]] = firstBit;
         this[keyA[1]] = secondBit;
@@ -251,7 +247,14 @@ class CPU {
         default:
           // nothing;
       }
-      this[register] += 1;
+      if (opcode === 0x34) {
+        const address = this.hl;
+        const initialValue = this.memory.readROM(address);
+        this.memory.writeROM(address, initialValue + 1);
+      }
+      else {
+        this[register] += 1;
+      }
     }
 
     if (mnemonic === 'JUMP') {
