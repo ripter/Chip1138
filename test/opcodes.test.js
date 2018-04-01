@@ -195,7 +195,7 @@ describe('CPU can run OPCODES:', () => {
   }); // INC
 
   describe('ADC', () => {
-    let randomValue;
+    let randomValue; 
 
     beforeEach(() => {
       randomValue = random8bit();

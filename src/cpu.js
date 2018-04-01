@@ -53,6 +53,10 @@ class CPU {
     }
   }
 
+  adc (keyB) {
+    this.a = this.a + this[keyB];
+  }
+
   /*
    * ADD: takes 2 aruguements, gets register values and sets register with sum of values
    */
@@ -138,16 +142,15 @@ class CPU {
     const opLength = this.opcodeArray.length;
 
     // Sort first by mnemonic
+    if (mnemonic === 'ADC') {
+      this.adc(keyB)
+    }
     if (mnemonic === 'ADD') {
       if (length === 1) {
         this.add(keyA, keyB, length);
         return;
       }
-      if (length === 2 && opLength === length) {
-        const opcodeData = this.opcodeArray[1];
-        this.add(keyA, opcodeData, length);
-        return;
-      }
+
       if (length === 2 && opLength === length) {
         const opcodeData = this.opcodeArray[1];
         this.add(keyA, opcodeData, length);
