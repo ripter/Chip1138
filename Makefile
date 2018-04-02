@@ -36,3 +36,6 @@ test.blink:
 
 watch:
 	$(NPM_BIN)/webpack --env.dev --progress --colors -d --watch
+
+cover:
+	$(NPM_BIN)/istanbul cover $(NPM_BIN)/_mocha test/*.js -- --require babel-register
