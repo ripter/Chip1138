@@ -97,10 +97,8 @@ class CPU {
     if (length === 1) {
       if (keyB === '(hl)') {
         keyB = keyB.slice(1,3);
-        console.log(keyB)
         const address = this[keyB];
         this[keyA] = this.memory.readROM(address);
-        console.log('wooooo', this[keyB], this[keyA]);
       }
       else {
         this[keyA] = this[keyB];
@@ -147,7 +145,7 @@ class CPU {
 
     // Sort first by mnemonic
     if (mnemonic === 'ADC') {
-      this.adc(keyB)
+      this.adc(keyB);
     }
     if (mnemonic === 'ADD') {
       if (length === 1) {
@@ -170,22 +168,22 @@ class CPU {
     if (mnemonic === 'DEC') {
       let register;
       switch (opcode) {
-        case 0xb:             // if (0xb === opcode) { register = 'bc'; }
+        case 0xb: // if (0xb === opcode) { register = 'bc'; }
           register = 'bc';
           break;
-        case 0x5:             // (0x5 === opcode) && register = 'b';
+        case 0x5: // (0x5 === opcode) && register = 'b';
           register = 'b';
           break;
-        case 0xd:             // (0xd === opcode) ? register = 'c' : void 0;
+        case 0xd: // (0xd === opcode) ? register = 'c' : void 0;
           register = 'c';
           break;
-        case 0x1b:            // register = operand1
+        case 0x1b: // register = operand1
           register = 'de';
           break;
-        case 0x15:            // register = operand1
+        case 0x15: // register = operand1
           register = 'd';
           break;
-        case 0x1d:            // register = operand1
+        case 0x1d: // register = operand1
           register = 'e';
           break;
         case 0x2b:
@@ -215,7 +213,7 @@ class CPU {
       else {
         this[register] -= 1;
       }
-    }  // register == operand1
+    } // register == operand1
 
     if (mnemonic === 'LD') {
       // this.ld(opcode);
