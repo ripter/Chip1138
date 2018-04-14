@@ -3,4 +3,8 @@ node_modules
 roms/*
 public/
 package-lock.json
+<<<<<<< HEAD
 coverage/*
+=======
+coverage/
+>>>>>>> aaff1675c4520c42a7a444aeb9733a4a004d3d75
