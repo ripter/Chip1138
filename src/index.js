@@ -1,29 +1,34 @@
-import CPU from './cpu.js';
-import Memory from './memory.js';
-import loadROM from './utils/loadROM.js';
-import rom from '../roms/flappyboy.json';
-let romData = window.romData = loadROM(rom);
-
-
-const memory = window.memory = new Memory(rom);
-const cpu = window.cpu = new CPU({
-  memory,
-});
+// import CPU from './cpu.js';
+// import Memory from './memory.js';
+// import loadROM from './utils/loadROM.js';
+// import rom from '../roms/flappyboy.json';
+// let romData = window.romData = loadROM(rom);
+//
+//
+// const memory = window.memory = new Memory(rom);
+// const cpu = window.cpu = new CPU({
+//   memory,
+// });
 //
 // cpu.pc = 0x0100;
-// const firstByte = memory.readROM(cpu.pc);
-// console.log('first byte', `0x${firstByte.toString(16)}`, firstByte);
-
-for(let i=0; i < 5; i++) {
-  cpu.tick();
-  const byte = memory.readROM(cpu.pc);
-  console.log('byte', `0x${byte.toString(16)}`, byte);
-}
-// pc: 256, opcode: 0
-// pc: 257, opcode: 195
-// pc: 336, opcode: 243
-// pc: 337, opcode: 87
-// pc: 338, opcode: 175,
+// [
+//   { pc: 256, opcode: 0 },
+//   { pc: 257, opcode: 195 },
+//   { pc: 336, opcode: 243 },
+//   { pc: 337, opcode: 87 },
+//   { pc: 338, opcode: 175 },
+// ].forEach((set) => {
+//   const pc = cpu.pc;
+//   const opcode = memory.readROM(pc);
+//   cpu.tick(); // this can change pc
+//
+//   if (opcode === set.opcode) {
+//     console.log('%cSUCCESS:', 'background-color: #2ECC40; padding: .5em;', 'opcode', `0x${opcode.toString(16)}`, ', pc', `0x${pc.toString(16)}`);
+//   }
+//   else {
+//     console.log('%cFAILURE:', 'background-color: #FF4136; padding: .5em', 'opcode', `0x${opcode.toString(16)}`, 'should be', `0x${set.opcode.toString(16)}`, ', pc', `0x${pc.toString(16)}`, 'should be', `0x${set.pc.toString(16)}`);
+//   }
+// });
 
 
 

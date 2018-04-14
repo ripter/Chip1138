@@ -19,11 +19,11 @@ describe('timer', () => {
       expect(cpu.pc).to.eql(0x0101);
     });
 
-    it('runs opcode at cpu.pc + 1', () => {
-      cpu.tick(); // 0x0101: 0xc3
-      cpu.tick(); // 0x0102: 0x50
-      cpu.tick(); // 0x0103: 0x01
-      expect(cpu.pc).to.eql(0x5001);
+    it('JUMP with tick()', () => {
+      cpu.pc = 0x0101; // opcode at this address is 0xC3 JUMP
+      cpu.tick(); // Run one tick, which will run JUMP
+      expect(cpu.pc).to.eql(0x0150); // The new pc after the jump.
     });
   });
+
 });

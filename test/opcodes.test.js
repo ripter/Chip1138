@@ -195,7 +195,7 @@ describe('CPU can run OPCODES:', () => {
   }); // INC
 
   describe('ADC', () => {
-    let randomValue; 
+    let randomValue;
 
     beforeEach(() => {
       randomValue = random8bit();
@@ -225,7 +225,7 @@ describe('CPU can run OPCODES:', () => {
           cpu.processOpcode(byte);
         }
 
-        expect(cpu.a).to.eql( 0x50 + randomValue);
+        expect(cpu.a).to.eql(0x50 + randomValue);
       });
 
     }); // forEach opcode
