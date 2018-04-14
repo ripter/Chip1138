@@ -54,12 +54,11 @@ class CPU {
   }
 
   adc (keyB) {
-    const total = this[keyA] + this[keyB];
-    if (this[keyA] >= 254) {
-      debugger;
+    const total = this.a + this[keyB];
+    if (total >= 254) {
       this.f = this.f | this.masks.full;
     }
-    this[keyA] = total;
+    this.a = total;
   }
 
   /*
