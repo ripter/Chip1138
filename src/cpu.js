@@ -69,8 +69,6 @@ class CPU {
 
   adc (keyB) {
     const total = this.a + this[keyB];
-    //TODO: 0xff is nicer than 255/254 (are we sure 254 is right?)
-    //    : Everything else is in hex, it's easier to read if we don't have to convert in our heads.
     if (total >= 254) {
       this.f = this.f | this.masks.full;
     }
