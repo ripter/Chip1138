@@ -77,6 +77,8 @@ class CPU {
       this.f = this.f & 0b0000;
     }
     // this.f = this.f & this.masks.sub;
+    //TODO: there is no reason for this method to have length or or call reset.
+    //    : The only thing it does with length is call reset, let processOpcode worry about that.
     this.reset(length);
   }
 
@@ -140,14 +142,21 @@ class CPU {
       keyB = operand2.toLowerCase();
     }
 
+    //TODO: this comment says check, but it's not checking anything.
     // Check our opcode's length...
     const opLength = this.opcodeArray.length;
 
     // Sort first by mnemonic
     if (mnemonic === 'ADC') {
+      //TODO: this doesn't handle any of the special cases like d8, (hl)
+      //    : The flag test uses d8, so until that is handles, the flag tests will continue to fail.
+      //IDEA: instead of passing in the key, pass in the value it should use.
+      //    : Then processOpcode can figure out how to get the values and pass them to mnemonic methods.
+      //    : this.adc(someByte); // Adds someByte to register A and updates the carry flags.
       this.adc(keyB);
     }
     if (mnemonic === 'ADD') {
+      //IDEA: this.add(register, someByte); // Adds someByte to the register and updates the flags.
       if (length === 1) {
         this.add(keyA, keyB, length);
         return;

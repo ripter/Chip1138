@@ -240,9 +240,7 @@ describe('CPU can run OPCODES:', () => {
           expect(cpu.a).to.eql(0xA0);
         }
       });
-
     }); // forEach opcode
-
 
     it('it sets the carry flag', () => {
       const opcodes = [
