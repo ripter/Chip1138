@@ -201,31 +201,44 @@ describe('CPU can run OPCODES:', () => {
       randomValue = random8bit();
     });
 
+    // Loop over all the Add with Carry opcodes
     opcodeList = filter(OPCODE, {mnemonic: 'ADC'});
     opcodeList.forEach(function(opcode) {
       const { addr, operand2 } = opcode;
       const register = operand2.toLowerCase();
       const byte = parseInt(addr, 16);
 
-      it(`[${addr}] ADC a, ${register}; Adds ${register} to register A`, () => {
+      it(`ADC a, ${register}; Opcode [${addr}] Adds ${register} to register A.`, () => {
         cpu.a = 0x50;
 
-        // Set values we want to add together
+        // d8 means a random 8bit number
         if (register === 'd8') {
-          cpu.processOpcode(byte);
+          cpu.processOpcode(byte); // Run the opcode
           cpu.processOpcode(randomValue);
         }
+        // (hl) is a special register
         else if (register === '(hl)') {
           cpu.hl = 0x0001;
           memory.writeROM(cpu.hl, randomValue);
-          cpu.processOpcode(byte);
+          cpu.processOpcode(byte); // Run the opcode
+        }
+        // Since a is the dest, we don't want to overwrite it when it's also the source.
+        else if (register === 'a') {
+          cpu.processOpcode(byte); // Run the opcode
         }
         else {
           cpu[register] = randomValue;
-          cpu.processOpcode(byte);
+          cpu.processOpcode(byte); // Run the opcode
         }
 
-        expect(cpu.a).to.eql(0x50 + randomValue);
+        if (register !== 'a') {
+          // JS will happly overflow, but we don't want that for the test.
+          // use `& 0xFF` to keep it 8bits.
+          expect(cpu.a).to.eql((0x50 + randomValue) & 0xff);
+        } else {
+          // Since a is the dest, we don't want to overwrite it when it's also the source.
+          expect(cpu.a).to.eql(0xA0);
+        }
       });
 
     }); // forEach opcode
