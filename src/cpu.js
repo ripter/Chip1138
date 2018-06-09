@@ -6,12 +6,26 @@ import { OPCODE } from '../const/opcode.js';
 // import loadROM from './utils/loadROM.js';
 // import rom from '../roms/flappyboy.json';
 
+
+/** OPCODE NOTES **/
 /**
  * (HL) === Address in memory. reterieve value using value in HL and do with what you wish
  */
 
+/*
+ * d8 === 8 bit value (any)
+ */
+
+/*
+ * FLAGS: Full carry === >=254, half carry >=15
+ */
+
 /**
  * ADC === Add and carry. check tests for implementation
+ */
+
+/**
+ * TODO: Decrement needs a check for zero. value can't be negative.
  */
 
 class CPU {
@@ -26,7 +40,7 @@ class CPU {
     this.opcodeArray = [];
     this.data = 0;
     this.a = 0x01;
-    this.f = 0xb0;
+    this.f = 0b10110000; // NOTE: in binary
 
     /*
     /* fullCarry: 0b0001
@@ -36,10 +50,10 @@ class CPU {
      */
 
     this.masks = {
-      full: 0b0001,
-      half: 0b0010,
-      sub: 0b0100,
-      zero: 0b1000,
+      full: 0b00010000,
+      half: 0b00100000,
+      sub: 0b010000000,
+      zero: 0b10000000,
     };
   }
 
@@ -47,7 +61,7 @@ class CPU {
   * RESET: tssts length and opcode length, resets this.opcodeArray;
    */
   reset(length) {
-    // console.log(`reset? ${this.opcodeArray.length} == ${length}`)
+    // console.log(`reset? ${this.opcodeArray.length == length}`)
     if (this.opcodeArray.length === length) {
       this.opcodeArray = [];
     }
@@ -66,6 +80,7 @@ class CPU {
   /*
    * ADD: takes 2 aruguements, gets register values and sets register with sum of values
    */
+
   add (keyA = 'a', keyB = 'a', length) {
     const valueA = this[keyA];
     const valueB = typeof keyB === 'string' ? this[keyB]: keyB;
@@ -131,13 +146,15 @@ class CPU {
     this.processOpcode(this.memory.readROM(this.pc));
   }
 
-  //TODO: Add ☠️ 👻 🐶
+  // TODO: Add ☠️ 👻 🐶
   processOpcode(opcode) {
     this.opcodeArray.push(opcode);
     // our object key for the table
     const opKey = this.opcodeArray[0];
     const { length, operand1, operand2, mnemonic } = OPCODE[opKey];
     const keyA = operand1.toLowerCase();
+
+    // if(this.f > 0B1011) { debugger; }
 
     let keyB;
     if (operand2) {
@@ -169,6 +186,11 @@ class CPU {
         this.add(keyA, opcodeData, length);
         return;
       }
+    }
+
+    if (mnemonic === 'ADC') {
+
+      this.adc(keyB);
     }
 
     if (mnemonic === 'SUB') {
