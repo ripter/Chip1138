@@ -8,6 +8,8 @@ import { OPCODE } from '../const/opcode.js';
 
 /**
  * (HL) === Address in memory. reterieve value using value in HL and do with what you wish
+ *
+ * d8 represents 8bit number.
  */
 
 /**
@@ -44,7 +46,7 @@ class CPU {
   }
 
   /*
-  * RESET: tssts length and opcode length, resets this.opcodeArray;
+  * RESET: tests length and opcode length, resets this.opcodeArray;
    */
   reset(length) {
     // console.log(`reset? ${this.opcodeArray.length} == ${length}`)
@@ -53,8 +55,8 @@ class CPU {
     }
   }
 
-  adc (keyB) {
-    const total = this.a + this[keyB];
+  adc (bit8) {
+    const total = this.a + bit8;
     //TODO: 0xff is nicer than 255/254 (are we sure 254 is right?)
     //    : Everything else is in hex, it's easier to read if we don't have to convert in our heads.
     if (total >= 254) {
@@ -144,8 +146,6 @@ class CPU {
       keyB = operand2.toLowerCase();
     }
 
-    //TODO: this comment says check, but it's not checking anything.
-    // Check our opcode's length...
     const opLength = this.opcodeArray.length;
 
     // Sort first by mnemonic
@@ -155,7 +155,13 @@ class CPU {
       //IDEA: instead of passing in the key, pass in the value it should use.
       //    : Then processOpcode can figure out how to get the values and pass them to mnemonic methods.
       //    : this.adc(someByte); // Adds someByte to register A and updates the carry flags.
-      this.adc(keyB);
+      const bit8 = this[keyB] || this.opcodeArray[1];
+      if (keyB !== 'd8') {
+        this.adc(bit8);
+      }
+      if (this.opcodeArray.length === 2) {
+        this.adc(bit8);
+      }
     }
     if (mnemonic === 'ADD') {
       //IDEA: this.add(register, someByte); // Adds someByte to the register and updates the flags.
