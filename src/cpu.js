@@ -56,6 +56,7 @@ class CPU {
   }
 
   adc (bit8) {
+    console.log('ADC....', this.memory.readROM(this.hl));
     const total = this.a + bit8;
     //TODO: 0xff is nicer than 255/254 (are we sure 254 is right?)
     //    : Everything else is in hex, it's easier to read if we don't have to convert in our heads.
@@ -63,6 +64,7 @@ class CPU {
       this.f = this.f | this.masks.full;
     }
     this.a = total;
+    return total;
   }
 
   /*
@@ -152,16 +154,28 @@ class CPU {
     if (mnemonic === 'ADC') {
       //TODO: this doesn't handle any of the special cases like d8, (hl)
       //    : The flag test uses d8, so until that is handles, the flag tests will continue to fail.
+
       //IDEA: instead of passing in the key, pass in the value it should use.
       //    : Then processOpcode can figure out how to get the values and pass them to mnemonic methods.
       //    : this.adc(someByte); // Adds someByte to register A and updates the carry flags.
+
       const bit8 = this[keyB] || this.opcodeArray[1];
+     if (keyB === '(hl)') {
+       const value = this.memory.readROM(this.hl);
+       return this.adc(value);
+     }
+
       if (keyB !== 'd8') {
         this.adc(bit8);
       }
+
       if (this.opcodeArray.length === 2) {
         this.adc(bit8);
       }
+      /*
+      * this.A === 80 (0x50)
+      * this.hl is always be 1, value of memory[1]
+       */
     }
     if (mnemonic === 'ADD') {
       //IDEA: this.add(register, someByte); // Adds someByte to the register and updates the flags.
