@@ -10,6 +10,9 @@ import { OPCODE } from '../const/opcode.js';
  * (HL) === Address in memory. reterieve value using value in HL and do with what you wish
  *
  * d8 represents 8bit number.
+ *
+ * pc === program counter; our address for the next opcode.
+ *
  */
 
 /**
@@ -56,15 +59,13 @@ class CPU {
   }
 
   adc (bit8) {
-    console.log('ADC....', this.memory.readROM(this.hl));
     const total = this.a + bit8;
     //TODO: 0xff is nicer than 255/254 (are we sure 254 is right?)
     //    : Everything else is in hex, it's easier to read if we don't have to convert in our heads.
-    if (total >= 254) {
+    if (total >= 0xff) {
       this.f = this.f | this.masks.full;
     }
     this.a = total;
-    return total;
   }
 
   /*
@@ -152,18 +153,13 @@ class CPU {
 
     // Sort first by mnemonic
     if (mnemonic === 'ADC') {
-      //TODO: this doesn't handle any of the special cases like d8, (hl)
-      //    : The flag test uses d8, so until that is handles, the flag tests will continue to fail.
-
-      //IDEA: instead of passing in the key, pass in the value it should use.
-      //    : Then processOpcode can figure out how to get the values and pass them to mnemonic methods.
-      //    : this.adc(someByte); // Adds someByte to register A and updates the carry flags.
 
       const bit8 = this[keyB] || this.opcodeArray[1];
-     if (keyB === '(hl)') {
-       const value = this.memory.readROM(this.hl);
-       return this.adc(value);
-     }
+      if (keyB === '(hl)') {
+        const value = this.memory.readROM(this.hl);
+        this.adc(value);
+        return;
+      }
 
       if (keyB !== 'd8') {
         this.adc(bit8);
@@ -175,10 +171,11 @@ class CPU {
       /*
       * this.A === 80 (0x50)
       * this.hl is always be 1, value of memory[1]
-       */
+      */
     }
     if (mnemonic === 'ADD') {
-      //IDEA: this.add(register, someByte); // Adds someByte to the register and updates the flags.
+      // IDEA: this.add(register, someByte); // Adds someByte to the register and updates the flags.
+      // TODO: this.add(register, someByte)
       if (length === 1) {
         this.add(keyA, keyB, length);
         return;
@@ -308,11 +305,15 @@ class CPU {
     }
 
     if (mnemonic === 'JUMP') {
+      debugger;
+      console.log('jump opLength', opLength);
       if (opLength === 3) {
+        console.log('length 3')
+        debugger;
         const val = this.opcodeArray[1];
         const val1 = this.opcodeArray[2];
         this.pc = (val << 8) | val1;
-      }
+      } // 34, 170
     }
 
     if (mnemonic === 'POP') {
