@@ -131,6 +131,15 @@ class CPU {
     this.reset(length);
   }
 
+  jump() {
+    const opLength = this.opcodeArray.length;
+    if (opLength < 3) {
+      // this.jump();
+      console.log('less than 3', this.opcodeArray)
+    }
+    console.log(this.opcodeArray)
+  }
+
   tick() {
     this.pc +=1;
     this.processOpcode(this.memory.readROM(this.pc));
@@ -307,6 +316,7 @@ class CPU {
     if (mnemonic === 'JUMP') {
       debugger;
       console.log('jump opLength', opLength);
+      this.jump()
       if (opLength === 3) {
         console.log('length 3')
         debugger;
