@@ -144,18 +144,29 @@ class CPU {
 
   tick() {
     this.pc +=1;
+    // How many times do we need to call processOpcode per `tick()`?
+    // What is OPCODE.length?
     this.processOpcode(this.memory.readROM(this.pc));
+    // IF JUMP!!!
     if (this.opcodeArray[0] === 0xc3) {
-      // console.log('this fired on 0xc3', this.toHex(this.opcodeArray), this.pc);
-      if (this.opcodeArray[1]) {
-        if (this.opcodeArray[0] === 0xc3) {
-          this.processOpcode(this.memory.readROM(this.pc));
-        }
-        this.opcodeArray.push(this.opcodeArray[1] + 1);
-        const val = this.opcodeArray[1];
-        const val1 = this.opcodeArray[2];
-        this.pc = val | val1;
+      // How many times do we need to loop?
+      // 3
+      for (let i = 1; i < 3; i++) {
+        this.processOpcode(this.memory.readROM(this.pc + i));
       }
+
+      // console.log('this fired on 0xc3', this.toHex(this.opcodeArray), this.pc);
+      // if (this.opcodeArray[1]) {
+      //
+      //   if (this.opcodeArray[0] === 0xc3) {
+      //     this.processOpcode(this.memory.readROM(this.pc));
+      //   }
+      //
+      //   this.opcodeArray.push(this.opcodeArray[1] + 1);
+      //   const val = this.opcodeArray[1];
+      //   const val1 = this.opcodeArray[2];
+      //   this.pc =  val | val1;
+      // }
     }
   }
 

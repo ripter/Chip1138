@@ -14,7 +14,7 @@ describe('clock', () => {
     });
   });
 
-  describe.only('tick()', () => {
+  describe('tick()', () => {
     it('first tick() that does nothing but increment pc.', () => {
       // console.log('\none tick() before, cpu.pc', `0x${cpu.pc.toString(16)}`, 'data at pc', `0x${memory.readROM(cpu.pc).toString(16)}`);
       cpu.tick();
@@ -34,7 +34,7 @@ describe('clock', () => {
     });
   });
 
-  describe('PC during Flappyboy', () => {
+  describe.skip('PC during Flappyboy', () => {
     let cpu, memory;
 
     beforeEach(() => {
