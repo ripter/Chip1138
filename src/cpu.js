@@ -131,13 +131,22 @@ class CPU {
     this.reset(length);
   }
 
-  jump() {
+
+  /**
+   * Performs a JUMP operation by combining two 8bit bytes into a new 16bit address.
+   * Sets cpu.pc
+   * @param  {8Bit} byte1
+   * @param  {8Bit} byte2
+   * @return {16Bit} new value of cpu.pc
+   */
+  jump(byte1, byte2) {
+    console.log('JUMP Brother', `0x${byte1.toString(16)}`, `0x${byte2.toString(16)}`);
     // const opLength = this.opcodeArray.length;
 
     const initialPC = this.pc;
     const val1 = initialPC + 1;
     const val2 = val1 + 1;
-    // console.log('From jump', this.toHex(this.pc), this.toHex(val1), this.toHex(val2));
+    console.log('From jump', this.toHex(this.pc), this.toHex(val1), this.toHex(val2));
     // console.log('PC', this.pc);
     // this.pc = (val1 << 8) | val2;
   }
@@ -145,11 +154,13 @@ class CPU {
   tick() {
     const data = this.memory.readROM(this.pc);
     const opcode = OPCODE[data];
+        console.log('Calling da po`po', `0x${data.toString(16)}`);
     this.processOpcode(data);
 
     // JUMP
     if (data === 0xc3) {
       for (let i = 1; i < opcode.length; i++) {
+        console.log('Calling da po`po', `0x${this.memory.readROM(this.pc + i).toString(16)}`);
         this.processOpcode(this.memory.readROM(this.pc + i));
       }
     }
@@ -328,17 +339,15 @@ class CPU {
       }
     }
 
-    if (mnemonic === 'JUMP') {
-
-      // console.log('jump opLength', opLength);
-      this.jump();
-      if (opLength === 3) {
-        // console.log('length 3');
-
-        const val = this.opcodeArray[1];
-        const val1 = this.opcodeArray[2];
-        this.pc = (val << 8) | val1;
-      } // 34, 170
+    if (this.opcodeArray[0] === 0xc3 && this.opcodeArray.length === 3) {
+      this.jump(this.opcodeArray[1], this.opcodeArray[2]);
+      // if (opLength === 3) {
+      //   // console.log('length 3');
+      //
+      //   const val = this.opcodeArray[1];
+      //   const val1 = this.opcodeArray[2];
+      //   this.pc = (val << 8) | val1;
+      // } // 34, 170
     }
 
     if (mnemonic === 'POP') {
