@@ -2,6 +2,7 @@ import expect from 'expect.js';
 import CPU from '../src/cpu.js';
 import Memory from '../src/memory.js';
 import rom from '../roms/flappyboy.json';
+import { pcRuntimeValues } from './utils/pcRuntimeValues.js';
 
 describe('clock', () => {
   let cpu, memory;
@@ -113,5 +114,16 @@ describe('clock', () => {
       }
       expect(cpu.pc).to.eql(0x015e);
     });
+
+    // Check the first 1,000 ticks and the PC values for each
+    pcRuntimeValues.forEach((pcValue, tickCount) => {
+      it(`${tickCount}: tick(), CPU.pc = 0x${pcValue.toString(16)}`, () => {
+        for (let i=0; i < tickCount; i++) {
+          cpu.tick();
+        }
+        expect(cpu.pc).to.eql(pcValue);
+      });
+    });
+
   });
 });
