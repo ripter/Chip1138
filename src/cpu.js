@@ -143,31 +143,17 @@ class CPU {
   }
 
   tick() {
-    this.pc +=1;
-    // How many times do we need to call processOpcode per `tick()`?
-    // What is OPCODE.length?
-    this.processOpcode(this.memory.readROM(this.pc));
-    // IF JUMP!!!
-    if (this.opcodeArray[0] === 0xc3) {
-      // How many times do we need to loop?
-      // 3
-      for (let i = 1; i < 3; i++) {
+    const data = this.memory.readROM(this.pc);
+    const opcode = OPCODE[data];
+    this.processOpcode(data);
+
+    // JUMP
+    if (data === 0xc3) {
+      for (let i = 1; i < opcode.length; i++) {
         this.processOpcode(this.memory.readROM(this.pc + i));
       }
-
-      // console.log('this fired on 0xc3', this.toHex(this.opcodeArray), this.pc);
-      // if (this.opcodeArray[1]) {
-      //
-      //   if (this.opcodeArray[0] === 0xc3) {
-      //     this.processOpcode(this.memory.readROM(this.pc));
-      //   }
-      //
-      //   this.opcodeArray.push(this.opcodeArray[1] + 1);
-      //   const val = this.opcodeArray[1];
-      //   const val1 = this.opcodeArray[2];
-      //   this.pc =  val | val1;
-      // }
     }
+    this.pc +=1;
   }
 
   toHex(val) {
@@ -180,7 +166,7 @@ class CPU {
     // our object key for the table
     const opKey = this.opcodeArray[0];
     const { length, operand1, operand2, mnemonic } = OPCODE[opKey];
-    const keyA = operand1.toLowerCase();
+    const keyA = operand1 ? operand1.toLowerCase() : '';
 
     let keyB;
     if (operand2) {
