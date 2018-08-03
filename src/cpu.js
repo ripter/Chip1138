@@ -132,17 +132,35 @@ class CPU {
   }
 
   jump() {
-    const opLength = this.opcodeArray.length;
-    if (opLength < 3) {
-      // this.jump();
-      console.log('less than 3', this.opcodeArray)
-    }
-    console.log(this.opcodeArray)
+    // const opLength = this.opcodeArray.length;
+
+    const initialPC = this.pc;
+    const val1 = initialPC + 1;
+    const val2 = val1 + 1;
+    // console.log('From jump', this.toHex(this.pc), this.toHex(val1), this.toHex(val2));
+    // console.log('PC', this.pc);
+    // this.pc = (val1 << 8) | val2;
   }
 
   tick() {
     this.pc +=1;
     this.processOpcode(this.memory.readROM(this.pc));
+    if (this.opcodeArray[0] === 0xc3) {
+      // console.log('this fired on 0xc3', this.toHex(this.opcodeArray), this.pc);
+      if (this.opcodeArray[1]) {
+        if (this.opcodeArray[0] === 0xc3) {
+          this.processOpcode(this.memory.readROM(this.pc));
+        }
+        this.opcodeArray.push(this.opcodeArray[1] + 1);
+        const val = this.opcodeArray[1];
+        const val1 = this.opcodeArray[2];
+        this.pc = val | val1;
+      }
+    }
+  }
+
+  toHex(val) {
+    return `0x${(val).toString(16)}`;
   }
 
   //TODO: Add ☠️ 👻 🐶
@@ -314,12 +332,12 @@ class CPU {
     }
 
     if (mnemonic === 'JUMP') {
-      debugger;
-      console.log('jump opLength', opLength);
-      this.jump()
+
+      // console.log('jump opLength', opLength);
+      this.jump();
       if (opLength === 3) {
-        console.log('length 3')
-        debugger;
+        // console.log('length 3');
+
         const val = this.opcodeArray[1];
         const val1 = this.opcodeArray[2];
         this.pc = (val << 8) | val1;
