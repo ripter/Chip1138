@@ -33,4 +33,85 @@ describe('clock', () => {
     });
   });
 
+  describe('PC during Flappyboy', () => {
+    let cpu, memory;
+
+    beforeEach(() => {
+      memory = new Memory(rom);
+      cpu = new CPU({
+        memory,
+      });
+    });
+
+    it('0: tick(), CPU.pc = 0x0100', () => {
+      expect(cpu.pc).to.eql(0x0100);
+    });
+
+    it('1: tick(), CPU.pc = 0x0101', () => {
+      cpu.tick();
+      expect(cpu.pc).to.eql(0x0101);
+    });
+
+    it('2: tick(), CPU.pc = 0x0150', () => {
+      cpu.tick();
+      cpu.tick();
+      expect(cpu.pc).to.eql(0x0150);
+    });
+
+    it('3: tick(), CPU.pc = 0x0151', () => {
+      for (let i=0; i < 3; i++) {
+        cpu.tick();
+      }
+      expect(cpu.pc).to.eql(0x0151);
+    });
+
+    it('4: tick(), CPU.pc = 0x0152', () => {
+      for (let i=0; i < 4; i++) {
+        cpu.tick();
+      }
+      expect(cpu.pc).to.eql(0x0152);
+    });
+
+    it('5: tick(), CPU.pc = 0x0153', () => {
+      for (let i=0; i < 5; i++) {
+        cpu.tick();
+      }
+      expect(cpu.pc).to.eql(0x0153);
+    });
+
+    it('6: tick(), CPU.pc = 0x0156', () => {
+      for (let i=0; i < 6; i++) {
+        cpu.tick();
+      }
+      expect(cpu.pc).to.eql(0x0156);
+    });
+
+    it('7: tick(), CPU.pc = 0x0159', () => {
+      for (let i=0; i < 7; i++) {
+        cpu.tick();
+      }
+      expect(cpu.pc).to.eql(0x0159);
+    });
+
+    it('8: tick(), CPU.pc = 0x015b', () => {
+      for (let i=0; i < 8; i++) {
+        cpu.tick();
+      }
+      expect(cpu.pc).to.eql(0x015b);
+    });
+
+    it('9: tick(), CPU.pc = 0x015d', () => {
+      for (let i=0; i < 9; i++) {
+        cpu.tick();
+      }
+      expect(cpu.pc).to.eql(0x015d);
+    });
+
+    it('10: tick(), CPU.pc = 0x015e', () => {
+      for (let i=0; i < 10; i++) {
+        cpu.tick();
+      }
+      expect(cpu.pc).to.eql(0x015e);
+    });
+  });
 });
