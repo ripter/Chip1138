@@ -141,14 +141,8 @@ class CPU {
    */
   jump(byte1, byte2) {
     console.log('JUMP Brother', `0x${byte1.toString(16)}`, `0x${byte2.toString(16)}`);
-    // const opLength = this.opcodeArray.length;
-
-    const initialPC = this.pc;
-    const val1 = initialPC + 1;
-    const val2 = val1 + 1;
-    console.log('From jump', this.toHex(this.pc), this.toHex(val1), this.toHex(val2));
     // console.log('PC', this.pc);
-    // this.pc = (val1 << 8) | val2;
+    this.pc = (byte1 << 8) | byte2;
   }
 
   tick() {
@@ -341,13 +335,6 @@ class CPU {
 
     if (this.opcodeArray[0] === 0xc3 && this.opcodeArray.length === 3) {
       this.jump(this.opcodeArray[1], this.opcodeArray[2]);
-      // if (opLength === 3) {
-      //   // console.log('length 3');
-      //
-      //   const val = this.opcodeArray[1];
-      //   const val1 = this.opcodeArray[2];
-      //   this.pc = (val << 8) | val1;
-      // } // 34, 170
     }
 
     if (mnemonic === 'POP') {
