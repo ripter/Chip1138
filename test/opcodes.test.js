@@ -131,7 +131,7 @@ describe('CPU can run OPCODES:', () => {
       cpu.processOpcode(0xc3); // JUMP opcode
       cpu.processOpcode(0x22); // address one
       cpu.processOpcode(0xaa); // address two
-      expect(cpu.pc).to.eql(0x22aa);
+      expect(cpu.pc).to.eql(0xaa22);
     });
   }); // JUMP:
 

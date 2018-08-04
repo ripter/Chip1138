@@ -142,7 +142,7 @@ class CPU {
   jump(byte1, byte2) {
     console.log('JUMP Brother', `0x${byte1.toString(16)}`, `0x${byte2.toString(16)}`);
     // console.log('PC', this.pc);
-    this.pc = (byte1 << 8) | byte2;
+    this.pc = (byte2 << 8) | byte1;
   }
 
   tick() {
@@ -157,6 +157,7 @@ class CPU {
         console.log('Calling da po`po', `0x${this.memory.readROM(this.pc + i).toString(16)}`);
         this.processOpcode(this.memory.readROM(this.pc + i));
       }
+      return;
     }
     this.pc +=1;
   }
