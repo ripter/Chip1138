@@ -126,7 +126,7 @@ describe('CPU can run OPCODES:', () => {
     }); // end forEach opcode
   }); // SUB
 
-  describe.only('JUMP:', () => {
+  describe('JUMP:', () => {
     it('[0xC3] to address', () => {
       cpu.processOpcode(0xc3); // JUMP opcode
       cpu.processOpcode(0x22); // address one

@@ -140,21 +140,17 @@ class CPU {
    * @return {16Bit} new value of cpu.pc
    */
   jump(byte1, byte2) {
-    console.log('JUMP Brother', `0x${byte1.toString(16)}`, `0x${byte2.toString(16)}`);
-    // console.log('PC', this.pc);
     this.pc = (byte2 << 8) | byte1;
   }
 
   tick() {
     const data = this.memory.readROM(this.pc);
     const opcode = OPCODE[data];
-        console.log('Calling da po`po', `0x${data.toString(16)}`);
     this.processOpcode(data);
 
     // JUMP
     if (data === 0xc3) {
       for (let i = 1; i < opcode.length; i++) {
-        console.log('Calling da po`po', `0x${this.memory.readROM(this.pc + i).toString(16)}`);
         this.processOpcode(this.memory.readROM(this.pc + i));
       }
       return;
@@ -336,6 +332,7 @@ class CPU {
 
     if (this.opcodeArray[0] === 0xc3 && this.opcodeArray.length === 3) {
       this.jump(this.opcodeArray[1], this.opcodeArray[2]);
+      this.reset(this.opcodeArray.length);
     }
 
     if (mnemonic === 'POP') {
