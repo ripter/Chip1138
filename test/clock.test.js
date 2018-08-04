@@ -116,7 +116,7 @@ describe('clock', () => {
     });
 
     // Check the first 1,000 ticks and the PC values for each
-    pcRuntimeValues.forEach((pcValue, tickCount) => {
+    pcRuntimeValues.slice(0, 25).forEach((pcValue, tickCount) => {
       it(`${tickCount}: tick(), CPU.pc = 0x${pcValue.toString(16)}`, () => {
         for (let i=0; i < tickCount; i++) {
           cpu.tick();
