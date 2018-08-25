@@ -59,12 +59,26 @@ class CPU {
   }
 
   adc (bit8) {
+    debugger;
     const total = this.a + bit8;
-    //TODO: 0xff is nicer than 255/254 (are we sure 254 is right?)
-    //    : Everything else is in hex, it's easier to read if we don't have to convert in our heads.
+    console.log('Flags', (this.f).toString(2))
+    this.f = this.f & ~this.masks.half;
+    // this.f = this.f | 0b0001;
+debugger;
     if (total >= 0xff) {
+      this.f = this.f & this.masks.full;
+    }
+    else {
       this.f = this.f | this.masks.full;
     }
+
+    if (total > 127 && total < 0xff) {
+      this.f = this.f | this.masks.half;
+    }
+    else {
+      this.f = this.f | 0b0000;
+    }
+
     this.a = total;
   }
 
@@ -147,7 +161,7 @@ class CPU {
     const data = this.memory.readROM(this.pc);
     const opcode = OPCODE[data];
     this.processOpcode(data);
-
+    // console.log(this.toHex(this.pc), this.memory.isColor);
     // JUMP
     if (data === 0xc3) {
       for (let i = 1; i < opcode.length; i++) {
