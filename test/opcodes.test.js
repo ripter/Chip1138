@@ -253,7 +253,7 @@ describe('CPU can run OPCODES:', () => {
       opcodes.forEach(function(opcode) {
         cpu.processOpcode(opcode);
       });
-      expect(cpu.f & 0b1).to.eql(0b1);
+      expect(cpu.f & 0b0001).to.eql(0b0001);
     });
 
     it.only('it resets the carry flag', () => {
@@ -267,11 +267,11 @@ describe('CPU can run OPCODES:', () => {
       opcodes.forEach(function(opcode) {
         cpu.processOpcode(opcode);
       });
-      expect(cpu.f & 0b1).to.eql(0);
+      expect(cpu.f & 0b0001).to.eql(0);
     });
 
 
-    it.only('it sets the half carry flag', () => {
+    it('it sets the half carry flag', () => {
       const opcodes = [
         0x3e, 0x0e, // LD  a, 255 (62, 255)
         0xce, // ADC a, d8
@@ -282,10 +282,10 @@ describe('CPU can run OPCODES:', () => {
       opcodes.forEach(function(opcode) {
         cpu.processOpcode(opcode);
       });
-      expect(cpu.f & 0b1).to.eql(0b1);
+      expect(cpu.f & 0b0010).to.eql(0b0010);
     });
 
-    it.only('it resets the half carry flag', () => {
+    it('it resets the half carry flag', () => {
       const opcodes = [
         0x3e, 0x0e, // LD  a, 255 (62, 255)
         0xce, // ADC a, d8
@@ -297,7 +297,7 @@ describe('CPU can run OPCODES:', () => {
         cpu.processOpcode(opcode);
       });
       console.log('CPU', cpu.f & 0b1, 0b1)
-      expect(cpu.f & 0b10).to.eql(0);
+      expect(cpu.f & 0b0010).to.eql(0);
     });
   });
 });
