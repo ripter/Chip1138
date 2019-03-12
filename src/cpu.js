@@ -92,7 +92,7 @@ class CPU {
     this.a = value;
   }
 
-  add(opcode, byte1) {
+  add (opcode, byte1) {
     const meta = OPCODE[opcode];
     const dest = meta.operand1.toLowerCase();
     const source = meta.operand2.toLowerCase();
@@ -108,11 +108,11 @@ class CPU {
     }
     // Check for Carry
     if (value > 0xFF) {
-      this.f = this.f | 0b001;
+      this.f = this.f | 0b0001;
     }
     else {
       // Reset Carry
-      this.f = this.f & 0b001;
+      this.f = this.f & 0b0001;
     }
 
     this[dest] = value;
@@ -189,6 +189,25 @@ class CPU {
     }
   }
 
+  // Pushes the value at af into the stack and decrements the stackpointer.
+  push () {
+    const address1 = this.sp-1;
+    const address2 = this.sp-2;
+
+    this.memory.writeROM(address1, this.a);
+    this.memory.writeROM(address2, this.f);
+    this.sp -= 2;
+  }
+
+  pop () {
+    const address1 = this.sp+0;
+    const address2 = this.sp+1;
+
+    this.h = this.memory.readROM(address2);
+    this.l = this.memory.readROM(address1);
+    this.sp += 2;
+  }
+
 
   /**
    * Performs a JUMP operation by combining two 8bit bytes into a new 16bit address.
@@ -260,44 +279,9 @@ class CPU {
     const opLength = this.opcodeArray.length;
 
 
-    if (mnemonic === 'ADD') {
-      // IDEA: this.add(register, someByte); // Adds someByte to the register and updates the flags.
-      // TODO: this.add(register, someByte)
-      if (length === 1) {
-        this.add(keyA, keyB, length);
-        return;
-      }
-
-      if (length === 2 && opLength === length) {
-        const opcodeData = this.opcodeArray[1];
-        this.add(keyA, opcodeData, length);
-        return;
-      }
-    }
-
-
     if (this.opcodeArray[0] === 0xc3 && this.opcodeArray.length === 3) {
       this.jump(this.opcodeArray[1], this.opcodeArray[2]);
       this.reset(this.opcodeArray.length);
-    }
-
-    if (mnemonic === 'POP') {
-      const address = this.sp;
-      const address2 = address + 1;
-      this.sp = this.sp + 2;
-
-      this.h = this.memory.readROM(address2);
-      this.l = this.memory.readROM(address);
-      // this.memory.readROM(this[keyA]);
-    }
-
-    if (mnemonic === 'PUSH') {
-      const address = this.sp - 1;
-      const address2 = address - 1;
-      this.sp = this.sp - 2;
-
-      this.memory.writeROM(address, this.a);
-      this.memory.writeROM(address2, this.f);
     }
 
     this.reset(length);
