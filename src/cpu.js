@@ -2,23 +2,6 @@
  * Virtual CPU for the Gameboy Color; a modified z80
  */
 import { OPCODE } from '../const/opcode.js';
-
-// import loadROM from './utils/loadROM.js';
-// import rom from '../roms/flappyboy.json';
-
-/**
- * (HL) === Address in memory. reterieve value using value in HL and do with what you wish
- *
- * d8 represents 8bit number.
- *
- * pc === program counter; our address for the next opcode.
- *
- */
-
-/**
- * ADC === Add and carry. check tests for implementation
- */
-
 class CPU {
   constructor({ memory }) {
     // Create the memory banks
@@ -28,9 +11,6 @@ class CPU {
     this.memory = memory;
 
     this.opcodeBuffer = [];
-    // an array to store the opcodes in between calls in order to know how to process
-    this.opcodeArray = [];
-    this.data = 0;
     this.a = 0x01;
     this.f = 0xb0;
 
@@ -49,19 +29,8 @@ class CPU {
     };
   }
 
-  /*
-  * RESET: tests length and opcode length, resets this.opcodeArray;
-   */
-  reset(length) {
-    // console.log(`reset? ${this.opcodeArray.length} == ${length}`)
-    if (this.opcodeArray.length === length) {
-      this.opcodeArray = [];
-    }
-  }
-
   adc (opcode, byte1) {
     const meta = OPCODE[opcode];
-    const dest = meta.operand1.toLowerCase();
     const source = meta.operand2.toLowerCase();
     let value;
 
@@ -118,7 +87,7 @@ class CPU {
     this[dest] = value;
   }
 
-  sub (opcode, byte1) {
+  sub (opcode) {
     const meta = OPCODE[opcode];
     const source = meta.operand1.toLowerCase();
     const value = this[source];
@@ -262,31 +231,6 @@ class CPU {
     // Clear the buffer for the next call.
     this.opcodeBuffer = [];
   }
-
-  //TODO: Add ☠️ 👻 🐶
-  processOpcodeSkip(opcode) {
-    this.opcodeArray.push(opcode);
-    // our object key for the table
-    const opKey = this.opcodeArray[0];
-    const { length, operand1, operand2, mnemonic } = OPCODE[opKey];
-    const keyA = operand1 ? operand1.toLowerCase() : '';
-
-    let keyB;
-    if (operand2) {
-      keyB = operand2.toLowerCase();
-    }
-
-    const opLength = this.opcodeArray.length;
-
-
-    if (this.opcodeArray[0] === 0xc3 && this.opcodeArray.length === 3) {
-      this.jump(this.opcodeArray[1], this.opcodeArray[2]);
-      this.reset(this.opcodeArray.length);
-    }
-
-    this.reset(length);
-  }
-
 
   // 8 Bit regsiters
   get a() {

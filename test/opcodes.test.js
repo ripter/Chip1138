@@ -87,7 +87,6 @@ describe('CPU can run OPCODES:', () => {
         cpu.processOpcode(opcode);
       });
 
-      console.log('f', cpu.f.toString(2));
       expect(cpu.f & 0b1).to.eql(0);
     });
   }); // ADD
