@@ -27,6 +27,7 @@ class CPU {
 
     this.memory = memory;
 
+    this.opcodeBuffer = [];
     // an array to store the opcodes in between calls in order to know how to process
     this.opcodeArray = [];
     this.data = 0;
@@ -59,12 +60,10 @@ class CPU {
   }
 
   adc (bit8) {
-    debugger;
+    console.log('adc', arguments);
     const total = this.a + bit8;
-    console.log('Flags', (this.f).toString(2))
     this.f = this.f & ~this.masks.half;
     // this.f = this.f | 0b0001;
-debugger;
     if (total >= 0xff) {
       this.f = this.f & this.masks.full;
     }
@@ -82,67 +81,83 @@ debugger;
     this.a = total;
   }
 
-  /*
-   * ADD: takes 2 aruguements, gets register values and sets register with sum of values
-   */
-  add (keyA = 'a', keyB = 'a', length) {
-    const valueA = this[keyA];
-    const valueB = typeof keyB === 'string' ? this[keyB]: keyB;
+  add(opcode, byte1) {
+    const meta = OPCODE[opcode];
+    const dest = meta.operand1.toLowerCase();
+    const source = meta.operand2.toLowerCase();
+    let value;
 
-    this[keyA] = valueA + valueB;
-    this.f = this.f & ~this.masks.sub; // reset back to correct value after tests
-    if (this[keyA] >= 254) {
-      this.f = this.f | this.masks.full;
+    // Add the numbers
+    switch (source) {
+      case 'd8':
+        value = this[dest] + byte1;
+        break;
+      default:
+        value = this[dest] + this[source];
+    }
+    // Check for Carry
+    if (value > 0xFF) {
+      this.f = this.f | 0b001;
     }
     else {
-      this.f = this.f & 0b0000;
+      // Reset Carry
+      this.f = this.f & 0b001;
     }
-    // this.f = this.f & this.masks.sub;
-    //TODO: there is no reason for this method to have length or or call reset.
-    //    : The only thing it does with length is call reset, let processOpcode worry about that.
-    this.reset(length);
+
+    this[dest] = value;
   }
 
-  sub (keyA, length) {
-    // this.f = this.masks.sub;
-    this.f = this.f | 0b100; // set the bit on flag using a bitwise or
-    const subSum = this.a - this[keyA];
-    this[keyA] = subSum;
-    this.reset(length);
+  sub (opcode, byte1) {
+    const meta = OPCODE[opcode];
+    const source = meta.operand1.toLowerCase();
+    const value = this[source];
+
+    this.a -= value;
+    // Set the subtract flag, cus we are subtraction 😝
+    this.f = this.f | 0b100;
   }
 
-  ld (keyA, keyB, length) {
-    const opLength = this.opcodeArray.length;
-    if (opLength === 2) {
-      this[keyA] = this.opcodeArray[1];
+  // Loads bytes into CPU registers
+  ld (opcode, byte1, byte2) {
+    const meta = OPCODE[opcode];
+    const dest = meta.operand1.toLowerCase();
+    const source = meta.operand2.toLowerCase();
+    let value;
+
+    // use the source to get the new value.
+    switch (source) {
+      case 'd8':
+        value = byte1;
+        break;
+      case 'd16':
+        value = (byte1 << 8) | byte2;
+        break;
+      case '(hl)':
+        value = this.memory.readROM(this.hl);
+        break;
+      default:
+        value = this[source];
+        break;
     }
 
-    if (length === 1) {
-      if (keyB === '(hl)') {
-        keyB = keyB.slice(1,3);
-        const address = this[keyB];
-        this[keyA] = this.memory.readROM(address);
-      }
-      else {
-        this[keyA] = this[keyB];
-      }
+    // Update the dest with the new value.
+    this[dest] = value;
+  }
+
+  dec(opcode) {
+    const meta = OPCODE[opcode];
+    const dest = meta.operand1.toLowerCase();
+
+    // HL means change the value in memory
+    if (dest === '(hl)') {
+      let value = this.memory.readROM(this.hl);
+      value -= 1;
+      this.memory.writeROM(this.hl, value);
     }
-
-    // console.log('Length pre check', opLength);
-    if (length === 3 && opLength === length) {
-      const firstBit = this.opcodeArray[1];
-      const secondBit = this.opcodeArray[2];
-
-      if (keyA === 'sp') {
-        this[keyA] = (firstBit << 8) | secondBit;
-      }
-
-      else {
-        this[keyA[0]] = firstBit;
-        this[keyA[1]] = secondBit;
-      }
+    // change in register
+    else {
+      this[dest] -= 1;
     }
-    this.reset(length);
   }
 
 
@@ -176,8 +191,32 @@ debugger;
     return `0x${(val).toString(16)}`;
   }
 
-  //TODO: Add ☠️ 👻 🐶
+
   processOpcode(opcode) {
+    const { opcodeBuffer } = this;
+    // Add the new byte to the buffer.
+    opcodeBuffer.push(opcode);
+
+    // The first byte is the opcode, the rest is data.
+    // So when we get the opcode metadata, get it from the frist byte.
+    const meta = OPCODE[opcodeBuffer[0]];
+    const { length } = meta;
+    const mnemonic = meta.mnemonic.toLowerCase();
+
+    // Hold bytes in the buffer until we have all the bytes for the call.
+    if (opcodeBuffer.length < length) {
+      return;
+    }
+
+    // console.log('processOpcode', mnemonic, length, opcodeBuffer);
+    // Call the opcode function with data.
+    this[mnemonic].apply(this, opcodeBuffer);
+    // Clear the buffer for the next call.
+    this.opcodeBuffer = [];
+  }
+
+  //TODO: Add ☠️ 👻 🐶
+  processOpcodeSkip(opcode) {
     this.opcodeArray.push(opcode);
     // our object key for the table
     const opKey = this.opcodeArray[0];
@@ -191,23 +230,24 @@ debugger;
 
     const opLength = this.opcodeArray.length;
 
-    // Sort first by mnemonic
+
     if (mnemonic === 'ADC') {
+      console.log('ADC in processOpcode', opcode);
 
-      const bit8 = this[keyB] || this.opcodeArray[1];
-      if (keyB === '(hl)') {
-        const value = this.memory.readROM(this.hl);
-        this.adc(value);
-        return;
-      }
-
-      if (keyB !== 'd8') {
-        this.adc(bit8);
-      }
-
-      if (this.opcodeArray.length === 2) {
-        this.adc(bit8);
-      }
+      // const bit8 = this[keyB] || this.opcodeArray[1];
+      // if (keyB === '(hl)') {
+      //   const value = this.memory.readROM(this.hl);
+      //   this.adc(value);
+      //   return;
+      // }
+      //
+      // if (keyB !== 'd8') {
+      //   this.adc(bit8);
+      // }
+      //
+      // if (this.opcodeArray.length === 2) {
+      //   this.adc(bit8);
+      // }
       /*
       * this.A === 80 (0x50)
       * this.hl is always be 1, value of memory[1]
@@ -225,68 +265,6 @@ debugger;
         const opcodeData = this.opcodeArray[1];
         this.add(keyA, opcodeData, length);
         return;
-      }
-    }
-
-    if (mnemonic === 'SUB') {
-      // this.sub(opcode, opcodeArray?)
-      this.sub(keyA, length);
-    }
-
-    if (mnemonic === 'DEC') {
-      let register;
-      switch (opcode) {
-        case 0xb: // if (0xb === opcode) { register = 'bc'; }
-          register = 'bc';
-          break;
-        case 0x5: // (0x5 === opcode) && register = 'b';
-          register = 'b';
-          break;
-        case 0xd: // (0xd === opcode) ? register = 'c' : void 0;
-          register = 'c';
-          break;
-        case 0x1b: // register = operand1
-          register = 'de';
-          break;
-        case 0x15: // register = operand1
-          register = 'd';
-          break;
-        case 0x1d: // register = operand1
-          register = 'e';
-          break;
-        case 0x2b:
-          register = 'hl';
-          break;
-        case 0x25:
-          register = 'h';
-          break;
-        case 0x2d:
-          register = 'l';
-          break;
-        case 0x3b:
-          register = 'sp';
-          break;
-        case 0x3d:
-          register = 'a';
-          break;
-        default:
-          // nothing;
-      }
-
-      if (opcode === 0x35) {
-        const address = this.hl;
-        const initialValue = this.memory.readROM(address);
-        this.memory.writeROM(address, initialValue - 1);
-      }
-      else {
-        this[register] -= 1;
-      }
-    } // register == operand1
-
-    if (mnemonic === 'LD') {
-      // this.ld(opcode);
-      if (keyB) {
-        this.ld(keyA, keyB, length);
       }
     }
 
