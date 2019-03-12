@@ -137,7 +137,7 @@ describe('CPU can run OPCODES:', () => {
     });
   }); // JUMP:
 
-  describe.only('INC', () => {
+  describe('INC', () => {
     let randomValue;
 
     beforeEach(() => {
@@ -246,9 +246,8 @@ describe('CPU can run OPCODES:', () => {
 
     it('it sets the carry flag', () => {
       const opcodes = [
-        0x3e, 0xfe, // LD  a, 255 (62, 255)
-        0xce, // ADC a, d8
-        0x02, // value that will carry when added to A
+        0x3e, 0xfe, // LD a 0xFE
+        0xce, 0x02, // ADC a 0x02
       ];
 
       // run the opcodes
@@ -275,9 +274,8 @@ describe('CPU can run OPCODES:', () => {
 
     it('it sets the half carry flag', () => {
       const opcodes = [
-        0x3e, 0x0e, // LD a, 255
-        0xce, // ADC a, d8
-        0x02, // value that will carry when added to A
+        0x3e, 0x0e, // LD  a 0x0e
+        0xce, 0x02, // ADC a 0x02
       ];
 
       // run the opcodes

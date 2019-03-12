@@ -59,26 +59,37 @@ class CPU {
     }
   }
 
-  adc (bit8) {
-    console.log('adc', arguments);
-    const total = this.a + bit8;
-    this.f = this.f & ~this.masks.half;
-    // this.f = this.f | 0b0001;
-    if (total >= 0xff) {
-      this.f = this.f & this.masks.full;
-    }
-    else {
-      this.f = this.f | this.masks.full;
+  adc (opcode, byte1) {
+    const meta = OPCODE[opcode];
+    const dest = meta.operand1.toLowerCase();
+    const source = meta.operand2.toLowerCase();
+    let value;
+
+    switch (source) {
+      case 'd8':
+        value = this.a + byte1;
+        break;
+      case '(hl)':
+        value = this.a + this.memory.readROM(this.hl);
+        break;
+      default:
+        value = this.a + this[source];
     }
 
-    if (total > 127 && total < 0xff) {
-      this.f = this.f | this.masks.half;
+    // Add the carry value
+    value += this.f & 0b0001;
+
+    // Update the flags
+    // Carry
+    if (value > 0xFF) {
+      this.f = this.f | 0b0001;
     }
-    else {
-      this.f = this.f | 0b0000;
+    // Half-Carry
+    if (value > 0x0F) {
+      this.f = this.f | 0b0010;
     }
 
-    this.a = total;
+    this.a = value;
   }
 
   add(opcode, byte1) {
@@ -144,7 +155,8 @@ class CPU {
     this[dest] = value;
   }
 
-  dec(opcode) {
+  // -1 a register or memory value
+  dec (opcode) {
     const meta = OPCODE[opcode];
     const dest = meta.operand1.toLowerCase();
 
@@ -160,6 +172,23 @@ class CPU {
     }
   }
 
+  // +1 a register or memory values
+  inc (opcode) {
+    const meta = OPCODE[opcode];
+    const dest = meta.operand1.toLowerCase();
+
+    // HL means change the value in memory
+    if (dest === '(hl)') {
+      let value = this.memory.readROM(this.hl);
+      value += 1;
+      this.memory.writeROM(this.hl, value);
+    }
+    // change in register
+    else {
+      this[dest] += 1;
+    }
+  }
+
 
   /**
    * Performs a JUMP operation by combining two 8bit bytes into a new 16bit address.
@@ -168,7 +197,7 @@ class CPU {
    * @param  {8Bit} byte2
    * @return {16Bit} new value of cpu.pc
    */
-  jump(byte1, byte2) {
+  jump(opcode, byte1, byte2) {
     this.pc = (byte2 << 8) | byte1;
   }
 
@@ -231,28 +260,6 @@ class CPU {
     const opLength = this.opcodeArray.length;
 
 
-    if (mnemonic === 'ADC') {
-      console.log('ADC in processOpcode', opcode);
-
-      // const bit8 = this[keyB] || this.opcodeArray[1];
-      // if (keyB === '(hl)') {
-      //   const value = this.memory.readROM(this.hl);
-      //   this.adc(value);
-      //   return;
-      // }
-      //
-      // if (keyB !== 'd8') {
-      //   this.adc(bit8);
-      // }
-      //
-      // if (this.opcodeArray.length === 2) {
-      //   this.adc(bit8);
-      // }
-      /*
-      * this.A === 80 (0x50)
-      * this.hl is always be 1, value of memory[1]
-      */
-    }
     if (mnemonic === 'ADD') {
       // IDEA: this.add(register, someByte); // Adds someByte to the register and updates the flags.
       // TODO: this.add(register, someByte)
@@ -268,59 +275,6 @@ class CPU {
       }
     }
 
-    if (mnemonic === 'INC') {
-      // this.inc(opcode);
-      let register;
-      switch (opcode) {
-        case 0x3:
-          register = 'bc'; // register = operand1
-          break;
-        case 0x4:
-          register = 'b'; // register = operand1
-          break;
-        case 0xc:
-          register = 'c'; // register = operand1
-          break;
-        case 0x13:
-          register = 'de';
-          break;
-        case 0x14:
-          register = 'd';
-          break;
-        case 0x1c:
-          register = 'e';
-          break;
-        case 0x23:
-          register = 'hl';
-          break;
-        case 0x24:
-          register = 'h';
-          break;
-        case 0x2c:
-          register = 'l';
-          break;
-        case 0x33:
-          register = 'sp';
-          break;
-        case 0x34:
-          register = 'hl'; // return to this TODO: here
-          break;
-        case 0x3c:
-          register = 'a';
-          break;
-        default:
-          // nothing;
-      }
-
-      if (opcode === 0x34) {
-        const address = this.hl;
-        const initialValue = this.memory.readROM(address);
-        this.memory.writeROM(address, initialValue + 1);
-      }
-      else {
-        this[register] += 1;
-      }
-    }
 
     if (this.opcodeArray[0] === 0xc3 && this.opcodeArray.length === 3) {
       this.jump(this.opcodeArray[1], this.opcodeArray[2]);
