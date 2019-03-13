@@ -227,7 +227,12 @@ class CPU {
 
     // console.log('processOpcode', mnemonic, length, opcodeBuffer);
     // Call the opcode function with data.
-    this[mnemonic].apply(this, opcodeBuffer);
+    try {
+      this[mnemonic].apply(this, opcodeBuffer);
+    }
+    catch (error) {
+      throw new Error(`Unsupported Opcode: "${mnemonic}"`);
+    }
     // Clear the buffer for the next call.
     this.opcodeBuffer = [];
   }

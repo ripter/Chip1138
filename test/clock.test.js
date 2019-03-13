@@ -4,7 +4,7 @@ import Memory from '../src/memory.js';
 import rom from '../roms/flappyboy.json';
 import { pcRuntimeValues } from './utils/pcRuntimeValues.js';
 
-describe.skip('clock', () => {
+describe('clock', () => {
   let cpu, memory;
 
   beforeEach(() => {
@@ -15,7 +15,7 @@ describe.skip('clock', () => {
   });
 
   describe('tick()', () => {
-    it('first tick() that does nothing but increment pc.', () => {
+    it.only('first tick() that does nothing but increment pc.', () => {
       // console.log('\none tick() before, cpu.pc', `0x${cpu.pc.toString(16)}`, 'data at pc', `0x${memory.readROM(cpu.pc).toString(16)}`);
       cpu.tick();
       // console.log('\none tick() after, cpu.pc', `0x${cpu.pc.toString(16)}`, 'data at pc', `0x${memory.readROM(cpu.pc).toString(16)}`);
