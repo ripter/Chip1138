@@ -74,7 +74,8 @@ describe('CPU can run OPCODES:', () => {
       expect(cpu.f & 0b1).to.eql(0b1);
     });
 
-    it('ADD 255, 254; Unsets the carry flag', () => {
+    // from Chris: is this test bad? 0xFF + anything greater than zero would overflow right?
+    it.skip('ADD 255, 254; Unsets the carry flag', () => {
       const opcodes = [
         0x3e, 0xff, // LD  a, 255
         0x6, 0xf2, // LD  b, 242
@@ -107,10 +108,10 @@ describe('CPU can run OPCODES:', () => {
 
         // a - a = 0
         if (register === 'a') {
-          expect(cpu[register]).to.eql(0);
+          expect(cpu.a).to.eql(0);
         }
         else {
-          expect(cpu[register]).to.eql(0x18);
+          expect(cpu.a).to.eql(0x18);
         }
       });
 
@@ -244,9 +245,8 @@ describe('CPU can run OPCODES:', () => {
 
     it('it sets the carry flag', () => {
       const opcodes = [
-        0x3e, 0xfe, // LD  a, 255 (62, 255)
-        0xce, // ADC a, d8
-        0x02, // value that will carry when added to A
+        0x3e, 0xfe, // LD a 0xFE
+        0xce, 0x02, // ADC a 0x02
       ];
 
       // run the opcodes
@@ -256,7 +256,7 @@ describe('CPU can run OPCODES:', () => {
       expect(cpu.f & 0b0001).to.eql(0b0001);
     });
 
-    it.only('it resets the carry flag', () => {
+    it('it resets the carry flag', () => {
       const opcodes = [
         0x3e, 0xfe, // LD  a, 255 (62, 255)
         0xce, // ADC a, d8
@@ -273,9 +273,8 @@ describe('CPU can run OPCODES:', () => {
 
     it('it sets the half carry flag', () => {
       const opcodes = [
-        0x3e, 0x0e, // LD  a, 255 (62, 255)
-        0xce, // ADC a, d8
-        0x02, // value that will carry when added to A
+        0x3e, 0x0e, // LD  a 0x0e
+        0xce, 0x02, // ADC a 0x02
       ];
 
       // run the opcodes
@@ -296,7 +295,6 @@ describe('CPU can run OPCODES:', () => {
       opcodes.forEach(function(opcode) {
         cpu.processOpcode(opcode);
       });
-      console.log('CPU', cpu.f & 0b1, 0b1)
       expect(cpu.f & 0b0010).to.eql(0);
     });
   });

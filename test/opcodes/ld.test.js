@@ -86,7 +86,7 @@ describe('ld.test.js', () => {
     });
 
 
-    it ('LD SP, HL; loads value at cpu.hl into cpu.sp [0xf9]', () => {
+    it('LD SP, HL; loads value at cpu.hl into cpu.sp [0xf9]', () => {
       const randomByte = random16bit();
       cpu.hl = randomByte;
       cpu.sp = 0;

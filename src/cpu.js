@@ -2,23 +2,6 @@
  * Virtual CPU for the Gameboy Color; a modified z80
  */
 import { OPCODE } from '../const/opcode.js';
-
-// import loadROM from './utils/loadROM.js';
-// import rom from '../roms/flappyboy.json';
-
-/**
- * (HL) === Address in memory. reterieve value using value in HL and do with what you wish
- *
- * d8 represents 8bit number.
- *
- * pc === program counter; our address for the next opcode.
- *
- */
-
-/**
- * ADC === Add and carry. check tests for implementation
- */
-
 class CPU {
   constructor({ memory }) {
     // Create the memory banks
@@ -27,9 +10,7 @@ class CPU {
 
     this.memory = memory;
 
-    // an array to store the opcodes in between calls in order to know how to process
-    this.opcodeArray = [];
-    this.data = 0;
+    this.opcodeBuffer = [];
     this.a = 0x01;
     this.f = 0xb0;
 
@@ -48,103 +29,173 @@ class CPU {
     };
   }
 
-  /*
-  * RESET: tests length and opcode length, resets this.opcodeArray;
-   */
-  reset(length) {
-    // console.log(`reset? ${this.opcodeArray.length} == ${length}`)
-    if (this.opcodeArray.length === length) {
-      this.opcodeArray = [];
+  adc (opcode, byte1) {
+    const meta = OPCODE[opcode];
+    const source = meta.operand2.toLowerCase();
+    let value;
+
+    switch (source) {
+      case 'd8':
+        value = this.a + byte1;
+        break;
+      case '(hl)':
+        value = this.a + this.memory.readROM(this.hl);
+        break;
+      default:
+        value = this.a + this[source];
     }
+
+    // Add the carry value
+    value += this.f & 0b0001;
+
+    // Update the flags
+    // Carry
+    if (value > 0xFF) {
+      this.f = this.f | 0b0001;
+    }
+    // Half-Carry
+    if (value > 0x0F) {
+      this.f = this.f | 0b0010;
+    }
+
+    this.a = value;
   }
 
-  adc (bit8) {
-    debugger;
-    const total = this.a + bit8;
-    console.log('Flags', (this.f).toString(2))
-    this.f = this.f & ~this.masks.half;
-    // this.f = this.f | 0b0001;
-debugger;
-    if (total >= 0xff) {
-      this.f = this.f & this.masks.full;
+  add (opcode, byte1) {
+    const meta = OPCODE[opcode];
+    const dest = meta.operand1.toLowerCase();
+    const source = meta.operand2.toLowerCase();
+    let value;
+
+    // Add the numbers
+    switch (source) {
+      case 'd8':
+        value = this[dest] + byte1;
+        break;
+      default:
+        value = this[dest] + this[source];
+    }
+    // Check for Carry
+    if (value > 0xFF) {
+      this.f = this.f | 0b0001;
     }
     else {
-      this.f = this.f | this.masks.full;
+      // Reset Carry
+      this.f = this.f & 0b0001;
     }
 
-    if (total > 127 && total < 0xff) {
-      this.f = this.f | this.masks.half;
+    this[dest] = value;
+  }
+
+  sub (opcode) {
+    const meta = OPCODE[opcode];
+    const source = meta.operand1.toLowerCase();
+    const value = this[source];
+
+    this.a -= value;
+    // Set the subtract flag, cus we are subtraction 😝
+    this.f = this.f | 0b100;
+  }
+
+  // Loads bytes into CPU registers
+  ld (opcode, byte1, byte2) {
+    const meta = OPCODE[opcode];
+    const dest = meta.operand1.toLowerCase();
+    const source = meta.operand2.toLowerCase();
+    let value;
+
+    // use the source to get the new value.
+    switch (source) {
+      case 'd8':
+        value = byte1;
+        break;
+      case 'd16':
+        value = (byte1 << 8) | byte2;
+        break;
+      case '(hl)':
+        value = this.memory.readROM(this.hl);
+        break;
+      default:
+        value = this[source];
+        break;
     }
+
+    // Update the dest with the new value.
+    this[dest] = value;
+  }
+
+  // -1 a register or memory value
+  dec (opcode) {
+    const meta = OPCODE[opcode];
+    const dest = meta.operand1.toLowerCase();
+
+    // HL means change the value in memory
+    if (dest === '(hl)') {
+      let value = this.memory.readROM(this.hl);
+      value -= 1;
+      this.memory.writeROM(this.hl, value);
+    }
+    // change in register
     else {
-      this.f = this.f | 0b0000;
+      this[dest] -= 1;
     }
-
-    this.a = total;
   }
 
-  /*
-   * ADD: takes 2 aruguements, gets register values and sets register with sum of values
-   */
-  add (keyA = 'a', keyB = 'a', length) {
-    const valueA = this[keyA];
-    const valueB = typeof keyB === 'string' ? this[keyB]: keyB;
+  // +1 a register or memory values
+  inc (opcode) {
+    const meta = OPCODE[opcode];
+    const dest = meta.operand1.toLowerCase();
 
-    this[keyA] = valueA + valueB;
-    this.f = this.f & ~this.masks.sub; // reset back to correct value after tests
-    if (this[keyA] >= 254) {
-      this.f = this.f | this.masks.full;
+    // HL means change the value in memory
+    if (dest === '(hl)') {
+      let value = this.memory.readROM(this.hl);
+      value += 1;
+      this.memory.writeROM(this.hl, value);
     }
+    // change in register
     else {
-      this.f = this.f & 0b0000;
+      this[dest] += 1;
     }
-    // this.f = this.f & this.masks.sub;
-    //TODO: there is no reason for this method to have length or or call reset.
-    //    : The only thing it does with length is call reset, let processOpcode worry about that.
-    this.reset(length);
   }
 
-  sub (keyA, length) {
-    // this.f = this.masks.sub;
-    this.f = this.f | 0b100; // set the bit on flag using a bitwise or
-    const subSum = this.a - this[keyA];
-    this[keyA] = subSum;
-    this.reset(length);
+  // Pushes the value at af into the stack and decrements the stackpointer.
+  push () {
+    const address1 = this.sp-1;
+    const address2 = this.sp-2;
+
+    this.memory.writeROM(address1, this.a);
+    this.memory.writeROM(address2, this.f);
+    this.sp -= 2;
   }
 
-  ld (keyA, keyB, length) {
-    const opLength = this.opcodeArray.length;
-    if (opLength === 2) {
-      this[keyA] = this.opcodeArray[1];
-    }
+  pop () {
+    const address1 = this.sp+0;
+    const address2 = this.sp+1;
 
-    if (length === 1) {
-      if (keyB === '(hl)') {
-        keyB = keyB.slice(1,3);
-        const address = this[keyB];
-        this[keyA] = this.memory.readROM(address);
-      }
-      else {
-        this[keyA] = this[keyB];
-      }
-    }
-
-    // console.log('Length pre check', opLength);
-    if (length === 3 && opLength === length) {
-      const firstBit = this.opcodeArray[1];
-      const secondBit = this.opcodeArray[2];
-
-      if (keyA === 'sp') {
-        this[keyA] = (firstBit << 8) | secondBit;
-      }
-
-      else {
-        this[keyA[0]] = firstBit;
-        this[keyA[1]] = secondBit;
-      }
-    }
-    this.reset(length);
+    this.h = this.memory.readROM(address2);
+    this.l = this.memory.readROM(address1);
+    this.sp += 2;
   }
 
+  nop() {
+    // no operation, aka do nothing.
+  }
+
+  // This instruction disables interrupts but not immediately. Interrupts are disabled after instruction after DI is executed.
+  di() {
+    console.log('di', arguments);
+  }
+
+  // Logical exclusive OR with register A, result in A.
+  // example from z80 doc: If the Accumulator contains 96h (1001 0110), then upon the execution of an XOR 5Dh (5Dh = 0101 1101) instruction, the Accumulator contains CBh (1100 1011).
+  xor(opcode) {
+    console.log('xor', opcode, arguments);
+  }
+
+  // Add n to current address and jump to it
+  jr(opcode) {
+    console.log('jr', arguments);
+  }
 
   /**
    * Performs a JUMP operation by combining two 8bit bytes into a new 16bit address.
@@ -153,7 +204,7 @@ debugger;
    * @param  {8Bit} byte2
    * @return {16Bit} new value of cpu.pc
    */
-  jump(byte1, byte2) {
+  jump(opcode, byte1, byte2) {
     this.pc = (byte2 << 8) | byte1;
   }
 
@@ -176,201 +227,34 @@ debugger;
     return `0x${(val).toString(16)}`;
   }
 
-  //TODO: Add ☠️ 👻 🐶
+
   processOpcode(opcode) {
-    this.opcodeArray.push(opcode);
-    // our object key for the table
-    const opKey = this.opcodeArray[0];
-    const { length, operand1, operand2, mnemonic } = OPCODE[opKey];
-    const keyA = operand1 ? operand1.toLowerCase() : '';
+    const { opcodeBuffer } = this;
+    // Add the new byte to the buffer.
+    opcodeBuffer.push(opcode);
 
-    let keyB;
-    if (operand2) {
-      keyB = operand2.toLowerCase();
+    // The first byte is the opcode, the rest is data.
+    // So when we get the opcode metadata, get it from the frist byte.
+    const meta = OPCODE[opcodeBuffer[0]];
+    const { length } = meta;
+    const mnemonic = meta.mnemonic.toLowerCase();
+
+    // Hold bytes in the buffer until we have all the bytes for the call.
+    if (opcodeBuffer.length < length) {
+      return;
     }
 
-    const opLength = this.opcodeArray.length;
-
-    // Sort first by mnemonic
-    if (mnemonic === 'ADC') {
-
-      const bit8 = this[keyB] || this.opcodeArray[1];
-      if (keyB === '(hl)') {
-        const value = this.memory.readROM(this.hl);
-        this.adc(value);
-        return;
-      }
-
-      if (keyB !== 'd8') {
-        this.adc(bit8);
-      }
-
-      if (this.opcodeArray.length === 2) {
-        this.adc(bit8);
-      }
-      /*
-      * this.A === 80 (0x50)
-      * this.hl is always be 1, value of memory[1]
-      */
+    // console.log('processOpcode', mnemonic, length, opcodeBuffer);
+    // Call the opcode function with data.
+    try {
+      this[mnemonic].apply(this, opcodeBuffer);
     }
-    if (mnemonic === 'ADD') {
-      // IDEA: this.add(register, someByte); // Adds someByte to the register and updates the flags.
-      // TODO: this.add(register, someByte)
-      if (length === 1) {
-        this.add(keyA, keyB, length);
-        return;
-      }
-
-      if (length === 2 && opLength === length) {
-        const opcodeData = this.opcodeArray[1];
-        this.add(keyA, opcodeData, length);
-        return;
-      }
+    catch (error) {
+      throw new Error(`Unsupported Opcode: "${mnemonic}"`);
     }
-
-    if (mnemonic === 'SUB') {
-      // this.sub(opcode, opcodeArray?)
-      this.sub(keyA, length);
-    }
-
-    if (mnemonic === 'DEC') {
-      let register;
-      switch (opcode) {
-        case 0xb: // if (0xb === opcode) { register = 'bc'; }
-          register = 'bc';
-          break;
-        case 0x5: // (0x5 === opcode) && register = 'b';
-          register = 'b';
-          break;
-        case 0xd: // (0xd === opcode) ? register = 'c' : void 0;
-          register = 'c';
-          break;
-        case 0x1b: // register = operand1
-          register = 'de';
-          break;
-        case 0x15: // register = operand1
-          register = 'd';
-          break;
-        case 0x1d: // register = operand1
-          register = 'e';
-          break;
-        case 0x2b:
-          register = 'hl';
-          break;
-        case 0x25:
-          register = 'h';
-          break;
-        case 0x2d:
-          register = 'l';
-          break;
-        case 0x3b:
-          register = 'sp';
-          break;
-        case 0x3d:
-          register = 'a';
-          break;
-        default:
-          // nothing;
-      }
-
-      if (opcode === 0x35) {
-        const address = this.hl;
-        const initialValue = this.memory.readROM(address);
-        this.memory.writeROM(address, initialValue - 1);
-      }
-      else {
-        this[register] -= 1;
-      }
-    } // register == operand1
-
-    if (mnemonic === 'LD') {
-      // this.ld(opcode);
-      if (keyB) {
-        this.ld(keyA, keyB, length);
-      }
-    }
-
-    if (mnemonic === 'INC') {
-      // this.inc(opcode);
-      let register;
-      switch (opcode) {
-        case 0x3:
-          register = 'bc'; // register = operand1
-          break;
-        case 0x4:
-          register = 'b'; // register = operand1
-          break;
-        case 0xc:
-          register = 'c'; // register = operand1
-          break;
-        case 0x13:
-          register = 'de';
-          break;
-        case 0x14:
-          register = 'd';
-          break;
-        case 0x1c:
-          register = 'e';
-          break;
-        case 0x23:
-          register = 'hl';
-          break;
-        case 0x24:
-          register = 'h';
-          break;
-        case 0x2c:
-          register = 'l';
-          break;
-        case 0x33:
-          register = 'sp';
-          break;
-        case 0x34:
-          register = 'hl'; // return to this TODO: here
-          break;
-        case 0x3c:
-          register = 'a';
-          break;
-        default:
-          // nothing;
-      }
-
-      if (opcode === 0x34) {
-        const address = this.hl;
-        const initialValue = this.memory.readROM(address);
-        this.memory.writeROM(address, initialValue + 1);
-      }
-      else {
-        this[register] += 1;
-      }
-    }
-
-    if (this.opcodeArray[0] === 0xc3 && this.opcodeArray.length === 3) {
-      this.jump(this.opcodeArray[1], this.opcodeArray[2]);
-      this.reset(this.opcodeArray.length);
-    }
-
-    if (mnemonic === 'POP') {
-      const address = this.sp;
-      const address2 = address + 1;
-      this.sp = this.sp + 2;
-
-      this.h = this.memory.readROM(address2);
-      this.l = this.memory.readROM(address);
-      // this.memory.readROM(this[keyA]);
-    }
-
-    if (mnemonic === 'PUSH') {
-      const address = this.sp - 1;
-      const address2 = address - 1;
-      this.sp = this.sp - 2;
-
-      this.memory.writeROM(address, this.a);
-      this.memory.writeROM(address2, this.f);
-    }
-
-    this.reset(length);
+    // Clear the buffer for the next call.
+    this.opcodeBuffer = [];
   }
-
 
   // 8 Bit regsiters
   get a() {
