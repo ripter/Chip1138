@@ -177,6 +177,25 @@ class CPU {
     this.sp += 2;
   }
 
+  nop() {
+    // no operation, aka do nothing.
+  }
+
+  // This instruction disables interrupts but not immediately. Interrupts are disabled after instruction after DI is executed.
+  di() {
+    console.log('di', arguments);
+  }
+
+  // Logical exclusive OR with register A, result in A.
+  // example from z80 doc: If the Accumulator contains 96h (1001 0110), then upon the execution of an XOR 5Dh (5Dh = 0101 1101) instruction, the Accumulator contains CBh (1100 1011).
+  xor(opcode) {
+    console.log('xor', opcode, arguments);
+  }
+
+  // Add n to current address and jump to it
+  jr(opcode) {
+    console.log('jr', arguments);
+  }
 
   /**
    * Performs a JUMP operation by combining two 8bit bytes into a new 16bit address.

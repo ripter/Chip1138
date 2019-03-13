@@ -15,7 +15,7 @@ describe('clock', () => {
   });
 
   describe('tick()', () => {
-    it.only('first tick() that does nothing but increment pc.', () => {
+    it('first tick() that does nothing but increment pc.', () => {
       // console.log('\none tick() before, cpu.pc', `0x${cpu.pc.toString(16)}`, 'data at pc', `0x${memory.readROM(cpu.pc).toString(16)}`);
       cpu.tick();
       // console.log('\none tick() after, cpu.pc', `0x${cpu.pc.toString(16)}`, 'data at pc', `0x${memory.readROM(cpu.pc).toString(16)}`);
