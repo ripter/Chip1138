@@ -1,4 +1,4 @@
-.PHONY: all build deploy dev-server server plop lint test test.only
+.PHONY: all build deploy debug dev-server server plop lint test test.only test.blink watch cover clean
 NPM_BIN=./node_modules/.bin
 
 all: build lint server
@@ -39,3 +39,8 @@ watch:
 
 cover:
 	$(NPM_BIN)/istanbul cover $(NPM_BIN)/_mocha test/*.js -- --require babel-register
+
+clean:
+	-rm -f package-lock.json
+	-rm -r ./node_modules
+	-npm cache verify
