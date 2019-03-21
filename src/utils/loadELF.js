@@ -5,7 +5,8 @@ import { readFile } from 'fs';
 //          : https://github.com/indutny/elfy/blob/master/lib/elfy/parser.js
 
 export default function loadELF(filePath) {
-  let readUInt16;
+  let readUInt16, readUInt32;
+  let readUInt;
   return new Promise(function(resolve, reject) {
     try {
       readFile(filePath, function(err, data) {
@@ -26,10 +27,10 @@ export default function loadELF(filePath) {
         });
         // Update our read methods to use the correct edianness
         if (header.isLittleEdian) {
-          readUInt16 = data.readUInt16LE.bind(data);
+          readUInt = data.readUIntLE.bind(data);
         }
         else if (header.isBigEdian) {
-          readUInt16 = data.readUInt16BE.bind(data);
+          readUInt = data.readUIntBE.bind(data);
         }
 
         // check if the file is 32 or 64 bit
@@ -42,8 +43,26 @@ export default function loadELF(filePath) {
         header.ei_version = data[0x06];
         header.ei_osabi = data[0x07];
         header.ei_abiversion = data[0x08]
-        header.e_type = readUInt16(0x10);
-        header.e_machine = readUInt16(0x12);
+        header.e_type = readUInt(0x10, 2);
+        header.e_machine = readUInt(0x12, 2);
+
+        // Entry Point Address
+        if (header.is32) {
+          header.e_entry = readUInt(0x18, 4);
+          header.e_phoff = readUInt(0x1C, 4);
+          header.e_shoff = readUInt(0x20, 4);
+          header.e_flags = readUInt(0x24, 4);
+          header.e_ehsize = readUInt(0x28, 2);
+          header.e_phentsize = readUInt(0x2A, 2);
+        }
+        else if (header.is64) {
+          header.e_entry = readUInt(0x18, 8);
+          header.e_phoff = readUInt(0x20, 8);
+          header.e_shoff = readUInt(0x28, 8);
+          header.e_flags = readUInt(0x30, 4);
+          header.e_ehsize = readUInt(0x34, 2);
+          header.e_phentsize = readUInt(0x36, 2);
+        }
 
 
         resolve(header);
