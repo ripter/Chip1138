@@ -23,9 +23,9 @@
   },
   "homepage": "https://github.com/ripter/Chip1138#readme",
   "devDependencies": {
-    "@babel/core": "^7.0.0",
+    "@babel/core": "^7.4.0",
     "@babel/preset-env": "^7.4.2",
-    "@babel/register": "^7.0.0",
+    "@babel/register": "^7.4.0",
     "eslint": "^5",
     "expect.js": "^0.3.1",
     "js-base64": "^2.5.1",
