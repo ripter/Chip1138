@@ -1,3 +1,4 @@
+src/
 --extension test.js
 --recursive
 --check-leaks

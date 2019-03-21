@@ -1,7 +1,7 @@
 /**
  * Virtual CPU for the Gameboy Color; a modified z80
  */
-import { OPCODE } from '../const/opcode.js';
+import { OPCODE } from '../../const/opcode.js';
 class CPU {
   constructor({ memory }) {
     // Create the memory banks

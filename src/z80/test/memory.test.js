@@ -1,9 +1,9 @@
 import expect from 'expect.js';
-import Memory from '../src/memory.js';
+import Memory from '../memory.js';
 import { random8bit, randomInt } from './utils.js';
-import rom from '../roms/flappyboy.json';
-import romRumble from '../roms/flappyboy.rumble.json';
-import { CART_TYPE } from '../const/cartType.js';
+import rom from '../../../roms/flappyboy.json';
+import romRumble from '../../../roms/flappyboy.rumble.json';
+import { CART_TYPE } from '../../../const/cartType.js';
 
 describe('Memory', () => {
   let memory;

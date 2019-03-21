@@ -16,7 +16,7 @@ debug:
 	$(NPM_BIN)/mocha --opts mocha.opts --inspect-brk
 
 lint: node_modules/
-	$(NPM_BIN)/eslint src/ test/
+	$(NPM_BIN)/eslint src/ 
 
 node_modules/: package.json
 	npm install

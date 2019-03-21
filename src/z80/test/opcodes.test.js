@@ -1,9 +1,9 @@
 import expect from 'expect.js';
 import filter from 'lodash.filter';
-import CPU from '../src/cpu.js';
-import Memory from '../src/memory.js';
-import OPCODE from '../const/opcode.js';
-import rom from '../roms/flappyboy.json';
+import CPU from '../cpu.js';
+import Memory from '../memory.js';
+import OPCODE from '../../../const/opcode.js';
+import rom from '../../../roms/flappyboy.json';
 import { random8bit } from './utils.js';
 
 

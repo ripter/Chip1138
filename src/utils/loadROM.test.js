@@ -1,5 +1,5 @@
 import expect from 'expect.js';
-import loadROM from '../../src/utils/loadROM.js';
+import loadROM from './loadROM.js';
 import rom from '../../roms/flappyboy.json';
 
 describe('loadROM', () => {
