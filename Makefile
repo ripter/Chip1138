@@ -1,4 +1,4 @@
-.PHONY: all build deploy debug dev-server server plop lint test test.only test.blink watch cover clean
+.PHONY: all build clean deploy debug lint test test.only test.blink
 NPM_BIN=./node_modules/.bin
 
 all: build test server
@@ -24,7 +24,6 @@ node_modules/: package.json
 
 test: lint
 	$(NPM_BIN)/mocha --opts mocha.opts
-
 
 test.only:
 	$(NPM_BIN)/mocha --opts mocha.opts

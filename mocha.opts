@@ -1,3 +1,4 @@
+--extension test.js
 --recursive
 --check-leaks
 --require @babel/register
