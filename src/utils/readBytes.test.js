@@ -19,6 +19,9 @@ describe.only('readBytes', () => {
       it(`returns the same as Buffer.readUIntLE(${offset}, ${byteLength})`, () => {
         expect(actual).to.eql(buffer.readUIntLE(offset, byteLength));
       });
+      it(`returns the same as Buffer.readIntLE(${offset}, ${byteLength})`, () => {
+        expect(actual).to.eql(buffer.readIntLE(offset, byteLength));
+      });
     });
     describe('offset 2', () => {
       const offset = 2;
@@ -30,6 +33,9 @@ describe.only('readBytes', () => {
       });
       it(`returns the same as Buffer.readUIntLE(${offset}, ${byteLength})`, () => {
         expect(actual).to.eql(buffer.readUIntLE(offset, byteLength));
+      });
+      it(`returns the same as Buffer.readIntLE(${offset}, ${byteLength})`, () => {
+        expect(actual).to.eql(buffer.readIntLE(offset, byteLength));
       });
     });
   });
@@ -48,6 +54,9 @@ describe.only('readBytes', () => {
       it(`returns the same as Buffer.readUIntBE(${offset}, ${byteLength})`, () => {
         expect(actual).to.eql(buffer.readUIntBE(offset, byteLength));
       });
+      it(`returns the same as Buffer.readIntBE(${offset}, ${byteLength})`, () => {
+        expect(actual).to.eql(buffer.readIntBE(offset, byteLength));
+      });
     });
     describe('offset 2', () => {
       const offset = 2;
@@ -59,6 +68,9 @@ describe.only('readBytes', () => {
       });
       it(`returns the same as Buffer.readUIntBE(${offset}, ${byteLength})`, () => {
         expect(actual).to.eql(buffer.readUIntBE(offset, byteLength));
+      });
+      it(`returns the same as Buffer.readIntBE(${offset}, ${byteLength})`, () => {
+        expect(actual).to.eql(buffer.readIntBE(offset, byteLength));
       });
     });
   });
@@ -77,6 +89,9 @@ describe.only('readBytes', () => {
       it(`returns the same as Buffer.readUIntLE(${offset}, ${byteLength})`, () => {
         expect(actual).to.eql(buffer.readUIntLE(offset, byteLength));
       });
+      it(`returns the same as Buffer.readIntLE(${offset}, ${byteLength})`, () => {
+        expect(actual).to.eql(buffer.readIntLE(offset, byteLength));
+      });
     });
     describe('offset 4', () => {
       const offset = 4;
@@ -88,6 +103,9 @@ describe.only('readBytes', () => {
       });
       it(`returns the same as Buffer.readUIntLE(${offset}, ${byteLength})`, () => {
         expect(actual).to.eql(buffer.readUIntLE(offset, byteLength));
+      });
+      it(`returns the same as Buffer.readIntLE(${offset}, ${byteLength})`, () => {
+        expect(actual).to.eql(buffer.readIntLE(offset, byteLength));
       });
     });
   });
@@ -105,6 +123,9 @@ describe.only('readBytes', () => {
       it(`returns the same as Buffer.readUIntBE(${offset}, ${byteLength})`, () => {
         expect(actual).to.eql(buffer.readUIntBE(offset, byteLength));
       });
+      it(`returns the same as Buffer.readIntBE(${offset}, ${byteLength})`, () => {
+        expect(actual).to.eql(buffer.readIntBE(offset, byteLength));
+      });
     });
     describe('offset 4', () => {
       const offset = 4;
@@ -116,6 +137,9 @@ describe.only('readBytes', () => {
       });
       it(`returns the same as Buffer.readUIntBE(${offset}, ${byteLength})`, () => {
         expect(actual).to.eql(buffer.readUIntBE(offset, byteLength));
+      });
+      it(`returns the same as Buffer.readIntBE(${offset}, ${byteLength})`, () => {
+        expect(actual).to.eql(buffer.readIntBE(offset, byteLength));
       });
     });
   });
