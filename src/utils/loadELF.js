@@ -54,6 +54,10 @@ export default function loadELF(filePath) {
           header.e_flags = readUInt(0x24, 4);
           header.e_ehsize = readUInt(0x28, 2);
           header.e_phentsize = readUInt(0x2A, 2);
+          header.e_phnum = readUInt(0x2C, 2);
+          header.e_shentsize = readUInt(0x2E, 2);
+          header.e_shnum = readUInt(0x30, 2);
+          header.e_shstrndx = readUInt(0x32, 2);
         }
         else if (header.is64) {
           header.e_entry = readUInt(0x18, 8);
@@ -62,6 +66,10 @@ export default function loadELF(filePath) {
           header.e_flags = readUInt(0x30, 4);
           header.e_ehsize = readUInt(0x34, 2);
           header.e_phentsize = readUInt(0x36, 2);
+          header.e_phnum = readUInt(0x38, 2);
+          header.e_shentsize = readUInt(0x3A, 2);
+          header.e_shnum = readUInt(0x3C, 2);
+          header.e_shstrndx = readUInt(0x3E, 2);
         }
 
 
