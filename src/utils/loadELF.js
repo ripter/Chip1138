@@ -20,13 +20,15 @@ export default function loadELF(filePath) {
 
         resolve(header);
       });
-    } catch (err) {
+    }
+    catch (err) {
       reject(`Unknown error loading elf at "${filePath}"\n\t${err}`);
     }
   });
 }
 
 export function elfToFileHeader(data) {
+  /* eslint-disable camelcase */
   const header = {};
   let readUInt;
 
@@ -34,8 +36,16 @@ export function elfToFileHeader(data) {
   header.ei_data = data[0x05];
   // Add fun and handy getters because the offical names suck.
   Object.defineProperties(header, {
-    isLittleEdian: { get() {return this.ei_data === 1;} },
-    isBigEdian: { get() {return this.ei_data === 2;} },
+    isLittleEdian: {
+      get() {
+        return this.ei_data === 1;
+      },
+    },
+    isBigEdian: {
+      get() {
+        return this.ei_data === 2;
+      },
+    },
   });
   // Update our read methods to use the correct edianness
   if (header.isLittleEdian) {
@@ -48,13 +58,21 @@ export function elfToFileHeader(data) {
   // check if the file is 32 or 64 bit
   header.ei_class = data[0x04];
   Object.defineProperties(header, {
-    is32: { get() {return this.ei_class === 1;} },
-    is64: { get() {return this.ei_class === 2;} },
+    is32: {
+      get() {
+        return this.ei_class === 1;
+      },
+    },
+    is64: {
+      get() {
+        return this.ei_class === 2;
+      },
+    },
   });
 
   header.ei_version = data[0x06];
   header.ei_osabi = data[0x07];
-  header.ei_abiversion = data[0x08]
+  header.ei_abiversion = data[0x08];
   header.e_type = readUInt(0x10, 2);
   header.e_machine = readUInt(0x12, 2);
 
@@ -71,9 +89,9 @@ export function elfToFileHeader(data) {
     header.e_shstrndx = readUInt(0x32, 2);
   }
   else if (header.is64) {
-    header.e_entry = readUInt(0x18, 8);
-    header.e_phoff = readUInt(0x20, 8);
-    header.e_shoff = readUInt(0x28, 8);
+    // header.e_entry = readUInt(0x18, 8);
+    // header.e_phoff = readUInt(0x20, 8);
+    // header.e_shoff = readUInt(0x28, 8);
     header.e_flags = readUInt(0x30, 4);
     header.e_ehsize = readUInt(0x34, 2);
     header.e_phentsize = readUInt(0x36, 2);
@@ -84,9 +102,11 @@ export function elfToFileHeader(data) {
   }
 
   return header;
+  /* eslint-enable camelcase */
 }
 
 export function fileHeaderToProgramHeaders(fileHeader, data) {
+  /* eslint-disable camelcase */
   const offset = fileHeader.e_phoff;
   const numberOfHeaders = fileHeader.e_phnum;
   const readUInt = fileHeader.isLittleEdian ? data.readUIntLE.bind(data) : data.readUIntBE.bind(data);
@@ -118,9 +138,11 @@ export function fileHeaderToProgramHeaders(fileHeader, data) {
     result.push(header);
   }
   return result;
+  /* eslint-enable camelcase */
 }
 
 export function fileHeaderToSectionHeaders(fileHeader, data) {
+  /* eslint-disable camelcase */
   const offset = fileHeader.e_shoff;
   const numberOfHeaders = fileHeader.e_shnum;
   const readUInt = fileHeader.isLittleEdian ? data.readUIntLE.bind(data) : data.readUIntBE.bind(data);
@@ -143,16 +165,24 @@ export function fileHeaderToSectionHeaders(fileHeader, data) {
       header.sh_entsize = readUInt(offset + 0x24, 4);
     }
     else if (fileHeader.is64) {
-      header.sh_flags = readUInt(offset + 0x08, 8);
-      header.sh_addr = readUInt(offset + 0x10, 8);
-      header.sh_offset = readUInt(offset + 0x18, 8);
-      header.sh_size = readUInt(offset + 0x20, 8);
+      // header.sh_flags = readUInt(offset + 0x08, 8);
+      // header.sh_addr = readUInt(offset + 0x10, 8);
+      // header.sh_offset = readUInt(offset + 0x18, 8);
+      // header.sh_size = readUInt(offset + 0x20, 8);
       header.sh_link = readUInt(offset + 0x28, 4);
       header.sh_info = readUInt(offset + 0x2C, 4);
-      header.sh_addralign = readUInt(offset + 0x30, 8);
-      header.sh_entsize = readUInt(offset + 0x38, 8);
+      // header.sh_addralign = readUInt(offset + 0x30, 8);
+      // header.sh_entsize = readUInt(offset + 0x38, 8);
     }
     result.push(header);
   }
   return result;
+  /* eslint-enable camelcase */
+}
+
+export function readBytes(isLittleEdian, buffer, offset, byteLength) {
+  if (isLittleEdian) {
+    return buffer.slice(offset, byteLength).reverse();
+  }
+  return buffer.slice(offset, byteLength);
 }
