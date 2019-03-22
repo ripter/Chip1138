@@ -35,17 +35,42 @@ describe.only('loadELF("roms/vmlinux")', () => {
   });
 
   describe.only('readBytes', () => {
-    const buffer = Buffer.from([0x7f, 0x45, 0x4c, 0x46]);
+    const buffer = Buffer.from([0x7f, 0x45, 0x4c, 0x46, 0xAA, 0xBB, 0xCC, 0xDD]);
 
     it('2 bytes: Little Edian', () => {
       const actual = readBytes(true, buffer, 0, 2);
-      expect(actual).to.eql(Buffer.from([0x45, 0x7F]));
+      expect(actual).to.eql(0x457F);
+      expect(actual).to.eql(buffer.readUIntLE(0, 2));
     });
 
     it('2 bytes: Big Edian', () => {
       const actual = readBytes(false, buffer, 0, 2);
-      expect(actual).to.eql(Buffer.from([0x7F, 0x45]));
+      expect(actual).to.eql(0x7F45);
+      expect(actual).to.eql(buffer.readUIntBE(0, 2));
     });
+
+    it('4 bytes: Little Edian', () => {
+      const actual = readBytes(true, buffer, 0, 4);
+      expect(actual).to.eql(0x464c457f);
+      expect(actual).to.eql(buffer.readUIntLE(0, 4));
+    });
+
+    it('4 bytes: Big Edian', () => {
+      const actual = readBytes(false, buffer, 0, 4);
+      expect(actual).to.eql(0x7f454c46);
+      expect(actual).to.eql(buffer.readUIntBE(0, 4));
+    });
+
+    it('8 bytes: Little Edian', () => {
+      const actual = readBytes(true, buffer, 0, 8);
+      expect(actual).to.eql(0xDDCCBBAA464c457f);
+    });
+
+    it('8 bytes: Big Edian', () => {
+      const actual = readBytes(false, buffer, 0, 8);
+      expect(actual).to.eql(0x7f454c46AABBCCDD);
+    });
+
   });
 
   it('loads roms/vmlinux', () => {

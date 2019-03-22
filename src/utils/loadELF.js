@@ -180,9 +180,19 @@ export function fileHeaderToSectionHeaders(fileHeader, data) {
   /* eslint-enable camelcase */
 }
 
+// reads a number of bytes and returns a number
 export function readBytes(isLittleEdian, buffer, offset, byteLength) {
-  if (isLittleEdian) {
-    return buffer.slice(offset, byteLength).reverse();
+  let result;
+
+  for (let i=0; i < byteLength; i++) {
+    if (isLittleEdian) {
+      // for Little Edian, increase the offset while decreasing the position.
+      result |= buffer[offset+i] << (8 * i);
+    }
+    else {
+      // for Big Edian, decrease from total offset,t while increasing the position.
+      result |= buffer[offset+(byteLength-i-1)] << (8 * i);
+    }
   }
-  return buffer.slice(offset, byteLength);
+  return result;
 }
