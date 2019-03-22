@@ -36,27 +36,64 @@ describe.only('loadELF("roms/vmlinux")', () => {
 
   it('loads roms/vmlinux', () => {
     return loadELF(FILE_PATH)
-      .then((data) => {
-        const actual = data;
-        expect(actual).to.eql({
-          ei_data: 1,
-          ei_class: 2,
-          ei_version: 1,
-          ei_osabi: 0,
-          ei_abiversion: 0,
-          e_type: 2,
-          e_machine: 0xF3,
-          e_entry: 0x2000,
-          e_phoff: 0x40,
-          e_shoff: 0x2741F8,
-          e_flags: 0,
-          e_ehsize: 64, // hex is 0x40. the value is 32 or 64
-          e_phentsize: 0x38,
-          e_phnum: 4,
-          e_shentsize: 0x40,
-          e_shnum: 0x12,
-          e_shstrndx: 0xF});
-        })
+    .then((data) => {
+      const actual = data;
+      expect(actual).to.eql({
+        ei_data: 1,
+        ei_class: 2,
+        ei_version: 1,
+        ei_osabi: 0,
+        ei_abiversion: 0,
+        e_type: 2,
+        e_machine: 0xF3,
+        e_entry: 0x2000,
+        e_phoff: 0x40,
+        e_shoff: 0x2741F8,
+        e_flags: 0,
+        e_ehsize: 64, // hex is 0x40. the value is 32 or 64
+        e_phentsize: 0x38,
+        e_phnum: 4,
+        e_shentsize: 0x40,
+        e_shnum: 0x12,
+        e_shstrndx: 0xF,
+        headers: [{
+          p_type: 1,
+          p_flags: 7,
+          p_offset: 0,
+          p_vaddr: 0xFFFFFFFF80000000,
+          p_paddr: 0,
+          p_filesz: 0x25D6D0,
+          p_memsz: 0x25E000,
+          p_align: 0x10000
+        }, {
+          p_type: 1,
+          p_flags: 7,
+          p_offset: 0,
+          p_vaddr: 0xFFFFFFFF80000000,
+          p_paddr: 0,
+          p_filesz: 0x25D6D0,
+          p_memsz: 0x25E000,
+          p_align: 0x10000
+        }, {
+          p_type: 1,
+          p_flags: 7,
+          p_offset: 0,
+          p_vaddr: 0xFFFFFFFF80000000,
+          p_paddr: 0,
+          p_filesz: 0x25D6D0,
+          p_memsz: 0x25E000,
+          p_align: 0x10000
+        }, {
+          p_type: 1,
+          p_flags: 7,
+          p_offset: 0,
+          p_vaddr: 0xFFFFFFFF80000000,
+          p_paddr: 0,
+          p_filesz: 0x25D6D0,
+          p_memsz: 0x25E000,
+          p_align: 0x10000 }
+        ]});
+            })
       .catch((e) => {
         expect().to.fail(e);
       });
