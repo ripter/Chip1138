@@ -15,7 +15,8 @@ export default function loadELF(filePath) {
         if (magicNumber !== '7f454c46') { reject(`ELF failed magic number test. Found "${magicNumber}"`); }
 
         let header = elfToFileHeader(data);
-        header.headers = fileHeaderToProgramHeaders(header, data)
+        header.headers = fileHeaderToProgramHeaders(header, data);
+        header.sections = fileHeaderToSectionHeaders(header, data);
 
         resolve(header);
       });
@@ -113,6 +114,43 @@ export function fileHeaderToProgramHeaders(fileHeader, data) {
       header.p_filesz = readUInt(offset + 0x20, 8);
       header.p_memsz = readUInt(offset + 0x28, 8);
       header.p_align = readUInt(offset + 0x30, 8);
+    }
+    result.push(header);
+  }
+  return result;
+}
+
+export function fileHeaderToSectionHeaders(fileHeader, data) {
+  const offset = fileHeader.e_shoff;
+  const numberOfHeaders = fileHeader.e_shnum;
+  const readUInt = fileHeader.isLittleEdian ? data.readUIntLE.bind(data) : data.readUIntBE.bind(data);
+  let result = [];
+
+  for (let i=0; i < numberOfHeaders; i++) {
+    const header = {
+      sh_name: readUInt(offset + 0x00, 4),
+      sh_type: readUInt(offset + 0x04, 4),
+    };
+
+    if (fileHeader.is32) {
+      header.sh_flags = readUInt(offset + 0x08, 4);
+      header.sh_addr = readUInt(offset + 0x0C, 4);
+      header.sh_offset = readUInt(offset + 0x10, 4);
+      header.sh_size = readUInt(offset + 0x14, 4);
+      header.sh_link = readUInt(offset + 0x18, 4);
+      header.sh_info = readUInt(offset + 0x1C, 4);
+      header.sh_addralign = readUInt(offset + 0x20, 4);
+      header.sh_entsize = readUInt(offset + 0x24, 4);
+    }
+    else if (fileHeader.is64) {
+      header.sh_flags = readUInt(offset + 0x08, 8);
+      header.sh_addr = readUInt(offset + 0x10, 8);
+      header.sh_offset = readUInt(offset + 0x18, 8);
+      header.sh_size = readUInt(offset + 0x20, 8);
+      header.sh_link = readUInt(offset + 0x28, 4);
+      header.sh_info = readUInt(offset + 0x2C, 4);
+      header.sh_addralign = readUInt(offset + 0x30, 8);
+      header.sh_entsize = readUInt(offset + 0x38, 8);
     }
     result.push(header);
   }
