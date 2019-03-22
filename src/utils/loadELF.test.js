@@ -1,6 +1,6 @@
 import path from 'path';
 import expect from 'expect.js';
-import { loadELF, readBytes } from './loadELF.js';
+import { loadELF } from './loadELF.js';
 const FILE_PATH = path.join(process.cwd(), '/roms/vmlinux');
 
 describe.only('loadELF("roms/vmlinux")', () => {
@@ -34,63 +34,8 @@ describe.only('loadELF("roms/vmlinux")', () => {
       });
   });
 
-  describe.only('readBytes', () => {
-    const buffer = Buffer.from([0x7f, 0x45, 0x4c, 0x46, 0xAA, 0xBB, 0xCC, 0xDD]);
 
-    it('2 bytes: Little Edian', () => {
-      const actual = readBytes(true, buffer, 0, 2);
-      expect(actual).to.eql(0x457F);
-      expect(actual).to.eql(buffer.readUIntLE(0, 2));
-    });
-    it('2 bytes, offset 2: Little Edian', () => {
-      const actual = readBytes(true, buffer, 2, 2);
-      expect(actual).to.eql(0x464c);
-      expect(actual).to.eql(buffer.readUIntLE(2, 2));
-    });
-    it('2 bytes: Big Edian', () => {
-      const actual = readBytes(false, buffer, 0, 2);
-      expect(actual).to.eql(0x7F45);
-      expect(actual).to.eql(buffer.readUIntBE(0, 2));
-    });
-    it('2 bytes, offset 2: Big Edian', () => {
-      const actual = readBytes(false, buffer, 2, 2);
-      expect(actual).to.eql(0x4c46);
-      expect(actual).to.eql(buffer.readUIntBE(2, 2));
-    });
-
-    it('4 bytes: Little Edian', () => {
-      const actual = readBytes(true, buffer, 0, 4);
-      expect(actual).to.eql(0x464c457f);
-      expect(actual).to.eql(buffer.readUIntLE(0, 4));
-    });
-    it('4 bytes, offset 4: Little Edian', () => {
-      const actual = readBytes(true, buffer, 4, 4);
-      expect(actual).to.eql(0xDDCCBBAA);
-      expect(actual).to.eql(buffer.readUIntLE(4, 4));
-    });
-    it('4 bytes: Big Edian', () => {
-      const actual = readBytes(false, buffer, 0, 4);
-      expect(actual).to.eql(0x7f454c46);
-      expect(actual).to.eql(buffer.readUIntBE(0, 4));
-    });
-    it('4 bytes, offset 4: Big Edian', () => {
-      const actual = readBytes(false, buffer, 4, 4);
-      expect(actual).to.eql(0xAABBCCDD);
-      expect(actual).to.eql(buffer.readUIntBE(4, 4));
-    });
-
-    it('8 bytes: Little Edian', () => {
-      const actual = readBytes(true, buffer, 0, 8);
-      expect(actual).to.eql(0xDDCCBBAA464c457f);
-    });
-    it('8 bytes: Big Edian', () => {
-      const actual = readBytes(false, buffer, 0, 8);
-      expect(actual).to.eql(0x7f454c46AABBCCDD);
-    });
-
-  });
-
-  it('loads roms/vmlinux', () => {
+  it.skip('loads roms/vmlinux', () => {
     /* eslint-disable camelcase */
     return loadELF(FILE_PATH)
       .then((data) => {

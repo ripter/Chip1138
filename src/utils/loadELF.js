@@ -4,7 +4,7 @@ import { readFile } from 'fs';
 // help from: https://github.com/riscv/riscv-angel/blob/release/elfload.js
 //          : https://github.com/indutny/elfy/blob/master/lib/elfy/parser.js
 
-export default function loadELF(filePath) {
+export function loadELF(filePath) {
   return new Promise(function(resolve, reject) {
     try {
       readFile(filePath, function(err, data) {
@@ -178,21 +178,4 @@ export function fileHeaderToSectionHeaders(fileHeader, data) {
   }
   return result;
   /* eslint-enable camelcase */
-}
-
-// reads a number of bytes and returns a number
-export function readBytes(isLittleEdian, buffer, offset, byteLength) {
-  let result;
-
-  for (let i=0; i < byteLength; i++) {
-    if (isLittleEdian) {
-      // for Little Edian, increase the offset while decreasing the position.
-      result |= buffer[offset+i] << (8 * i);
-    }
-    else {
-      // for Big Edian, decrease from total offset,t while increasing the position.
-      result |= buffer[offset+(byteLength-i-1)] << (8 * i);
-    }
-  }
-  return result;
 }
