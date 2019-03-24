@@ -4,7 +4,7 @@ import { readFile } from 'fs';
 // help from: https://github.com/riscv/riscv-angel/blob/release/elfload.js
 //          : https://github.com/indutny/elfy/blob/master/lib/elfy/parser.js
 
-export default function loadELF(filePath) {
+export function loadELF(filePath) {
   return new Promise(function(resolve, reject) {
     try {
       readFile(filePath, function(err, data) {
@@ -30,7 +30,7 @@ export default function loadELF(filePath) {
 export function elfToFileHeader(data) {
   /* eslint-disable camelcase */
   const header = {};
-  let readUInt;
+  let readInt;
 
   // Edian affects reading over 1 byte, so get it early
   header.ei_data = data[0x05];
@@ -49,10 +49,10 @@ export function elfToFileHeader(data) {
   });
   // Update our read methods to use the correct edianness
   if (header.isLittleEdian) {
-    readUInt = data.readUIntLE.bind(data);
+    readInt = data.readIntLE.bind(data);
   }
   else if (header.isBigEdian) {
-    readUInt = data.readUIntBE.bind(data);
+    readInt = data.readIntBE.bind(data);
   }
 
   // check if the file is 32 or 64 bit
@@ -70,35 +70,46 @@ export function elfToFileHeader(data) {
     },
   });
 
+  // Instead of copying bytes from the buffer and putting them in numbers,
+  // Let's just return number when requested.
+  Object.defineProperties(header, {
+    'e_entry': {
+      get() {
+        return readInt(0x18, 4); // JavaScript doesn't support 64 bit numbers, so stick with 32 bit.
+      }
+    }
+  });
+
+
   header.ei_version = data[0x06];
   header.ei_osabi = data[0x07];
   header.ei_abiversion = data[0x08];
-  header.e_type = readUInt(0x10, 2);
-  header.e_machine = readUInt(0x12, 2);
+  header.e_type = readInt(0x10, 2);
+  header.e_machine = readInt(0x12, 2);
 
   if (header.is32) {
-    header.e_entry = readUInt(0x18, 4);
-    header.e_phoff = readUInt(0x1C, 4);
-    header.e_shoff = readUInt(0x20, 4);
-    header.e_flags = readUInt(0x24, 4);
-    header.e_ehsize = readUInt(0x28, 2);
-    header.e_phentsize = readUInt(0x2A, 2);
-    header.e_phnum = readUInt(0x2C, 2);
-    header.e_shentsize = readUInt(0x2E, 2);
-    header.e_shnum = readUInt(0x30, 2);
-    header.e_shstrndx = readUInt(0x32, 2);
+    // header.e_entry = readInt(0x18, 4);
+    header.e_phoff = readInt(0x1C, 4);
+    header.e_shoff = readInt(0x20, 4);
+    header.e_flags = readInt(0x24, 4);
+    header.e_ehsize = readInt(0x28, 2);
+    header.e_phentsize = readInt(0x2A, 2);
+    header.e_phnum = readInt(0x2C, 2);
+    header.e_shentsize = readInt(0x2E, 2);
+    header.e_shnum = readInt(0x30, 2);
+    header.e_shstrndx = readInt(0x32, 2);
   }
   else if (header.is64) {
-    // header.e_entry = readUInt(0x18, 8);
-    // header.e_phoff = readUInt(0x20, 8);
-    // header.e_shoff = readUInt(0x28, 8);
-    header.e_flags = readUInt(0x30, 4);
-    header.e_ehsize = readUInt(0x34, 2);
-    header.e_phentsize = readUInt(0x36, 2);
-    header.e_phnum = readUInt(0x38, 2);
-    header.e_shentsize = readUInt(0x3A, 2);
-    header.e_shnum = readUInt(0x3C, 2);
-    header.e_shstrndx = readUInt(0x3E, 2);
+    // header.e_entry = readInt(0x18, 4);
+    header.e_phoff = readInt(0x20, 4);
+    header.e_shoff = readInt(0x28, 4);
+    header.e_flags = readInt(0x30, 4);
+    header.e_ehsize = readInt(0x34, 2);
+    header.e_phentsize = readInt(0x36, 2);
+    header.e_phnum = readInt(0x38, 2);
+    header.e_shentsize = readInt(0x3A, 2);
+    header.e_shnum = readInt(0x3C, 2);
+    header.e_shstrndx = readInt(0x3E, 2);
   }
 
   return header;
@@ -109,31 +120,31 @@ export function fileHeaderToProgramHeaders(fileHeader, data) {
   /* eslint-disable camelcase */
   const offset = fileHeader.e_phoff;
   const numberOfHeaders = fileHeader.e_phnum;
-  const readUInt = fileHeader.isLittleEdian ? data.readUIntLE.bind(data) : data.readUIntBE.bind(data);
+  const readInt = fileHeader.isLittleEdian ? data.readIntLE.bind(data) : data.readIntBE.bind(data);
   let result = [];
 
   for (let i=0; i < numberOfHeaders; i++) {
     const header = {
-      p_type: readUInt(offset + 0x00, 4),
+      p_type: readInt(offset + 0x00, 4),
     };
 
     if (fileHeader.is32) {
-      header.p_flags = readUInt(offset + 0x18, 4);
-      header.p_offset = readUInt(offset + 0x04, 4);
-      header.p_vaddr = readUInt(offset + 0x08, 4);
-      header.p_paddr = readUInt(offset + 0x0C, 4);
-      header.p_filesz = readUInt(offset + 0x10, 4);
-      header.p_memsz = readUInt(offset + 0x14, 4);
-      header.p_align = readUInt(offset + 0x1C, 4);
+      header.p_flags = readInt(offset + 0x18, 4);
+      header.p_offset = readInt(offset + 0x04, 4);
+      header.p_vaddr = readInt(offset + 0x08, 4);
+      header.p_paddr = readInt(offset + 0x0C, 4);
+      header.p_filesz = readInt(offset + 0x10, 4);
+      header.p_memsz = readInt(offset + 0x14, 4);
+      header.p_align = readInt(offset + 0x1C, 4);
     }
     else if (fileHeader.is64) {
-      header.p_flags = readUInt(offset + 0x04, 4);
-      header.p_offset = readUInt(offset + 0x08, 8);
-      header.p_vaddr = readUInt(offset + 0x10, 8);
-      header.p_paddr = readUInt(offset + 0x18, 8);
-      header.p_filesz = readUInt(offset + 0x20, 8);
-      header.p_memsz = readUInt(offset + 0x28, 8);
-      header.p_align = readUInt(offset + 0x30, 8);
+      header.p_flags = readInt(offset + 0x04, 4);
+      header.p_offset = readInt(offset + 0x08, 8);
+      header.p_vaddr = readInt(offset + 0x10, 8);
+      header.p_paddr = readInt(offset + 0x18, 8);
+      header.p_filesz = readInt(offset + 0x20, 8);
+      header.p_memsz = readInt(offset + 0x28, 8);
+      header.p_align = readInt(offset + 0x30, 8);
     }
     result.push(header);
   }
@@ -145,54 +156,37 @@ export function fileHeaderToSectionHeaders(fileHeader, data) {
   /* eslint-disable camelcase */
   const offset = fileHeader.e_shoff;
   const numberOfHeaders = fileHeader.e_shnum;
-  const readUInt = fileHeader.isLittleEdian ? data.readUIntLE.bind(data) : data.readUIntBE.bind(data);
+  const readInt = fileHeader.isLittleEdian ? data.readIntLE.bind(data) : data.readIntBE.bind(data);
   let result = [];
 
   for (let i=0; i < numberOfHeaders; i++) {
     const header = {
-      sh_name: readUInt(offset + 0x00, 4),
-      sh_type: readUInt(offset + 0x04, 4),
+      sh_name: readInt(offset + 0x00, 4),
+      sh_type: readInt(offset + 0x04, 4),
     };
 
     if (fileHeader.is32) {
-      header.sh_flags = readUInt(offset + 0x08, 4);
-      header.sh_addr = readUInt(offset + 0x0C, 4);
-      header.sh_offset = readUInt(offset + 0x10, 4);
-      header.sh_size = readUInt(offset + 0x14, 4);
-      header.sh_link = readUInt(offset + 0x18, 4);
-      header.sh_info = readUInt(offset + 0x1C, 4);
-      header.sh_addralign = readUInt(offset + 0x20, 4);
-      header.sh_entsize = readUInt(offset + 0x24, 4);
+      header.sh_flags = readInt(offset + 0x08, 4);
+      header.sh_addr = readInt(offset + 0x0C, 4);
+      header.sh_offset = readInt(offset + 0x10, 4);
+      header.sh_size = readInt(offset + 0x14, 4);
+      header.sh_link = readInt(offset + 0x18, 4);
+      header.sh_info = readInt(offset + 0x1C, 4);
+      header.sh_addralign = readInt(offset + 0x20, 4);
+      header.sh_entsize = readInt(offset + 0x24, 4);
     }
     else if (fileHeader.is64) {
-      // header.sh_flags = readUInt(offset + 0x08, 8);
-      // header.sh_addr = readUInt(offset + 0x10, 8);
-      // header.sh_offset = readUInt(offset + 0x18, 8);
-      // header.sh_size = readUInt(offset + 0x20, 8);
-      header.sh_link = readUInt(offset + 0x28, 4);
-      header.sh_info = readUInt(offset + 0x2C, 4);
-      // header.sh_addralign = readUInt(offset + 0x30, 8);
-      // header.sh_entsize = readUInt(offset + 0x38, 8);
+      // header.sh_flags = readInt(offset + 0x08, 8);
+      // header.sh_addr = readInt(offset + 0x10, 8);
+      // header.sh_offset = readInt(offset + 0x18, 8);
+      // header.sh_size = readInt(offset + 0x20, 8);
+      header.sh_link = readInt(offset + 0x28, 4);
+      header.sh_info = readInt(offset + 0x2C, 4);
+      // header.sh_addralign = readInt(offset + 0x30, 8);
+      // header.sh_entsize = readInt(offset + 0x38, 8);
     }
     result.push(header);
   }
   return result;
   /* eslint-enable camelcase */
-}
-
-// reads a number of bytes and returns a number
-export function readBytes(isLittleEdian, buffer, offset, byteLength) {
-  let result;
-
-  for (let i=0; i < byteLength; i++) {
-    if (isLittleEdian) {
-      // for Little Edian, increase the offset while decreasing the position.
-      result |= buffer[offset+i] << (8 * i);
-    }
-    else {
-      // for Big Edian, decrease from total offset,t while increasing the position.
-      result |= buffer[offset+(byteLength-i-1)] << (8 * i);
-    }
-  }
-  return result;
 }
