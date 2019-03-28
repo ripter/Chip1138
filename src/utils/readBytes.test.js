@@ -1,7 +1,7 @@
 import expect from 'expect.js';
 import { readBytes } from './readBytes.js';
 
-describe.only('readBytes', () => {
+describe('readBytes', () => {
   const buffer = Buffer.from([0x7f, 0x45, 0x4c, 0x46, 0x1A, 0x0B, 0x2C, 0x0D]);
   let actual;
 

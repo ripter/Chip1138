@@ -2,7 +2,7 @@
 // http://52.32.189.224/angel-simulator/
 import expect from 'expect.js';
 
-describe.only('RISC-V Bootstrap tests', () => {
+describe('RISC-V Bootstrap tests', () => {
   it('needs the frist test', () => {
     expect().to.fail();
   });

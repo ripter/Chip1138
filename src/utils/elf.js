@@ -14,9 +14,11 @@ export class Elf {
   }
 
   // Edian
+  /* eslint-disable camelcase */
   get ei_data() {
-    return this.buffer[0x05];
+    return this.buffer[0x05]; // this can't use readInt since readInt uses it.
   }
+  /* eslint-enable camelcase */
   get isLittleEdian() {
     return this.ei_data === 1;
   }
@@ -25,9 +27,11 @@ export class Elf {
   }
 
   // 32 or 64 bits
+  /* eslint-disable camelcase */
   get ei_class() {
     return this.buffer[0x04];
   }
+  /* eslint-enable camelcase */
   get is32() {
     return this.ei_class === 1;
   }
@@ -35,6 +39,7 @@ export class Elf {
     return this.ei_class === 2;
   }
 
+  /* eslint-disable camelcase */
   get e_machine() {
     return this.readInt(0x12, 2);
   }
@@ -43,6 +48,22 @@ export class Elf {
     // JavaScript doesn't support 64 bit numbers, so stick with 32 bit.
     return this.readInt(0x18, 4);
   }
+
+  get e_phoff() {
+    if (this.is32) {
+      return this.readInt(0x1C, 4);
+    }
+    // JavaScript doesn't support 64 bit numbers, so stick with 32 bit.
+    return this.readInt(0x20, 4);
+  }
+  get e_phnum() {
+    if (this.is32) {
+      return this.readInt(0x2C, 2);
+    }
+    return this.readInt(0x38, 2);
+  }
+
+  /* eslint-enable camelcase */
 }
 
 
