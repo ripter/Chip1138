@@ -23,29 +23,13 @@
   },
   "homepage": "https://github.com/ripter/Chip1138#readme",
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.4",
-    "babel-plugin-istanbul": "^3.1.2",
-    "babel-preset-env": "^1.6.0",
-    "babel-register": "^6.26.0",
-    "command-line-args": "^4.0.7",
-    "coveralls": "^2.13.3",
-    "eslint": "^4.19.1",
+    "@babel/core": "^7.4.0",
+    "@babel/preset-env": "^7.4.2",
+    "@babel/register": "^7.4.0",
+    "eslint": "^5",
     "expect.js": "^0.3.1",
-    "http-server": "^0.10.0",
-    "istanbul": "^1.1.0-alpha.1",
-    "istanbul-coveralls": "^1.0.3",
-    "jsdom": "11.3.0",
-    "jsdom-global": "3.0.2",
-    "mocha-lcov-reporter": "^1.3.0",
-    "nyc": "^10.3.2",
-    "webpack": "^3.11.0",
-    "webpack-dev-server": "^2.11.2"
-  },
-  "dependencies": {
-    "js-base64": "^2.4.3",
+    "js-base64": "^2.5.1",
     "lodash.filter": "^4.6.0",
-    "mocha": "^3.5.3"
+    "mocha": "^6.0.2"
   }
 }
