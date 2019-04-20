@@ -3,7 +3,7 @@ import expect from 'expect.js';
 import { loadELF } from './elf.js';
 const FILE_PATH = path.join(process.cwd(), '/roms/hello/hello');
 
-describe.only('Elf("roms/hello/hello")', () => {
+describe('Elf("roms/hello/hello")', () => {
   it('sets isBigEdian and isLittleEdian', () => {
     return loadELF(FILE_PATH)
       .then((actual) => {
