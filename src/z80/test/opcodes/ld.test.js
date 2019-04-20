@@ -1,10 +1,10 @@
 import expect from 'expect.js';
 import filter from 'lodash.filter';
-import CPU from '../../src/cpu.js';
-import Memory from '../../src/memory.js';
-import OPCODE from '../../const/opcode.js';
+import CPU from '../../cpu.js';
+import Memory from '../../memory.js';
+import OPCODE from '../../../../const/opcode.js';
 import { addTestData, random8bit, random16bit } from '../utils.js';
-import rom from '../../roms/flappyboy.json';
+import rom from '../../../../roms/flappyboy.json';
 
 
 describe('ld.test.js', () => {

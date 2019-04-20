@@ -1,7 +1,7 @@
 import expect from 'expect.js';
-import CPU from '../src/cpu.js';
-import Memory from '../src/memory.js';
-import rom from '../roms/flappyboy.json';
+import CPU from '../cpu.js';
+import Memory from '../memory.js';
+import rom from '../../../roms/flappyboy.json';
 import { pcRuntimeValues } from './utils/pcRuntimeValues.js';
 
 describe.skip('clock', () => {
