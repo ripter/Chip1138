@@ -71,14 +71,13 @@ describe('CPU can run OPCODES:', () => {
       opcodes.forEach(function(opcode) {
         cpu.processOpcode(opcode);
       });
-      expect(cpu.f & 0b1).to.eql(0b1);
+      expect(cpu.f & 0b0001).to.eql(0b0001);
     });
 
-    // from Chris: is this test bad? 0xFF + anything greater than zero would overflow right?
-    it.skip('ADD 255, 254; Unsets the carry flag', () => {
+    it('ADD 10, 11; Unsets the carry flag', () => {
       const opcodes = [
-        0x3e, 0xff, // LD  a, 255
-        0x6, 0xf2, // LD  b, 242
+        0x3e, 0x0a, // LD  a, 10
+        0x6, 0x0b, // LD  b, 11
         0x80, // ADD a, b
       ];
 
@@ -87,7 +86,8 @@ describe('CPU can run OPCODES:', () => {
         cpu.processOpcode(opcode);
       });
 
-      expect(cpu.f & 0b1).to.eql(0);
+      // z80 spec: "C is set if carry from bit 7; otherwise, it is reset."
+      expect(cpu.f | 0b0001).to.eql(0);
     });
   }); // ADD
 
