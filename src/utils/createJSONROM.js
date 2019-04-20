@@ -1,4 +1,4 @@
-import { readFile } from 'fs';
+import { readFile, writeFile } from 'fs';
 import { Base64 } from 'js-base64';
 export const MEDIATYPE = 'data:application/octet-stream;base64,';
 
@@ -31,5 +31,22 @@ export function convertROMtoJSON(filePath) {
     catch (err) {
       reject(`Unknown error loading ROM at "${filePath}"\n\t${err}`);
     }
+  });
+}
+
+export function writeJSON(filePath, json) {
+  return new Promise(function(resolve, reject) {
+    try {
+      writeFile(filePath, JSON.stringify(json, void 0, 4), 'utf8', function(err, dataBuffer) {
+        // reference: https://en.wikipedia.org/wiki/Executable_and_Linkable_Format
+        if (err) { reject(err); }
+
+        resolve(filePath);
+      });
+    }
+    catch (err) {
+      reject(`Unknown error loading ROM at "${filePath}"\n\t${err}`);
+    }
+
   });
 }
