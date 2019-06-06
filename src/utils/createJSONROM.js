@@ -8,8 +8,15 @@ export const MEDIATYPE = 'data:application/octet-stream;base64,';
  * @return {Object} A JSON with a dataurl of the data.
  */
 export function createJSONROM(binary) {
+  // console.log('\n\nbinary\t', binary, '\n\n');
   // convert each byte into a char code so we can turn it into a base64 string.
-  const stringData = binary.reduce((acc, byte) => { return acc + String.fromCharCode(byte); }, '');
+  // const stringData = binary.reduce((acc, byte) => { return acc + String.fromCharCode(byte); }, '');
+  let stringData = '';
+  for (let i=0; i < binary.length; i += 2) {
+    const byte = binary[i];
+    const byte2 = binary[i+1];
+    stringData += String.fromCharCode(byte, byte2);
+  }
   // convert the string into a base64 string.
   const base64String = Base64.encode(stringData);
   return {
@@ -21,8 +28,7 @@ export default createJSONROM;
 export function convertROMtoJSON(filePath) {
   return new Promise(function(resolve, reject) {
     try {
-      readFile(filePath, function(err, dataBuffer) {
-        // reference: https://en.wikipedia.org/wiki/Executable_and_Linkable_Format
+      readFile(filePath, 'utf8', function(err, dataBuffer) {
         if (err) { reject(err); }
 
         resolve(createJSONROM(dataBuffer));

@@ -4,7 +4,7 @@ import Memory from '../memory.js';
 import rom from '../../../roms/flappyboy.json';
 import { pcRuntimeValues } from './utils/pcRuntimeValues.js';
 
-describe.skip('clock', () => {
+describe('clock', () => {
   let cpu, memory;
 
   beforeEach(() => {

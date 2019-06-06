@@ -5,7 +5,7 @@ const ROOT_PATH = '/roms/gbstudio_test.gb';
 const ROM_PATH = path.join(process.cwd(), '/roms/gbstudio_test.gb');
 const JSON_PATH = path.join(process.cwd(), '/roms/gbstudio_test.json');
 
-describe('convertROMtoJSON', () => {
+describe.only('convertROMtoJSON', () => {
   it('has a property called data', () => {
     return convertROMtoJSON(ROM_PATH)
       .then((actual) => {
