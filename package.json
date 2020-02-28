@@ -4,7 +4,6 @@
   "description": "A fantasy chip",
   "main": "src/index.js",
   "scripts": {
-    "cover": "./node_modules/istanbul/lib/cli.js cover _mocha",
     "start": "./node_modules/.bin/webpack-dev-server -d --progress --colors --port 3000",
     "clean": "rm -rf node_modules dist",
     "build": "make deploy",
@@ -48,5 +47,12 @@
   "dependencies": {
     "js-base64": "^2.5.2",
     "lodash.filter": "^4.6.0"
+  },
+  "mocha": {
+    "require": [
+      "@babel/register",
+      "jsdom-global/register",
+      "expect.js"
+    ]
   }
 }
