@@ -13,5 +13,6 @@ module.exports = {
     // allow use of new operator when not part of the assignment or comparison
     // for constructor tests
     'no-new': 0,
+    'no-loop-func': 0,
   }
 }

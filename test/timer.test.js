@@ -15,7 +15,7 @@ describe('timer', () => {
 
   it('tick() incriments cpu.pc', () => {
     cpu.tick();
-    expect(cpu.pc).to.eql(0x0101)
+    expect(cpu.pc).to.eql(0x0101);
   });
 
 });

@@ -1,4 +1,4 @@
-.PHONY: all build deploy dev-server server plop lint test test.only
+.PHONY: all build clean deploy lint server test test.only
 NPM_BIN=./node_modules/.bin
 
 all: build lint server
@@ -8,18 +8,15 @@ build: node_modules/
 
 deploy: test build
 
-dev-server: build
-	npx webpack-dev-server --open
-
 server: build
-	npx http-server --open
+	npx webpack-dev-server --open
 
 node_modules/: package.json
 	npm install
-	-touch node_modules/
+	touch node_modules/
 
 lint: node_modules/
-	npx eslint src/ test/
+	npx eslint --fix src/ test/
 
 test: lint
 	npx mocha --opts mocha.opts
@@ -27,9 +24,10 @@ test: lint
 test.only:
 	npx mocha --opts mocha.opts
 
-test.blink:
-	# npx mocha --opts mocha.ops --require babel-register
-	mocha -R @ripter/mocha-reporter-blink1
-
 watch:
 	$(NPM_BIN)/webpack --env.dev --progress --colors -d --watch
+
+clean:
+	-rm -f package-lock.json
+	-rm -r ./node_modules
+	-npm cache verify
