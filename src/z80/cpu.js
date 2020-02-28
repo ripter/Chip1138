@@ -205,16 +205,16 @@ class CPU {
    * @return {16Bit} new value of cpu.pc
    */
   jump(opcode, byte1, byte2) {
-    console.log('\tjump', arguments);
+    // console.log('\tjump', arguments);
     this.pc = (byte2 << 8) | byte1;
   }
 
   tick() {
     const data = this.memory.readROM(this.pc);
-    const opcode = OPCODE[data];
-    console.log('\nprocessing', opcode.mnemonic);
+    // const opcode = OPCODE[data];
+    // console.log('\nprocessing', opcode.mnemonic);
     this.processOpcode(data);
-    console.log('end processing\n\n');
+    // console.log('end processing\n\n');
     // console.log(this.toHex(this.pc), this.memory.isColor);
     // JUMP
     // if (data === 0xc3) {
@@ -244,14 +244,14 @@ class CPU {
 
     // Hold bytes in the buffer until we have all the bytes for the call.
     if (opcodeBuffer.length < length) {
-      console.log('\tNot enought data');
+      // console.log('\tNot enought data');
       return;
     }
 
     // console.log('processOpcode', mnemonic, length, opcodeBuffer);
     // Call the opcode function with data.
     try {
-      console.log('All the data, calling', mnemonic);
+      // console.log('All the data, calling', mnemonic);
       this[mnemonic].apply(this, opcodeBuffer);
     } catch (error) {
       throw new Error(`Unsupported Opcode: "${mnemonic}"`);
