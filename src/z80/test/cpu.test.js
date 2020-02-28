@@ -6,7 +6,8 @@ import rom from '../../../roms/flappyboy.json';
 
 
 describe('CPU', () => {
-  let cpu, memory;
+  let cpu; let
+    memory;
 
   beforeEach(() => {
     // create a new blank CPU for each test.
@@ -108,7 +109,8 @@ describe('CPU', () => {
   }); // alternate registers
 
   describe('combined registers', () => {
-    let byte1, byte2;
+    let byte1; let
+      byte2;
 
     beforeEach(() => {
       byte1 = random8bit();

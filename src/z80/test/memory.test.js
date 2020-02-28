@@ -13,7 +13,7 @@ describe('Memory', () => {
   });
 
   it('requires a ROM', () => {
-    expect(function() {
+    expect(() => {
       new Memory();
     }).to.throwException(/requires ROM/);
   });
@@ -65,7 +65,7 @@ describe('Memory', () => {
 
     // We don't want to test each and every bit, that's 8k of tests!
     // Just pick a few at random.
-    for(let i=0; i < 5; i++) {
+    for (let i = 0; i < 5; i++) {
       const offset = randomInt(0, length);
       const bank1Addr = bank1[0] + offset;
       const bank2Addr = bank2[0] + offset;
@@ -90,7 +90,7 @@ describe('Memory', () => {
 
   describe('Cartridge Type', () => {
     it('is read only', () => {
-      expect(function() {
+      expect(() => {
         memory.cartType = CART_TYPE.POCKET_CAMERA;
       }).to.throwException(/has only a getter/);
     });

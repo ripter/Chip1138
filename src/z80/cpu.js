@@ -2,6 +2,7 @@
  * Virtual CPU for the Gameboy Color; a modified z80
  */
 import { OPCODE } from '../../const/opcode.js';
+
 class CPU {
   constructor({ memory }) {
     // Create the memory banks
@@ -29,7 +30,7 @@ class CPU {
     };
   }
 
-  adc (opcode, byte1) {
+  adc(opcode, byte1) {
     const meta = OPCODE[opcode];
     const source = meta.operand2.toLowerCase();
     let value;
@@ -51,17 +52,17 @@ class CPU {
     // Update the flags
     // Carry
     if (value > 0xFF) {
-      this.f = this.f | 0b0001;
+      this.f |= 0b0001;
     }
     // Half-Carry
     if (value > 0x0F) {
-      this.f = this.f | 0b0010;
+      this.f |= 0b0010;
     }
 
     this.a = value;
   }
 
-  add (opcode, byte1) {
+  add(opcode, byte1) {
     const meta = OPCODE[opcode];
     const dest = meta.operand1.toLowerCase();
     const source = meta.operand2.toLowerCase();
@@ -77,28 +78,27 @@ class CPU {
     }
     // Check for Carry
     if (value > 0xFF) {
-      this.f = this.f | 0b0001;
-    }
-    else {
+      this.f |= 0b0001;
+    } else {
       // Reset Carry
-      this.f = this.f & 0b0001;
+      this.f &= 0b0001;
     }
 
     this[dest] = value;
   }
 
-  sub (opcode) {
+  sub(opcode) {
     const meta = OPCODE[opcode];
     const source = meta.operand1.toLowerCase();
     const value = this[source];
 
     this.a -= value;
     // Set the subtract flag, cus we are subtraction 😝
-    this.f = this.f | 0b100;
+    this.f |= 0b100;
   }
 
   // Loads bytes into CPU registers
-  ld (opcode, byte1, byte2) {
+  ld(opcode, byte1, byte2) {
     const meta = OPCODE[opcode];
     const dest = meta.operand1.toLowerCase();
     const source = meta.operand2.toLowerCase();
@@ -125,7 +125,7 @@ class CPU {
   }
 
   // -1 a register or memory value
-  dec (opcode) {
+  dec(opcode) {
     const meta = OPCODE[opcode];
     const dest = meta.operand1.toLowerCase();
 
@@ -142,7 +142,7 @@ class CPU {
   }
 
   // +1 a register or memory values
-  inc (opcode) {
+  inc(opcode) {
     const meta = OPCODE[opcode];
     const dest = meta.operand1.toLowerCase();
 
@@ -159,18 +159,18 @@ class CPU {
   }
 
   // Pushes the value at af into the stack and decrements the stackpointer.
-  push () {
-    const address1 = this.sp-1;
-    const address2 = this.sp-2;
+  push() {
+    const address1 = this.sp - 1;
+    const address2 = this.sp - 2;
 
     this.memory.writeROM(address1, this.a);
     this.memory.writeROM(address2, this.f);
     this.sp -= 2;
   }
 
-  pop () {
-    const address1 = this.sp+0;
-    const address2 = this.sp+1;
+  pop() {
+    const address1 = this.sp + 0;
+    const address2 = this.sp + 1;
 
     this.h = this.memory.readROM(address2);
     this.l = this.memory.readROM(address1);
@@ -223,7 +223,7 @@ class CPU {
     //   }
     //   return;
     // }
-    this.pc +=1;
+    this.pc += 1;
   }
 
   toHex(val) {
@@ -253,8 +253,7 @@ class CPU {
     try {
       console.log('All the data, calling', mnemonic);
       this[mnemonic].apply(this, opcodeBuffer);
-    }
-    catch (error) {
+    } catch (error) {
       throw new Error(`Unsupported Opcode: "${mnemonic}"`);
     }
     // Clear the buffer for the next call.
@@ -265,6 +264,7 @@ class CPU {
   get a() {
     return this.memory8bit[0];
   }
+
   set a(value) {
     this.memory8bit[0] = value;
   }
@@ -272,6 +272,7 @@ class CPU {
   get b() {
     return this.memory8bit[1];
   }
+
   set b(value) {
     this.memory8bit[1] = value;
   }
@@ -279,6 +280,7 @@ class CPU {
   get c() {
     return this.memory8bit[2];
   }
+
   set c(value) {
     this.memory8bit[2] = value;
   }
@@ -286,6 +288,7 @@ class CPU {
   get d() {
     return this.memory8bit[3];
   }
+
   set d(value) {
     this.memory8bit[3] = value;
   }
@@ -293,6 +296,7 @@ class CPU {
   get e() {
     return this.memory8bit[4];
   }
+
   set e(value) {
     this.memory8bit[4] = value;
   }
@@ -300,6 +304,7 @@ class CPU {
   get f() {
     return this.memory8bit[5];
   }
+
   set f(value) {
     this.memory8bit[5] = value;
   }
@@ -307,6 +312,7 @@ class CPU {
   get l() {
     return this.memory8bit[6];
   }
+
   set l(value) {
     this.memory8bit[6] = value;
   }
@@ -314,6 +320,7 @@ class CPU {
   get h() {
     return this.memory8bit[7];
   }
+
   set h(value) {
     this.memory8bit[7] = value;
   }
@@ -325,6 +332,7 @@ class CPU {
     const bitF = this.f;
     return (bitA << 8) | bitF;
   }
+
   set af(value) {
     const bitA = (value >> 8) & 0xff;
     const bitF = value & 0xff;
@@ -337,6 +345,7 @@ class CPU {
     const bitC = this.c;
     return (bitB << 8) | bitC || 0x0013;
   }
+
   set bc(value) {
     const bitB = (value >> 8) & 0xff;
     const bitC = value & 0xff;
@@ -349,6 +358,7 @@ class CPU {
     const bitE = this.e;
     return (bitD << 8) | bitE || 0x00d8;
   }
+
   set de(value) {
     const bitD = (value >> 8) & 0xff;
     const bitE = value & 0xff;
@@ -361,6 +371,7 @@ class CPU {
     const bitL = this.l;
     return (bitH << 8) | bitL || 0x014d;
   }
+
   set hl(value) {
     const bitH = (value >> 8) & 0xff;
     const bitL = value & 0xff;
@@ -433,52 +444,52 @@ class CPU {
     this.memory8bit[15] = value;
   }
 
-  get i () {
+  get i() {
     return this.memory16bit[0];
   }
 
-  set i (value) {
+  set i(value) {
     this.memory16bit[0] = value;
   }
 
-  get r () {
+  get r() {
     return this.memory16bit[1];
   }
 
-  set r (value) {
+  set r(value) {
     this.memory16bit[1] = value;
   }
 
-  get ix () {
+  get ix() {
     return this.memory16bit[2];
   }
 
-  set ix (value) {
+  set ix(value) {
     this.memory16bit[2] = value;
   }
 
-  get iy () {
+  get iy() {
     return this.memory16bit[3];
   }
 
-  set iy (value) {
+  set iy(value) {
     this.memory16bit[3] = value;
   }
 
   // Stack pointer, 16 bits
-  get sp () {
+  get sp() {
     return this.memory16bit[4] || 0xFFFE;
   }
 
-  set sp (value) {
+  set sp(value) {
     this.memory16bit[4] = value;
   }
 
-  get pc () {
+  get pc() {
     return this.memory16bit[5] || 0x0100;
   }
 
-  set pc (value) {
+  set pc(value) {
     this.memory16bit[5] = value;
   }
 }

@@ -1,12 +1,20 @@
 import { Base64 } from 'js-base64';
+
 const MEDIATYPE = 'data:application/octet-stream;base64,';
+
+function checkIsValid(rom) {
+  const { data } = rom;
+  if (!data || !data.startsWith(MEDIATYPE)) {
+    throw new Error('Error invalid datauri');
+  }
+}
 
 /**
  * Loads a ROM JSON into a Uint16Array
  * @param  {Object} rom - JSON ROM Object
  * @return {Uint16Array} byte array of ROM contents
  */
-function loadROM(rom) {
+export function loadROM(rom) {
   checkIsValid(rom);
   // Get juse the data string from the rom, skipping the MEDIATYPE
   const base64String = rom.data.substr(MEDIATYPE.length);
@@ -17,10 +25,3 @@ function loadROM(rom) {
   return binary;
 }
 export default loadROM;
-
-function checkIsValid(rom) {
-  const { data } = rom;
-  if (!data || !data.startsWith(MEDIATYPE)) {
-    throw new Error('Error invalid datauri');
-  }
-}

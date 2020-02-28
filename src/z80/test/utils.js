@@ -10,16 +10,16 @@ export function addTestData(opcode) {
 }
 
 export function random8bit() {
-  return 0|Math.random()*0x100;
+  return 0 | Math.random() * 0x100;
 }
 
 export function random16bit() {
-  return 0|Math.random()*0x10000;
+  return 0 | Math.random() * 0x10000;
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
 export function randomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+  return Math.floor(Math.random() * (max - min)) + min; // The maximum is exclusive and the minimum is inclusive
 }

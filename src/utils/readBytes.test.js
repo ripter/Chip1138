@@ -152,5 +152,4 @@ describe('readBytes', () => {
     actual = readBytes(false, buffer, 0, 8);
     expect(actual).to.eql(0x7f454c46AABBCCDD);
   });
-
 });

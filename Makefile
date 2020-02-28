@@ -20,13 +20,12 @@ node_modules/: package.json
 	touch node_modules/
 
 lint: node_modules/
-	npx eslint --fix src/ test/
+	npx eslint src/ test/
 
-test: lint
-	$(NPM_BIN)/mocha --opts mocha.opts
+test: lint test.only
 
 test.only:
-	$(NPM_BIN)/mocha --opts mocha.opts
+	npx jest
 
 watch:
 	$(NPM_BIN)/webpack --env.dev --progress --colors -d --watch

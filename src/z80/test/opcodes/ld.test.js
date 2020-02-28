@@ -2,13 +2,14 @@ import expect from 'expect.js';
 import filter from 'lodash.filter';
 import CPU from '../../cpu.js';
 import Memory from '../../memory.js';
-import OPCODE from '../../../../const/opcode.js';
+import { OPCODE } from '../../../../const/opcode.js';
 import { addTestData, random8bit, random16bit } from '../utils.js';
 import rom from '../../../../roms/flappyboy.json';
 
 
 describe('ld.test.js', () => {
-  let cpu, opcodes, memory;
+  let cpu; let opcodes; let
+    memory;
 
   beforeEach(() => {
     // create a new blank CPU for each test.
@@ -20,16 +21,18 @@ describe('ld.test.js', () => {
 
 
   describe('loads 8-bit value into 8-bit register.', () => {
-    opcodes = filter(OPCODE, {mnemonic: 'LD', length: 2, operand2: 'd8'});
+    opcodes = filter(OPCODE, { mnemonic: 'LD', length: 2, operand2: 'd8' });
     // limit to opcodes that work with 8-bit registers
-    opcodes = filter(opcodes, ({operand1}) => operand1.length === 1 );
+    opcodes = filter(opcodes, ({ operand1 }) => operand1.length === 1);
     // make the data eaiser to work with.
     opcodes = opcodes.map(addTestData);
 
     // Create a test for each opcode
-    opcodes.forEach(function(opcode) {
+    opcodes.forEach((opcode) => {
       const randomByte = random8bit();
-      const {mnemonic, register1, operand1, addr, byte} = opcode;
+      const {
+        mnemonic, register1, operand1, addr, byte,
+      } = opcode;
 
       it(`${mnemonic} ${operand1}, 0x${randomByte.toString(16)}; load into register ${register1} [${addr}]`, () => {
         cpu.processOpcode(byte); // LD Opcode
@@ -40,15 +43,17 @@ describe('ld.test.js', () => {
   }); // loads 8-bit value into 8-bit register
 
   describe('copies value from one register into another register.', () => {
-    opcodes = filter(OPCODE, {mnemonic: 'LD', length: 1});
+    opcodes = filter(OPCODE, { mnemonic: 'LD', length: 1 });
     // limit to opcodes that work with 8-bit registers
-    opcodes = filter(opcodes, ({operand1, operand2}) => operand1.length === 1 && operand2.length === 1);
+    opcodes = filter(opcodes, ({ operand1, operand2 }) => operand1.length === 1 && operand2.length === 1);
     // make the data eaiser to work with.
     opcodes = opcodes.map(addTestData);
 
     // Create a test for each opcode
-    opcodes.forEach(function(opcode) {
-      const {mnemonic, register1, register2, addr, byte} = opcode;
+    opcodes.forEach((opcode) => {
+      const {
+        mnemonic, register1, register2, addr, byte,
+      } = opcode;
       it(`${mnemonic}; replaces value at cpu.${register1} with value at cpu.${register2}  [${addr}]`, () => {
         const randomByte1 = random8bit();
         const randomByte2 = random8bit();
@@ -66,16 +71,18 @@ describe('ld.test.js', () => {
 
 
   describe('loads 16-bit value into 16-bit register', () => {
-    opcodes = filter(OPCODE, {mnemonic: 'LD', length: 3, operand2: 'd16'});
+    opcodes = filter(OPCODE, { mnemonic: 'LD', length: 3, operand2: 'd16' });
     // limit to opcodes that work with basic 16-bit registers
-    opcodes = filter(opcodes, ({operand1}) => operand1.length === 2 );
+    opcodes = filter(opcodes, ({ operand1 }) => operand1.length === 2);
     // make the data eaiser to work with.
     opcodes = opcodes.map(addTestData);
 
     // Create a test for each opcode
-    opcodes.forEach(function(opcode) {
+    opcodes.forEach((opcode) => {
       const randomByte = random16bit();
-      const {mnemonic, register1, operand1, addr, byte} = opcode;
+      const {
+        mnemonic, register1, operand1, addr, byte,
+      } = opcode;
 
       it(`${mnemonic} ${operand1}, 0x${randomByte.toString(16)}; load into register ${register1}  [${addr}]`, () => {
         cpu.processOpcode(byte); // LD Opcode

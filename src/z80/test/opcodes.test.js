@@ -2,13 +2,14 @@ import expect from 'expect.js';
 import filter from 'lodash.filter';
 import CPU from '../cpu.js';
 import Memory from '../memory.js';
-import OPCODE from '../../../const/opcode.js';
+import { OPCODE } from '../../../const/opcode.js';
 import rom from '../../../roms/flappyboy.json';
 import { random8bit } from './utils.js';
 
 
 describe('CPU can run OPCODES:', () => {
-  let cpu, opcodeList, memory;
+  let cpu; let opcodeList; let
+    memory;
 
   beforeEach(() => {
     memory = new Memory(rom);
@@ -19,13 +20,15 @@ describe('CPU can run OPCODES:', () => {
 
   describe('ADD:', () => {
     // Test LD opcodes that load from the next byte into a register.
-    opcodeList = filter(OPCODE, {mnemonic: 'ADD', length: 1});
+    opcodeList = filter(OPCODE, { mnemonic: 'ADD', length: 1 });
     // temp limit to single register
-    opcodeList = filter(opcodeList, ({operand1, operand2}) => operand1.length === 1 && operand2.length === 1 );
+    opcodeList = filter(opcodeList, ({ operand1, operand2 }) => operand1.length === 1 && operand2.length === 1);
 
 
-    opcodeList.forEach(function(opcode) {
-      const { addr, mnemonic, operand1, operand2 } = opcode;
+    opcodeList.forEach((opcode) => {
+      const {
+        addr, mnemonic, operand1, operand2,
+      } = opcode;
       const register = operand1.toLowerCase();
       const register2 = operand2.toLowerCase();
 
@@ -37,8 +40,7 @@ describe('CPU can run OPCODES:', () => {
 
         if (register === register2) {
           expect(cpu[register]).to.eql(0x4);
-        }
-        else {
+        } else {
           expect(cpu[register]).to.eql(0x3);
         }
       });
@@ -68,7 +70,7 @@ describe('CPU can run OPCODES:', () => {
       ];
 
       // run the opcodes
-      opcodes.forEach(function(opcode) {
+      opcodes.forEach((opcode) => {
         cpu.processOpcode(opcode);
       });
       expect(cpu.f & 0b0001).to.eql(0b0001);
@@ -82,7 +84,7 @@ describe('CPU can run OPCODES:', () => {
       ];
 
       // run the opcodes
-      opcodes.forEach(function(opcode) {
+      opcodes.forEach((opcode) => {
         cpu.processOpcode(opcode);
       });
 
@@ -93,11 +95,11 @@ describe('CPU can run OPCODES:', () => {
 
   describe('SUB:', () => {
     // Test LD opcodes that load from the next byte into a register.
-    opcodeList = filter(OPCODE, {mnemonic: 'SUB', length: 1});
+    opcodeList = filter(OPCODE, { mnemonic: 'SUB', length: 1 });
     // temp limit to single register
-    opcodeList = filter(opcodeList, ({operand1}) => operand1.length === 1);
+    opcodeList = filter(opcodeList, ({ operand1 }) => operand1.length === 1);
 
-    opcodeList.forEach(function(opcode) {
+    opcodeList.forEach((opcode) => {
       const { addr, mnemonic, operand1 } = opcode;
       const register = operand1.toLowerCase();
 
@@ -109,8 +111,7 @@ describe('CPU can run OPCODES:', () => {
         // a - a = 0
         if (register === 'a') {
           expect(cpu.a).to.eql(0);
-        }
-        else {
+        } else {
           expect(cpu.a).to.eql(0x18);
         }
       });
@@ -143,8 +144,8 @@ describe('CPU can run OPCODES:', () => {
       randomValue = random8bit();
     });
 
-    opcodeList = filter(OPCODE, {mnemonic: 'INC'});
-    opcodeList.forEach(function(opcode) {
+    opcodeList = filter(OPCODE, { mnemonic: 'INC' });
+    opcodeList.forEach((opcode) => {
       const { addr, operand1 } = opcode;
       const register = operand1.toLowerCase();
       const byte = parseInt(addr, 16);
@@ -155,8 +156,7 @@ describe('CPU can run OPCODES:', () => {
           memory.writeROM(cpu.hl, randomValue);
           cpu.processOpcode(byte);
           expect(memory.readROM(cpu.hl)).to.eql(randomValue + 1);
-        }
-        else {
+        } else {
           // Set values we want to add together
           cpu[register] = randomValue;
           cpu.processOpcode(byte);
@@ -173,8 +173,8 @@ describe('CPU can run OPCODES:', () => {
       randomValue = random8bit();
     });
 
-    opcodeList = filter(OPCODE, {mnemonic: 'DEC'});
-    opcodeList.forEach(function(opcode) {
+    opcodeList = filter(OPCODE, { mnemonic: 'DEC' });
+    opcodeList.forEach((opcode) => {
       const { addr, operand1 } = opcode;
       const register = operand1.toLowerCase();
       const byte = parseInt(addr, 16);
@@ -185,8 +185,7 @@ describe('CPU can run OPCODES:', () => {
           memory.writeROM(cpu.hl, randomValue);
           cpu.processOpcode(byte);
           expect(memory.readROM(cpu.hl)).to.eql(randomValue - 1);
-        }
-        else {
+        } else {
           cpu[register] = randomValue;
           cpu.processOpcode(byte);
           expect(cpu[register]).to.eql(randomValue - 1);
@@ -203,8 +202,8 @@ describe('CPU can run OPCODES:', () => {
     });
 
     // Loop over all the Add with Carry opcodes
-    opcodeList = filter(OPCODE, {mnemonic: 'ADC'});
-    opcodeList.forEach(function(opcode) {
+    opcodeList = filter(OPCODE, { mnemonic: 'ADC' });
+    opcodeList.forEach((opcode) => {
       const { addr, operand2 } = opcode;
       const register = operand2.toLowerCase();
       const byte = parseInt(addr, 16);
@@ -226,8 +225,7 @@ describe('CPU can run OPCODES:', () => {
         // Since a is the dest, we don't want to overwrite it when it's also the source.
         else if (register === 'a') {
           cpu.processOpcode(byte); // Run the opcode
-        }
-        else {
+        } else {
           cpu[register] = randomValue;
           cpu.processOpcode(byte); // Run the opcode
         }
@@ -236,8 +234,7 @@ describe('CPU can run OPCODES:', () => {
           // JS will happly overflow, but we don't want that for the test.
           // use `& 0xFF` to keep it 8bits.
           expect(cpu.a).to.eql((0x50 + randomValue) & 0xff);
-        }
-        else {
+        } else {
           // Since a is the dest, we don't want to overwrite it when it's also the source.
           expect(cpu.a).to.eql(0xA0);
         }
@@ -251,7 +248,7 @@ describe('CPU can run OPCODES:', () => {
       ];
 
       // run the opcodes
-      opcodes.forEach(function(opcode) {
+      opcodes.forEach((opcode) => {
         cpu.processOpcode(opcode);
       });
       expect(cpu.f & 0b0001).to.eql(0b0001);
@@ -265,7 +262,7 @@ describe('CPU can run OPCODES:', () => {
       ];
 
       // run the opcodes
-      opcodes.forEach(function(opcode) {
+      opcodes.forEach((opcode) => {
         cpu.processOpcode(opcode);
       });
       expect(cpu.f & 0b0001).to.eql(0);
@@ -279,7 +276,7 @@ describe('CPU can run OPCODES:', () => {
       ];
 
       // run the opcodes
-      opcodes.forEach(function(opcode) {
+      opcodes.forEach((opcode) => {
         cpu.processOpcode(opcode);
       });
       expect(cpu.f & 0b0010).to.eql(0b0010);
@@ -293,7 +290,7 @@ describe('CPU can run OPCODES:', () => {
       ];
 
       // run the opcodes
-      opcodes.forEach(function(opcode) {
+      opcodes.forEach((opcode) => {
         cpu.processOpcode(opcode);
       });
       expect(cpu.f & 0b0010).to.eql(0);

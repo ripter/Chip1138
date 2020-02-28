@@ -5,7 +5,8 @@ import rom from '../../../roms/flappyboy.json';
 import { pcRuntimeValues } from './utils/pcRuntimeValues.js';
 
 describe('clock', () => {
-  let cpu, memory;
+  let cpu; let
+    memory;
 
   beforeEach(() => {
     memory = new Memory(rom);
@@ -35,8 +36,6 @@ describe('clock', () => {
   });
 
   describe('PC during Flappyboy', () => {
-    let cpu, memory;
-
     beforeEach(() => {
       memory = new Memory(rom);
       cpu = new CPU({
@@ -60,56 +59,56 @@ describe('clock', () => {
     });
 
     it('3: tick(), CPU.pc = 0x0151', () => {
-      for (let i=0; i < 3; i++) {
+      for (let i = 0; i < 3; i++) {
         cpu.tick();
       }
       expect(cpu.pc).to.eql(0x0151);
     });
 
     it('4: tick(), CPU.pc = 0x0152', () => {
-      for (let i=0; i < 4; i++) {
+      for (let i = 0; i < 4; i++) {
         cpu.tick();
       }
       expect(cpu.pc).to.eql(0x0152);
     });
 
     it('5: tick(), CPU.pc = 0x0153', () => {
-      for (let i=0; i < 5; i++) {
+      for (let i = 0; i < 5; i++) {
         cpu.tick();
       }
       expect(cpu.pc).to.eql(0x0153);
     });
 
     it('6: tick(), CPU.pc = 0x0156', () => {
-      for (let i=0; i < 6; i++) {
+      for (let i = 0; i < 6; i++) {
         cpu.tick();
       }
       expect(cpu.pc).to.eql(0x0156);
     });
 
     it('7: tick(), CPU.pc = 0x0159', () => {
-      for (let i=0; i < 7; i++) {
+      for (let i = 0; i < 7; i++) {
         cpu.tick();
       }
       expect(cpu.pc).to.eql(0x0159);
     });
 
     it('8: tick(), CPU.pc = 0x015b', () => {
-      for (let i=0; i < 8; i++) {
+      for (let i = 0; i < 8; i++) {
         cpu.tick();
       }
       expect(cpu.pc).to.eql(0x015b);
     });
 
     it('9: tick(), CPU.pc = 0x015d', () => {
-      for (let i=0; i < 9; i++) {
+      for (let i = 0; i < 9; i++) {
         cpu.tick();
       }
       expect(cpu.pc).to.eql(0x015d);
     });
 
     it('10: tick(), CPU.pc = 0x015e', () => {
-      for (let i=0; i < 10; i++) {
+      for (let i = 0; i < 10; i++) {
         cpu.tick();
       }
       expect(cpu.pc).to.eql(0x015e);
@@ -118,12 +117,11 @@ describe('clock', () => {
     // Check the first 1,000 ticks and the PC values for each
     pcRuntimeValues.slice(0, 25).forEach((pcValue, tickCount) => {
       it(`${tickCount}: tick(), CPU.pc = 0x${pcValue.toString(16)}`, () => {
-        for (let i=0; i < tickCount; i++) {
+        for (let i = 0; i < tickCount; i++) {
           cpu.tick();
         }
         expect(cpu.pc).to.eql(pcValue);
       });
     });
-
   });
 });

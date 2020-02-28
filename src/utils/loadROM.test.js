@@ -1,9 +1,10 @@
 import expect from 'expect.js';
-import loadROM from './loadROM.js';
+import { loadROM } from './loadROM.js';
 import rom from '../../roms/flappyboy.json';
-import generatedROM from '../../roms/gbstudio_test.json';
+import generatedROM from '../../roms/flappyboy.rumble.json';
+// import generatedROM from '../../roms/gbstudio_test.json';
 
-describe.only('loadROM', () => {
+describe('loadROM', () => {
   let actual;
 
   describe('Flappyboy ROM', () => {
@@ -12,8 +13,8 @@ describe.only('loadROM', () => {
     });
 
     it('checks for valid datauri', () => {
-      expect(function() {
-        loadROM({data: ''});
+      expect(() => {
+        loadROM({ data: '' });
       }).to.throwException(/Error invalid datauri/);
     });
 
@@ -22,9 +23,7 @@ describe.only('loadROM', () => {
     });
 
     it('can read name', () => {
-      const title = [0x134, 0x135, 0x136, 0x137, 0x138, 0x139, 0x13a, 0x13b, 0x13c].reduce((acc, addr) => {
-        return acc + String.fromCharCode(actual[addr]);
-      }, '');
+      const title = [0x134, 0x135, 0x136, 0x137, 0x138, 0x139, 0x13a, 0x13b, 0x13c].reduce((acc, addr) => acc + String.fromCharCode(actual[addr]), '');
       expect(title).to.eql('FLAPPYBOY');
     });
   });
@@ -35,9 +34,7 @@ describe.only('loadROM', () => {
     });
 
     it('can read name', () => {
-      const title = [0x134, 0x135, 0x136, 0x137, 0x138, 0x139, 0x13a, 0x13b, 0x13c].reduce((acc, addr) => {
-        return acc + String.fromCharCode(actual[addr]);
-      }, '');
+      const title = [0x134, 0x135, 0x136, 0x137, 0x138, 0x139, 0x13a, 0x13b, 0x13c].reduce((acc, addr) => acc + String.fromCharCode(actual[addr]), '');
       expect(title).to.eql('GAME');
     });
   });

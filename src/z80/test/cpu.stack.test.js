@@ -5,7 +5,8 @@ import Memory from '../memory.js';
 import rom from '../../../roms/flappyboy.json';
 
 describe('CPU Stack', () => {
-  let cpu, memory;
+  let cpu; let
+    memory;
 
   beforeEach(() => {
     memory = new Memory(rom);

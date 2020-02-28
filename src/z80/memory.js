@@ -1,8 +1,7 @@
-import loadROM from '../utils/loadROM.js';
+import { loadROM } from '../utils/loadROM.js';
 // import { CART_TYPE } from '../const/cartType.js';
 
 class Memory {
-
   constructor(rom) {
     if (!rom) {
       throw new Error('requires ROM');
@@ -21,12 +20,10 @@ class Memory {
   readROM(address) {
     let romValue;
     // if we used `if (!value)...` we would get a hit on 0 since it's falsey.
-    if (typeof address != 'number') {
+    if (typeof address !== 'number') {
       // this could throw an error or return the whole rom. I chose return rom to avoid errors
       romValue = this.data; // returns the whole ROM loaded in
-    }
-
-    else {
+    } else {
       // get our data at the given address in
       romValue = this.data[address];
     }
@@ -35,7 +32,6 @@ class Memory {
   }
 
   readROMRange(rangeLow, rangeHigh) {
-
     // range to read from
     if (!rangeLow && !rangeHigh) {
       throw new Error('please provide a range to return');
@@ -54,7 +50,7 @@ class Memory {
     const tempArray = this.data.slice(low, high + 1);
 
     // create out new typed array
-    let rangeArray = new Uint16Array(length);
+    const rangeArray = new Uint16Array(length);
 
     // set the values of tempArray into rangeArray
     rangeArray.set(tempArray);

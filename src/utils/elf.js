@@ -7,8 +7,7 @@ export class Elf {
     // use the readInt with the correct edianness
     if (this.isLittleEdian) {
       this.readInt = buffer.readIntLE.bind(buffer);
-    }
-    else {
+    } else {
       this.readInt = buffer.readIntBE.bind(buffer);
     }
   }
@@ -18,10 +17,12 @@ export class Elf {
   get ei_data() {
     return this.buffer[0x05]; // this can't use readInt since readInt uses it.
   }
+
   /* eslint-enable camelcase */
   get isLittleEdian() {
     return this.ei_data === 1;
   }
+
   get isBigEdian() {
     return this.ei_data === 2;
   }
@@ -31,10 +32,12 @@ export class Elf {
   get ei_class() {
     return this.buffer[0x04];
   }
+
   /* eslint-enable camelcase */
   get is32() {
     return this.ei_class === 1;
   }
+
   get is64() {
     return this.ei_class === 2;
   }
@@ -56,6 +59,7 @@ export class Elf {
     // JavaScript doesn't support 64 bit numbers, so stick with 32 bit.
     return this.readInt(0x20, 4);
   }
+
   get e_phnum() {
     if (this.is32) {
       return this.readInt(0x2C, 2);
@@ -68,9 +72,9 @@ export class Elf {
 
 
 export function loadELF(filePath) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(((resolve, reject) => {
     try {
-      readFile(filePath, function(err, dataBuffer) {
+      readFile(filePath, (err, dataBuffer) => {
         // reference: https://en.wikipedia.org/wiki/Executable_and_Linkable_Format
         if (err) { reject(err); }
         // Check for the ELF header 0x7f454c46 aka ox7f ELF (in ASCII)
@@ -79,9 +83,8 @@ export function loadELF(filePath) {
 
         resolve(new Elf(dataBuffer));
       });
-    }
-    catch (err) {
+    } catch (err) {
       reject(`Unknown error loading elf at "${filePath}"\n\t${err}`);
     }
-  });
+  }));
 }

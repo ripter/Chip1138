@@ -1,5 +1,6 @@
 import { readFile, writeFile } from 'fs';
 import { Base64 } from 'js-base64';
+
 export const MEDIATYPE = 'data:application/octet-stream;base64,';
 
 /**
@@ -12,9 +13,9 @@ export function createJSONROM(binary) {
   // convert each byte into a char code so we can turn it into a base64 string.
   // const stringData = binary.reduce((acc, byte) => { return acc + String.fromCharCode(byte); }, '');
   let stringData = '';
-  for (let i=0; i < binary.length; i += 2) {
+  for (let i = 0; i < binary.length; i += 2) {
     const byte = binary[i];
-    const byte2 = binary[i+1];
+    const byte2 = binary[i + 1];
     stringData += String.fromCharCode(byte, byte2);
   }
   // convert the string into a base64 string.
@@ -26,33 +27,30 @@ export function createJSONROM(binary) {
 export default createJSONROM;
 
 export function convertROMtoJSON(filePath) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(((resolve, reject) => {
     try {
-      readFile(filePath, 'utf8', function(err, dataBuffer) {
+      readFile(filePath, 'utf8', (err, dataBuffer) => {
         if (err) { reject(err); }
 
         resolve(createJSONROM(dataBuffer));
       });
-    }
-    catch (err) {
+    } catch (err) {
       reject(`Unknown error loading ROM at "${filePath}"\n\t${err}`);
     }
-  });
+  }));
 }
 
 export function writeJSON(filePath, json) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(((resolve, reject) => {
     try {
-      writeFile(filePath, JSON.stringify(json, void 0, 4), 'utf8', function(err, dataBuffer) {
+      writeFile(filePath, JSON.stringify(json, void 0, 4), 'utf8', (err) => {
         // reference: https://en.wikipedia.org/wiki/Executable_and_Linkable_Format
         if (err) { reject(err); }
 
         resolve(filePath);
       });
-    }
-    catch (err) {
+    } catch (err) {
       reject(`Unknown error loading ROM at "${filePath}"\n\t${err}`);
     }
-
-  });
+  }));
 }
