@@ -6,3 +6,11 @@ Fantasy CPU
 
 Now with Travis
 And coveralls...
+
+# Getting Started
+
+Run tests to see if everything passes.
+
+```
+make test
+```

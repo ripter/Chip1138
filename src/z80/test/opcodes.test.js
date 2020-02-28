@@ -236,7 +236,8 @@ describe('CPU can run OPCODES:', () => {
           // JS will happly overflow, but we don't want that for the test.
           // use `& 0xFF` to keep it 8bits.
           expect(cpu.a).to.eql((0x50 + randomValue) & 0xff);
-        } else {
+        }
+        else {
           // Since a is the dest, we don't want to overwrite it when it's also the source.
           expect(cpu.a).to.eql(0xA0);
         }

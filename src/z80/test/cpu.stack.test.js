@@ -61,7 +61,7 @@ describe('CPU Stack', () => {
     results in register pair HL containing 0x3355,
     and the Stack Pointer containing 0x1002.
    */
-   describe('POP HL;', () => {
+  describe('POP HL;', () => {
     beforeEach(() => {
       cpu.sp = 0x1000;
       memory.writeROM(0x1000, 0x55);
@@ -76,10 +76,10 @@ describe('CPU Stack', () => {
     it('results in cpu.sp === 0x1002', () => {
       expect(cpu.sp).to.eql(0x1002);
     });
-   });
+  });
 
 
-   /*
+  /*
     The Stack Pointer automatically decrements before it puts something onto the stack so it is perfectly acceptable to assign it a value which points to a memory address which is one location past the end of available RAM.
     */
 });

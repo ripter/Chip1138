@@ -4,7 +4,6 @@
   "description": "A fantasy chip",
   "main": "src/index.js",
   "scripts": {
-    "cover": "./node_modules/istanbul/lib/cli.js cover _mocha",
     "start": "./node_modules/.bin/webpack-dev-server -d --progress --colors --port 3000",
     "clean": "rm -rf node_modules dist",
     "build": "make deploy",
@@ -17,19 +16,42 @@
     "url": "git+https://github.com/ripter/Chip1138.git"
   },
   "author": "",
+  "contributors": [
+    {
+      "name": "skip mcbride",
+      "email": "skip@angerbunny.com",
+      "url": "https://github.com/skipzero"
+    }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/ripter/Chip1138/issues"
   },
   "homepage": "https://github.com/ripter/Chip1138#readme",
   "devDependencies": {
-    "@babel/core": "^7.4.0",
-    "@babel/preset-env": "^7.4.2",
-    "@babel/register": "^7.4.0",
-    "eslint": "^5",
+    "@babel/core": "^7.8.6",
+    "@babel/preset-env": "^7.8.6",
+    "@babel/register": "^7.8.6",
+    "babel-loader": "^8.0.6",
+    "babel-register": "^6.26.0",
+    "coveralls": "^3.0.9",
     "expect.js": "^0.3.1",
-    "js-base64": "^2.5.1",
-    "lodash.filter": "^4.6.0",
-    "mocha": "^6.0.2"
+    "jsdom": "^16.2.0",
+    "jsdom-global": "^3.0.2",
+    "mocha": "^7.1.0",
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
+  },
+  "dependencies": {
+    "js-base64": "^2.5.2",
+    "lodash.filter": "^4.6.0"
+  },
+  "mocha": {
+    "require": [
+      "@babel/register",
+      "jsdom-global/register",
+      "expect.js"
+    ]
   }
 }

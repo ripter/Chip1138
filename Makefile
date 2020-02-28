@@ -1,4 +1,4 @@
-.PHONY: all build clean deploy debug lint test test.only test.blink
+.PHONY: all build clean deploy lint server test test.only
 NPM_BIN=./node_modules/.bin
 
 all: build test server
@@ -12,15 +12,15 @@ clean:
 
 deploy: test build
 
-debug:
-	$(NPM_BIN)/mocha --opts mocha.opts --inspect-brk
-
-lint: node_modules/
-	$(NPM_BIN)/eslint src/ 
+server: build
+	npx webpack-dev-server --open
 
 node_modules/: package.json
 	npm install
-	-touch node_modules/
+	touch node_modules/
+
+lint: node_modules/
+	npx eslint --fix src/ test/
 
 test: lint
 	$(NPM_BIN)/mocha --opts mocha.opts
@@ -28,5 +28,5 @@ test: lint
 test.only:
 	$(NPM_BIN)/mocha --opts mocha.opts
 
-test.blink:
-	$(NPM_BIN)/mocha -R @ripter/mocha-reporter-blink1
+watch:
+	$(NPM_BIN)/webpack --env.dev --progress --colors -d --watch
