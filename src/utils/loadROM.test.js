@@ -1,7 +1,7 @@
 import expect from 'expect.js';
 import { loadROM } from './loadROM.js';
 import rom from '../../roms/flappyboy.json';
-import generatedROM from '../../roms/flappyboy.rumble.json';
+// import generatedROM from '../../roms/flappyboy.rumble.json';
 // import generatedROM from '../../roms/gbstudio_test.json';
 
 describe('loadROM', () => {
@@ -24,18 +24,7 @@ describe('loadROM', () => {
 
     it('can read name', () => {
       const title = [0x134, 0x135, 0x136, 0x137, 0x138, 0x139, 0x13a, 0x13b, 0x13c].reduce((acc, addr) => acc + String.fromCharCode(actual[addr]), '');
-      expect(title).to.eql('FLAPPYBOY');
-    });
-  });
-
-  describe('GB Studio test rom', () => {
-    beforeEach(() => {
-      actual = loadROM(generatedROM);
-    });
-
-    it('can read name', () => {
-      const title = [0x134, 0x135, 0x136, 0x137, 0x138, 0x139, 0x13a, 0x13b, 0x13c].reduce((acc, addr) => acc + String.fromCharCode(actual[addr]), '');
-      expect(title).to.eql('GAME');
+      expect(title).to.eql('BITNENFER');
     });
   });
 });
