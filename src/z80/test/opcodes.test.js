@@ -89,7 +89,7 @@ describe('CPU can run OPCODES:', () => {
       });
 
       // z80 spec: "C is set if carry from bit 7; otherwise, it is reset."
-      expect(cpu.f | 0b0001).to.eql(0);
+      expect(cpu.f & 0b0001).to.eql(0);
     });
   }); // ADD
 
