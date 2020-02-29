@@ -2,7 +2,7 @@ import expect from 'expect.js';
 import Memory from '../memory.js';
 import { random8bit, randomInt } from './utils.js';
 import rom from '../../../roms/flappyboy.json';
-import romRumble from '../../../roms/flappyboy.rumble.json';
+// import romRumble from '../../../roms/flappyboy.rumble.json';
 import { CART_TYPE } from '../../../const/cartType.js';
 
 describe('Memory', () => {
@@ -46,7 +46,7 @@ describe('Memory', () => {
 
   it('can read ROM TITLE', () => {
     const actual = memory.readROMRange(0x0134, 0x13c);
-    const expected = new Uint8Array([0x46, 0x4c, 0x41, 0x50, 0x50, 0x59, 0x42, 0x4f, 0x59]);
+    const expected = new Uint8Array([0x42, 0x49, 0x54, 0x4e, 0x45, 0x4e, 0x46, 0x45, 0x52]);
     expect(actual).to.eql(expected);
   });
 
@@ -99,10 +99,10 @@ describe('Memory', () => {
       expect(memory.cartType).to.eql(CART_TYPE.ROM_ONLY);
     });
 
-    it.skip(`CART_TYPE.ROM_MBC5_RUMBLE is set when address 0x0147 has value 0x${(0x1c).toString(16)}`, () => {
-      memory = new Memory(romRumble);
-      expect(memory.cartType).to.eql(CART_TYPE.ROM_MBC5_RUMBLE);
-    });
+    // it.skip(`CART_TYPE.ROM_MBC5_RUMBLE is set when address 0x0147 has value 0x${(0x1c).toString(16)}`, () => {
+    //   memory = new Memory(romRumble);
+    //   expect(memory.cartType).to.eql(CART_TYPE.ROM_MBC5_RUMBLE);
+    // });
 
     // set the 16-bits that describes the Cartridge type, then test that the memory object returns the correct type.
     Object.keys(CART_TYPE).forEach((name) => {
