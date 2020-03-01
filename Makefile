@@ -10,7 +10,7 @@ clean:
 	-rm -r ./node_modules
 	-npm cache verify
 
-deploy: test build
+deploy: build
 	npx jest  --collectCoverage
 
 server: build
