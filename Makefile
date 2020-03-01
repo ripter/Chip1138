@@ -26,7 +26,7 @@ lint: node_modules/
 test: lint test.only
 
 test.only:
-	npx jest 
+	npx jest --watchAll
 
 watch:
 	$(NPM_BIN)/webpack --env.dev --progress --colors -d --watch
