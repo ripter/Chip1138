@@ -25,7 +25,6 @@ describe('convertROMtoJSON', () => {
   //
   // TODO: Real test, the function does *NOT* work
   //
-  
   // it.skip('writes json file', () => convertROMtoJSON(ROM_PATH)
   //   .then(writeJSON.bind(null, JSON_PATH))
   //   .then((actual) => {
