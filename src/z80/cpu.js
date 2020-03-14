@@ -205,24 +205,18 @@ class CPU {
    * @return {16Bit} new value of cpu.pc
    */
   jump(opcode, byte1, byte2) {
-    // console.log('\tjump', arguments);
     this.pc = (byte2 << 8) | byte1;
+    console.group('\tjump', (this.pc).toString(16));
   }
 
   tick() {
-    const data = this.memory.readROM(this.pc);
-    // const opcode = OPCODE[data];
+    const opcode = this.memory.readROM(this.pc);
+    const opcodeObj = OPCODE[opcode];
+    const { length } = opcodeObj;
     // console.log('\nprocessing', opcode.mnemonic);
-    this.processOpcode(data);
-    // console.log('end processing\n\n');
-    // console.log(this.toHex(this.pc), this.memory.isColor);
-    // JUMP
-    // if (data === 0xc3) {
-    //   for (let i = 1; i < opcode.length; i++) {
-    //     this.processOpcode(this.memory.readROM(this.pc + i));
-    //   }
-    //   return;
-    // }
+    for (let i = 0; i <= length; i++) {
+      this.processOpcode(opcode);
+    }
     this.pc += 1;
   }
 
