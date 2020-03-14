@@ -16,10 +16,8 @@ describe('clock', () => {
   });
 
   describe('tick()', () => {
-    it('first tick() that does nothing but increment pc.', () => {
-      // console.log('\none tick() before, cpu.pc', `0x${cpu.pc.toString(16)}`, 'data at pc', `0x${memory.readROM(cpu.pc).toString(16)}`);
+    it('first tick() opcode is NOP, so it only increments PC', () => {
       cpu.tick();
-      // console.log('\none tick() after, cpu.pc', `0x${cpu.pc.toString(16)}`, 'data at pc', `0x${memory.readROM(cpu.pc).toString(16)}`);
       expect(cpu.pc).to.eql(0x0101);
     });
 
@@ -32,6 +30,7 @@ describe('clock', () => {
       expect(cpu.pc).to.eql(0x0101);
       // Opcode at 0x0101 is JUMP [0xC3].
       // This single call to tick will run the full opcode, which is several bytes long.
+      // Full Opcode is: 0xC3 0x56 0x1
       cpu.tick();
       // The PC should now have the address provided by JUMP.
       expect(cpu.pc).to.eql(0x0157);
