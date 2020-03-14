@@ -4,7 +4,7 @@ import Memory from '../memory.js';
 import rom from '../../../roms/flappyboy.json';
 // import { pcRuntimeValues } from './utils/pcRuntimeValues.js';
 
-describe.skip('clock', () => {
+describe('clock', () => {
   let cpu; let
     memory;
 
@@ -23,15 +23,18 @@ describe.skip('clock', () => {
       expect(cpu.pc).to.eql(0x0101);
     });
 
-    it('second tick() that performs a JUMP [0xC3]', () => {
-      // console.log('\ntwo tick() before, cpu.pc', `0x${cpu.pc.toString(16)}`, 'data at pc', `0x${memory.readROM(cpu.pc).toString(16)}`);
-      // cpu.pc = 0x0100
-      cpu.tick(); // Run one tick, which will run JUMP [0xC3]
-      // console.log('\ntwo tick() after one, cpu.pc', `0x${cpu.pc.toString(16)}`, 'data at pc', `0x${memory.readROM(cpu.pc).toString(16)}`);
-      // cpu.pc = 0x0101; // opcode at this address is JUMP [0xC3]
-      cpu.tick(); // Run one tick, which will run JUMP [0xC3]
-      // console.log('\ntwo tick() after both, cpu.pc', `0x${cpu.pc.toString(16)}`, 'data at pc', `0x${memory.readROM(cpu.pc).toString(16)}`);
-      expect(cpu.pc).to.eql(0x0150); // The new pc after the jump.
+    it.only('second tick() that performs a JUMP [0xC3]', () => {
+      // PC starts at 0100
+      expect(cpu.pc).to.eql(0x0100);
+      // First tick will read the opcode at 0x0100
+      cpu.tick();
+      // PC gets incremented by tick.
+      expect(cpu.pc).to.eql(0x0101);
+      // Runs the next opcode at 0x0100.
+      // This completes the JUMP [0xC3] opcode, which updates the PC.
+      cpu.tick();
+      // Check that the PC has the new location from the JUMP opcode.
+      expect(cpu.pc).to.eql(0x0150);
     });
   });
 
