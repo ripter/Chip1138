@@ -1,12 +1,17 @@
 .PHONY: all build clean deploy lint server test test.only
 NPM_BIN=./node_modules/.bin
 
-all: build lint server
+all: build test server
 
 build: node_modules/
-	npx webpack
 
-deploy: test build
+clean:
+	-rm -f package-lock.json
+	-rm -r ./node_modules
+	-npm cache verify
+
+deploy: build
+	npx jest  --collectCoverage
 
 server: build
 	npx webpack-dev-server --open
@@ -16,18 +21,12 @@ node_modules/: package.json
 	touch node_modules/
 
 lint: node_modules/
-	npx eslint --fix src/ test/
+	npx eslint src/ test/
 
-test: lint
-	npx mocha --opts mocha.opts
+test: lint test.only
 
 test.only:
-	npx mocha --opts mocha.opts
+	npx jest --watchAll
 
 watch:
 	$(NPM_BIN)/webpack --env.dev --progress --colors -d --watch
-
-clean:
-	-rm -f package-lock.json
-	-rm -r ./node_modules
-	-npm cache verify
