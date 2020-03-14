@@ -33,7 +33,7 @@ describe('clock', () => {
       // Full Opcode is: 0xC3 0x56 0x1
       cpu.tick();
       // The PC should now have the address provided by JUMP.
-      expect(cpu.pc).to.eql(0x0157);
+      expect(cpu.pc).to.eql(0x0156);
     });
   });
 
