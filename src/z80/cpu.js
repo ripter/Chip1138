@@ -210,12 +210,13 @@ class CPU {
   }
 
   tick() {
-    const opcode = this.memory.readROM(this.pc);
+    let opcode = this.memory.readROM(this.pc);
     const opcodeObj = OPCODE[opcode];
     const { length } = opcodeObj;
     // console.log('\nprocessing', opcode.mnemonic);
-    for (let i = 0; i <= length; i++) {
+    for (let i = 0; i === length; i++) {
       this.processOpcode(opcode);
+      opcode += 1;
     }
     this.pc += 1;
   }
@@ -230,7 +231,6 @@ class CPU {
     // Add the new byte to the buffer.
     opcodeBuffer.push(opcode);
 
-    console.group('::::', (opcode).toString(16), opcodeBuffer);
     // The first byte is the opcode, the rest is data.
     // So when we get the opcode metadata, get it from the frist byte.
     const meta = OPCODE[opcodeBuffer[0]];
