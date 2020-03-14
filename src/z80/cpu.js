@@ -206,7 +206,7 @@ class CPU {
    */
   jump(opcode, byte1, byte2) {
     this.pc = (byte2 << 8) | byte1;
-    console.group('\tjump', (this.pc).toString(16));
+    // console.group('\tjump', (this.pc).toString(16));
   }
 
   tick() {
@@ -230,6 +230,7 @@ class CPU {
     // Add the new byte to the buffer.
     opcodeBuffer.push(opcode);
 
+    console.group('::::', (opcode).toString(16), opcodeBuffer);
     // The first byte is the opcode, the rest is data.
     // So when we get the opcode metadata, get it from the frist byte.
     const meta = OPCODE[opcodeBuffer[0]];
