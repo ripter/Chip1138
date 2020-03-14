@@ -26,15 +26,15 @@ describe('clock', () => {
     it.only('second tick() that performs a JUMP [0xC3]', () => {
       // PC starts at 0100
       expect(cpu.pc).to.eql(0x0100);
-      // First tick will read the opcode at 0x0100
+      // First tick will read the opcode at 0x0100, in this case it's NOP.
       cpu.tick();
-      // PC gets incremented by tick.
+      // tick updates PC each call.
       expect(cpu.pc).to.eql(0x0101);
-      // Runs the next opcode at 0x0100.
-      // This completes the JUMP [0xC3] opcode, which updates the PC.
+      // Opcode at 0x0101 is JUMP [0xC3].
+      // This single call to tick will run the full opcode, which is several bytes long.
       cpu.tick();
-      // Check that the PC has the new location from the JUMP opcode.
-      expect(cpu.pc).to.eql(0x0150);
+      // The PC should now have the address provided by JUMP.
+      expect(cpu.pc).to.eql(0x0157);
     });
   });
 

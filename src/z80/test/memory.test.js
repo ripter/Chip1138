@@ -136,4 +136,23 @@ describe('Memory', () => {
       expect(memory.isSuper).to.eql(false);
     });
   });
+
+  describe.only('flappyboy dump test', () => {
+    it('0x0100', () => {
+      const actual = memory.readROM(0x0100);
+      expect(actual).to.eql(0x0);
+    });
+    it('0x0101', () => {
+      const actual = memory.readROM(0x0101);
+      expect(actual).to.eql(0xc3);
+    });
+    it('0x0102', () => {
+      const actual = memory.readROM(0x0102);
+      expect(actual).to.eql(0x56);
+    });
+    it('0x0103', () => {
+      const actual = memory.readROM(0x0103);
+      expect(actual).to.eql(0x1);
+    });
+  });
 });
