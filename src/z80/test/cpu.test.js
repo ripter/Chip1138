@@ -4,7 +4,6 @@ import { random8bit } from './utils.js';
 import Memory from '../memory.js';
 import rom from '../../../roms/flappyboy.json';
 
-
 describe('CPU', () => {
   let cpu; let
     memory;
@@ -40,7 +39,6 @@ describe('CPU', () => {
       cpu.h = 0xfff; // 4095 should overflow on 8-bit
       expect(cpu.h).to.eql(0xff); // largest 8-bit number
     });
-
 
     it('cpu.f defaults to 0xB0', () => {
       expect(cpu.f).to.eql(0xB0);
@@ -127,7 +125,6 @@ describe('CPU', () => {
       expect(cpu.a).to.eql(byte1);
       expect(cpu.f).to.eql(byte2);
     });
-
 
     it('cpu.bc defaults to 0x0013', () => {
       expect(cpu.bc).to.eql(0x0013);

@@ -57,7 +57,6 @@ describe('Memory', () => {
     expect(actual).to.eql(byte);
   });
 
-
   describe('8 kilobyte Internal Echo', () => {
     const bank1 = [0xE000, 0xFE00];
     const bank2 = [0xC000, 0xDE00];
@@ -137,7 +136,7 @@ describe('Memory', () => {
     });
   });
 
-  describe.only('flappyboy dump test', () => {
+  describe('flappyboy dump test', () => {
     it('0x0100', () => {
       const actual = memory.readROM(0x0100);
       expect(actual).to.eql(0x0);

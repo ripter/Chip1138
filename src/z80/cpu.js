@@ -225,7 +225,6 @@ class CPU {
     return `0x${(val).toString(16)}`;
   }
 
-
   processOpcode(opcode) {
     const { opcodeBuffer } = this;
     // Add the new byte to the buffer.

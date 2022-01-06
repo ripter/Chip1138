@@ -1,5 +1,5 @@
 module.exports = {
- extends: 'eslint:recommended',
+  extends: 'eslint:recommended',
   env: {
     browser: true,
     es6: true,
@@ -14,5 +14,5 @@ module.exports = {
     // for constructor tests
     'no-new': 0,
     'no-loop-func': 0,
-  }
-}
+  },
+};

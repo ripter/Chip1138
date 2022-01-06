@@ -23,7 +23,6 @@ describe('CPU Stack', () => {
     expect(cpu.pc).to.eql(0x0100); // default in the docs
   });
 
-
   /*
     If the AF Register pair contains 0x2233 and the Stack Pointer contains 0x1007,
     then upon the execution of a PUSH AF instruction,
@@ -78,7 +77,6 @@ describe('CPU Stack', () => {
       expect(cpu.sp).to.eql(0x1002);
     });
   });
-
 
   /*
     The Stack Pointer automatically decrements before it puts something onto the stack so it is perfectly acceptable to assign it a value which points to a memory address which is one location past the end of available RAM.

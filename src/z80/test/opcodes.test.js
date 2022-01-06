@@ -6,7 +6,6 @@ import { OPCODE } from '../../../const/opcode.js';
 import rom from '../../../roms/flappyboy.json';
 import { random8bit } from './utils.js';
 
-
 describe('CPU can run OPCODES:', () => {
   let cpu; let opcodeList; let
     memory;
@@ -23,7 +22,6 @@ describe('CPU can run OPCODES:', () => {
     opcodeList = filter(OPCODE, { mnemonic: 'ADD', length: 1 });
     // temp limit to single register
     opcodeList = filter(opcodeList, ({ operand1, operand2 }) => operand1.length === 1 && operand2.length === 1);
-
 
     opcodeList.forEach((opcode) => {
       const {
@@ -267,7 +265,6 @@ describe('CPU can run OPCODES:', () => {
       });
       expect(cpu.f & 0b0001).to.eql(0);
     });
-
 
     it('it sets the half carry flag', () => {
       const opcodes = [

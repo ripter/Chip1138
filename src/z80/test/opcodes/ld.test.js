@@ -6,7 +6,6 @@ import { OPCODE } from '../../../../const/opcode.js';
 import { addTestData, random8bit, random16bit } from '../utils.js';
 import rom from '../../../../roms/flappyboy.json';
 
-
 describe('ld.test.js', () => {
   let cpu; let opcodes; let
     memory;
@@ -18,7 +17,6 @@ describe('ld.test.js', () => {
       memory,
     });
   });
-
 
   describe('loads 8-bit value into 8-bit register.', () => {
     opcodes = filter(OPCODE, { mnemonic: 'LD', length: 2, operand2: 'd8' });
@@ -69,7 +67,6 @@ describe('ld.test.js', () => {
     });
   }); // copies value from one register into another register.
 
-
   describe('loads 16-bit value into 16-bit register', () => {
     opcodes = filter(OPCODE, { mnemonic: 'LD', length: 3, operand2: 'd16' });
     // limit to opcodes that work with basic 16-bit registers
@@ -92,7 +89,6 @@ describe('ld.test.js', () => {
       });
     });
 
-
     it('LD SP, HL; loads value at cpu.hl into cpu.sp [0xf9]', () => {
       const randomByte = random16bit();
       cpu.hl = randomByte;
@@ -101,7 +97,6 @@ describe('ld.test.js', () => {
       expect(cpu.sp).to.eql(randomByte);
     });
   }); // loads 8-bit value into 8-bit register
-
 
   describe('using test ROM', () => {
     // If register pair HL contains the number 75A1h,

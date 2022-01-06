@@ -70,7 +70,6 @@ export class Elf {
   /* eslint-enable camelcase */
 }
 
-
 export function loadELF(filePath) {
   return new Promise(((resolve, reject) => {
     try {

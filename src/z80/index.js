@@ -30,13 +30,11 @@
 //   }
 // });
 
-
 // print the rom title
 // const title = [0x134, 0x135, 0x136, 0x137, 0x138, 0x139, 0x13a, 0x13b, 0x13c].reduce((acc, addr) => {
 //   return acc + String.fromCharCode(romData[addr]);
 // }, '');
 // console.log('rom title: ', title);
-
 
 // const cpu = new CPU();
 // const opcodes = [
