@@ -1,15 +1,20 @@
+import { readFile } from 'fs/promises';
+import { normalize, resolve } from 'path';
 import expect from 'expect.js';
-import Memory from '../memory.js';
-import { random8bit, randomInt } from './utils.js';
-import rom from '../../../roms/flappyboy.json';
+
+import Memory from '../src/memory.mjs';
+import { random8bit, randomInt } from './utils.mjs';
+// import rom from '../../../roms/flappyboy.json';
 // import romRumble from '../../../roms/flappyboy.rumble.json';
-import { CART_TYPE } from '../../../const/cartType.js';
+import { CART_TYPE } from '../const/cartType.mjs';
+
+const ROM = JSON.parse(await readFile(resolve(normalize('./roms/flappyboy.json'))));
 
 describe('Memory', () => {
   let memory;
 
   beforeEach(() => {
-    memory = new Memory(rom);
+    memory = new Memory(ROM);
   });
 
   it('requires a ROM', () => {

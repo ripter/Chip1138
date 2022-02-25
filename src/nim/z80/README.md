@@ -1,6 +1,0 @@
-
-## Test
-```
-$ nimble test
-```
-

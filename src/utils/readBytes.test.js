@@ -143,13 +143,4 @@ describe('readBytes', () => {
       });
     });
   });
-
-  it.skip('8 bytes: Little Edian', () => {
-    actual = readBytes(true, buffer, 0, 8);
-    expect(actual).to.eql(0xDDCCBBAA464c457f);
-  });
-  it.skip('8 bytes: Big Edian', () => {
-    actual = readBytes(false, buffer, 0, 8);
-    expect(actual).to.eql(0x7f454c46AABBCCDD);
-  });
 });

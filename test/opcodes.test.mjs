@@ -1,17 +1,22 @@
+import { readFile } from 'fs/promises';
+import { normalize, resolve } from 'path';
 import expect from 'expect.js';
 import filter from 'lodash.filter';
-import CPU from '../cpu.js';
-import Memory from '../memory.js';
-import { OPCODE } from '../../../const/opcode.js';
-import rom from '../../../roms/flappyboy.json';
-import { random8bit } from './utils.js';
+
+import CPU from '../src/cpu.mjs';
+import Memory from '../src/memory.mjs';
+import { OPCODE } from '../const/opcode.mjs';
+// import rom from '../../../roms/flappyboy.json';
+import { random8bit } from './utils.mjs';
+
+const ROM = JSON.parse(await readFile(resolve(normalize('./roms/flappyboy.json'))));
 
 describe('CPU can run OPCODES:', () => {
   let cpu; let opcodeList; let
     memory;
 
   beforeEach(() => {
-    memory = new Memory(rom);
+    memory = new Memory(ROM);
     cpu = new CPU({
       memory,
     });

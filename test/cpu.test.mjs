@@ -1,8 +1,12 @@
+import { readFile } from 'fs/promises';
+import { normalize, resolve } from 'path';
 import expect from 'expect.js';
-import CPU from '../cpu.js';
-import { random8bit } from './utils.js';
-import Memory from '../memory.js';
-import rom from '../../../roms/flappyboy.json';
+
+import CPU from '../src/cpu.mjs';
+import { random8bit } from './utils.mjs';
+import Memory from '../src/memory.mjs';
+// import rom from '../../../roms/flappyboy.json';
+const ROM = JSON.parse(await readFile(resolve(normalize('./roms/flappyboy.json'))));
 
 describe('CPU', () => {
   let cpu; let
@@ -10,7 +14,7 @@ describe('CPU', () => {
 
   beforeEach(() => {
     // create a new blank CPU for each test.
-    memory = new Memory(rom);
+    memory = new Memory(ROM);
     cpu = new CPU({
       memory,
     });

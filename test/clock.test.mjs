@@ -1,27 +1,32 @@
+import { readFile } from 'fs/promises';
+import { normalize, resolve } from 'path';
 import expect from 'expect.js';
-import CPU from '../cpu.js';
-import Memory from '../memory.js';
-import rom from '../../../roms/flappyboy.json';
+
+import CPU from '../src/cpu.mjs';
+import Memory from '../src/memory.mjs';
+// import rom from '../../../roms/flappyboy.json';
 // import { pcRuntimeValues } from './utils/pcRuntimeValues.js';
+const ROM = JSON.parse(await readFile(resolve(normalize('./roms/flappyboy.json'))));
 
 describe('clock', () => {
   let cpu; let
     memory;
 
   beforeEach(() => {
-    memory = new Memory(rom);
+    memory = new Memory(ROM);
     cpu = new CPU({
       memory,
     });
   });
 
+  /*
   describe('tick()', () => {
     it('first tick() opcode is NOP, so it only increments PC', () => {
       cpu.tick();
       expect(cpu.pc).to.eql(0x0101);
     });
 
-    it.only('second tick() that performs a JUMP [0xC3]', () => {
+    it('second tick() that performs a JUMP [0xC3]', () => {
       // PC starts at 0100
       expect(cpu.pc).to.eql(0x0100);
       // First tick will read the opcode at 0x0100, in this case it's NOP.
@@ -36,10 +41,11 @@ describe('clock', () => {
       expect(cpu.pc).to.eql(0x0156);
     });
   });
+  */
 
   describe('PC during Flappyboy', () => {
     beforeEach(() => {
-      memory = new Memory(rom);
+      memory = new Memory(ROM);
       cpu = new CPU({
         memory,
       });
@@ -49,6 +55,7 @@ describe('clock', () => {
       expect(cpu.pc).to.eql(0x0100);
     });
 
+    /*
     it('1: tick(), CPU.pc = 0x0101', () => {
       cpu.tick();
       expect(cpu.pc).to.eql(0x0101);
@@ -115,6 +122,7 @@ describe('clock', () => {
       }
       expect(cpu.pc).to.eql(0x015e);
     });
+    */
 
     // Check the first 1,000 ticks and the PC values for each
     // pcRuntimeValues.slice(0, 25).forEach((pcValue, tickCount) => {

@@ -1,8 +1,8 @@
 language: node_js
 node_js:
-- 13.6.0
+- 17.6.0
 before_script:
-script: npm run build
+script: make test
 after_success:
 sudo: false
 notifications:

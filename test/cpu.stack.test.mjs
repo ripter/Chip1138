@@ -1,15 +1,19 @@
+import { readFile } from 'fs/promises';
+import { normalize, resolve } from 'path';
 import expect from 'expect.js';
-import CPU from '../cpu.js';
-import Memory from '../memory.js';
+
+import CPU from '../src/cpu.mjs';
+import Memory from '../src/memory.mjs';
 // import { random8bit } from './utils.js';
-import rom from '../../../roms/flappyboy.json';
+// import rom from '../../../roms/flappyboy.json';
+const ROM = JSON.parse(await readFile(resolve(normalize('./roms/flappyboy.json'))));
 
 describe('CPU Stack', () => {
   let cpu; let
     memory;
 
   beforeEach(() => {
-    memory = new Memory(rom);
+    memory = new Memory(ROM);
     cpu = new CPU({
       memory,
     });

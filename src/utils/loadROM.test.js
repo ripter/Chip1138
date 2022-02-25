@@ -1,8 +1,9 @@
 import expect from 'expect.js';
 import { loadROM } from './loadROM.js';
-import rom from '../../roms/flappyboy.json';
+// import rom from '../../roms/flappyboy.json';
 // import generatedROM from '../../roms/flappyboy.rumble.json';
 // import generatedROM from '../../roms/gbstudio_test.json';
+const rom = null;
 
 describe('loadROM', () => {
   let actual;

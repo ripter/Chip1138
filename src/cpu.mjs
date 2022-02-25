@@ -1,7 +1,7 @@
 /**
  * Virtual CPU for the Gameboy Color; a modified z80
  */
-import { OPCODE } from '../../const/opcode.js';
+import { OPCODE } from '../const/opcode.mjs';
 
 class CPU {
   constructor({ memory }) {
@@ -211,8 +211,7 @@ class CPU {
 
   tick() {
     let opcode = this.memory.readROM(this.pc);
-    const opcodeObj = OPCODE[opcode];
-    const { length } = opcodeObj;
+    const length = OPCODE[opcode]?.length ?? 0;
     // console.log('\nprocessing', opcode.mnemonic);
     for (let i = 0; i === length; i++) {
       this.processOpcode(opcode);

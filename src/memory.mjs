@@ -1,4 +1,4 @@
-import { loadROM } from '../utils/loadROM.js';
+import { loadROM } from './utils/loadROM.mjs';
 // import { CART_TYPE } from '../const/cartType.js';
 
 class Memory {
