@@ -52,21 +52,35 @@ describe('clock', () => {
     });
 
     it('0: tick(), CPU.pc = 0x0100', () => {
+      // PC starts at 0x0100
       expect(cpu.pc).to.eql(0x0100);
+      // In this ROM (and in many Gamebody ROMs) the first instruction is a NOP.
+      expect(memory.readROM(cpu.pc)).to.eql(0);
+    });
+
+    it('1: tick(), CPU.pc = 0x0101', () => {
+      cpu.tick();
+      // PC + 1 from the starting position.
+      expect(cpu.pc).to.eql(0x0101);
+      // In this ROM (and in many Gamebody ROMs) the second instruction is a JUMP.
+      expect(memory.readROM(cpu.pc)).to.eql(0xC3); // JUMP
     });
 
     /*
-    it('1: tick(), CPU.pc = 0x0101', () => {
+    it.only('2: tick(), CPU.pc = 0x0150', () => {
+      // First tick increase the PC by 1.
       cpu.tick();
       expect(cpu.pc).to.eql(0x0101);
-    });
+      expect(memory.readROM(cpu.pc)).to.eql(0xC3); // JUMP
 
-    it('2: tick(), CPU.pc = 0x0150', () => {
+      // Second tick performs the JUMP
       cpu.tick();
-      cpu.tick();
+      expect(memory.readROM(cpu.pc)).to.eql(0x56);
       expect(cpu.pc).to.eql(0x0150);
     });
+    */
 
+    /*
     it('3: tick(), CPU.pc = 0x0151', () => {
       for (let i = 0; i < 3; i++) {
         cpu.tick();

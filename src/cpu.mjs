@@ -478,6 +478,12 @@ class CPU {
     this.memory16bit[4] = value;
   }
 
+  /**
+   * The program counter holds the 16-bit address of the current instruction being fetched from memory. 
+   * The Program Counter is automatically incre- mented after its contents are transferred to the address lines. 
+   * When a program jump occurs, the new value is automatically placed in the Program Counter, overriding the incrementer.
+   * 0x0100 is the starting position used by the Gameboy.
+   */
   get pc() {
     return this.memory16bit[5] || 0x0100;
   }
