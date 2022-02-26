@@ -132,11 +132,30 @@ describe('CPU can run OPCODES:', () => {
   }); // SUB
 
   describe('JUMP:', () => {
-    it('[0xC3] to address', () => {
+    beforeEach(() => {
+      // Load some JUMP sequences into memory.      
+      // JP 0x0110
+      memory.writeROM(0x0100, 0xc3);
+      memory.writeROM(0x0101, 0x10);
+      memory.writeROM(0x0102, 0x01);
+
+    });
+
+    it('[0xC3] JP nn: Sets the Program Counter to a new 16-bit address.', () => {
       cpu.processOpcode(0xc3); // JUMP opcode
-      cpu.processOpcode(0x22); // address one
-      cpu.processOpcode(0xaa); // address two
+      // The first operand in this assembled object code is the low-order byte of a two-byte address.
+      cpu.processOpcode(0x22); // address
+      cpu.processOpcode(0xaa); // address
       expect(cpu.pc).to.eql(0xaa22);
+    });
+
+    it.only('tick() runs the entire JP nn Instruction Sequence.', () => {
+      // JP nn at 0x0100
+      expect(cpu.pc).to.eql(0x0100);
+      // tick should load the full instruction sequence.
+      cpu.tick();
+      // PC should now be at the jump address.
+      expect(cpu.pc).to.eql(0x0110);
     });
   }); // JUMP:
 
