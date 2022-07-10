@@ -212,12 +212,12 @@ class CPU {
   tick() {
     let opcode = this.memory.readROM(this.pc);
     const length = OPCODE[opcode]?.length ?? 0;
-    // console.log('\nprocessing', opcode.mnemonic);
+    
     for (let i = 0; i === length; i++) {
       this.processOpcode(opcode);
       opcode += 1;
     }
-    this.pc += 1;
+    this.pc += length;
   }
 
   toHex(val) {
