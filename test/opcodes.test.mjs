@@ -138,7 +138,6 @@ describe('CPU can run OPCODES:', () => {
       memory.writeROM(0x0100, 0xc3);
       memory.writeROM(0x0101, 0x10);
       memory.writeROM(0x0102, 0x01);
-
     });
 
     it('[0xC3] JP nn: Sets the Program Counter to a new 16-bit address.', () => {
@@ -149,7 +148,7 @@ describe('CPU can run OPCODES:', () => {
       expect(cpu.pc).to.eql(0xaa22);
     });
 
-    it.only('tick() runs the entire JP nn Instruction Sequence.', () => {
+    it('tick() runs the entire JP nn Instruction Sequence.', () => {
       // JP nn at 0x0100
       expect(cpu.pc).to.eql(0x0100);
       // tick should load the full instruction sequence.
