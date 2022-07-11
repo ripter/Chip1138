@@ -213,11 +213,12 @@ class CPU {
     let opcode = this.memory.readROM(this.pc);
     const length = OPCODE[opcode]?.length ?? 0;
     
-    for (let i = 0; i === length; i++) {
+    for (let i = 0; i < length; i++) {
+      // increment pc before processing opcode so it can alter the pc value.
+      this.pc += 1; 
       this.processOpcode(opcode);
-      opcode += 1;
+      opcode = this.memory.readROM(this.pc);
     }
-    this.pc += length;
   }
 
   toHex(val) {
