@@ -206,7 +206,8 @@ class CPU {
    */
   jump(opcode, byte1, byte2) {
     this.pc = (byte2 << 8) | byte1;
-    // console.group('\tjump', (this.pc).toString(16));
+    console.log('************************\tjump', (this.pc).toString(16));
+    return 'testttt';
   }
 
   tick() {
@@ -480,8 +481,8 @@ class CPU {
   }
 
   /**
-   * The program counter holds the 16-bit address of the current instruction being fetched from memory. 
-   * The Program Counter is automatically incre- mented after its contents are transferred to the address lines. 
+   * The program counter holds the 16-bit address of the current instruction being fetched from memory.
+   * The Program Counter is automatically incre- mented after its contents are transferred to the address lines.
    * When a program jump occurs, the new value is automatically placed in the Program Counter, overriding the incrementer.
    * 0x0100 is the starting position used by the Gameboy.
    */

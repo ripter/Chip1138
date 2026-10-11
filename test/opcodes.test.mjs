@@ -133,7 +133,7 @@ describe('CPU can run OPCODES:', () => {
 
   describe('JUMP:', () => {
     beforeEach(() => {
-      // Load some JUMP sequences into memory.      
+      // Load some JUMP sequences into memory.
       // JP 0x0110
       memory.writeROM(0x0100, 0xc3);
       memory.writeROM(0x0101, 0x10);
