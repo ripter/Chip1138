@@ -127,6 +127,7 @@ class Z80 {
     const meta = OPCODE[opcode];
     const source = meta.operand2.toLowerCase();
     let value;
+    console.log('ADC', source, byte1);
 
     switch (source) {
       case 'd8':
@@ -166,6 +167,7 @@ class Z80 {
     const dest = meta.operand1.toLowerCase();
     const source = meta.operand2.toLowerCase();
     let value;
+    console.log('ADD', dest, source, byte1);
 
     switch (source) {
       case 'd8':
@@ -196,6 +198,7 @@ class Z80 {
     const meta = OPCODE[opcode];
     const source = meta.operand1.toLowerCase();
     const value = this[source];
+    console.log('SUB', source, value);
 
     this.a -= value;
 
@@ -218,6 +221,7 @@ class Z80 {
     const dest = meta.operand1.toLowerCase();
     const source = meta.operand2.toLowerCase();
     let value;
+    console.log('LD', dest, source, byte1, byte2);
 
     switch (source) {
       case 'd8':
@@ -239,6 +243,7 @@ class Z80 {
   inc(opcode) {
     const meta = OPCODE[opcode];
     const dest = meta.operand1.toLowerCase();
+    console.log('INC', dest);
 
     if (dest === '(hl)') {
       let value = this.memory.readROM(this.hl);
@@ -258,6 +263,7 @@ class Z80 {
   dec(opcode) {
     const meta = OPCODE[opcode];
     const dest = meta.operand1.toLowerCase();
+    console.log('DEC', dest);
 
     if (dest === '(hl)') {
       let value = this.memory.readROM(this.hl);
@@ -278,11 +284,13 @@ class Z80 {
 
   jump(opcode, byte1, byte2) {
     this.pc = (byte2 << 8) | byte1;
+    console.log('JUMP', this.pc);
   }
 
   tick() {
     let opcode = this.memory.readROM(this.pc);
     const length = OPCODE[opcode]?.length ?? 0;
+    console.log('TICK', this.pc, opcode, length);
 
     for (let i = 0; i < length; i++) {
       this.pc += 1;
@@ -294,6 +302,7 @@ class Z80 {
   processOpcode(opcode) {
     const opcodeBuffer = this.opcodeBuffer;
     opcodeBuffer.push(opcode);
+    console.log('PROCESS OPCODE', opcodeBuffer, this.pc);
 
     const meta = OPCODE[opcodeBuffer[0]];
     const { length } = meta;
