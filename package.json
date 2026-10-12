@@ -8,6 +8,7 @@
     "node": "26.11.1"
   },
   "scripts": {
+    "preinstall": "echo '\\x1b[31m\\x1b[1m**** USE NODE 26.11.1 ****\\x1b[0m \\n \\x1b[34mPlease install 26.11.1 or higher. If you have nvm installed or another node version manager, it might have already switched.\\x1b[0m'",
     "lint": "make lint",
     "test": "make test"
   },
