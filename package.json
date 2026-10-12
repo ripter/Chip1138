@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "description": "A fantasy chip",
   "main": "src/index.js",
+  "engines": {
+    "npm": "11.20.0",
+    "node": "26.11.1"
+  },
   "scripts": {
     "lint": "make lint",
     "test": "make test"
@@ -40,5 +44,9 @@
   },
   "dependencies": {
     "js-base64": "^3.7.2"
+  },
+  "allowScripts": {
+    "@parcel/watcher@2.6.0": true,
+    "unrs-resolver@1.12.2": true
   }
 }
