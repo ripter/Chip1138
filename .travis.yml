@@ -1,9 +1,9 @@
 language: node_js
 node_js:
 - 25.9.0
-before_script:
+:
 script: make test
-after_success:
+
 sudo: false
 notifications:
   slack:

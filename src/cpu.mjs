@@ -124,23 +124,6 @@ class CPU {
     this[dest] = value;
   }
 
-  // -1 a register or memory value
-  dec(opcode) {
-    const meta = OPCODE[opcode];
-    const dest = meta.operand1.toLowerCase();
-
-    // HL means change the value in memory
-    if (dest === '(hl)') {
-      let value = this.memory.readROM(this.hl);
-      value -= 1;
-      this.memory.writeROM(this.hl, value);
-    }
-    // change in register
-    else {
-      this[dest] -= 1;
-    }
-  }
-
   // +1 a register or memory values
   inc(opcode) {
     const meta = OPCODE[opcode];
@@ -155,6 +138,23 @@ class CPU {
     // change in register
     else {
       this[dest] += 1;
+    }
+  }
+
+  // -1 a register or memory value
+  dec(opcode) {
+    const meta = OPCODE[opcode];
+    const dest = meta.operand1.toLowerCase();
+
+    // HL means change the value in memory
+    if (dest === '(hl)') {
+      let value = this.memory.readROM(this.hl);
+      value -= 1;
+      this.memory.writeROM(this.hl, value);
+    }
+    // change in register
+    else {
+      this[dest] -= 1;
     }
   }
 

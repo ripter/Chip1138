@@ -1,6 +1,9 @@
 import { loadROM } from './utils/loadROM.mjs';
 // import { CART_TYPE } from '../const/cartType.js';
 
+const rom = JSON.parse(await readFile(resolve(normalize('./roms/flappyboy.json'))));
+
+
 class Memory {
   constructor(rom) {
     if (!rom) {
