@@ -39,6 +39,10 @@
     "eslint": "^10.12.0",
     "expect.js": "^0.3.1",
     "jest": "^30.5.2",
+||||||| parent of b68041b (Bump braces and jest)
+    "globals": "^17.13.0",
+    "jest": "^30.5.2",
+"jest": "^30.5.2",
     "lodash.filter": "^4.6.0",
     "mocha": "^12.0.3"
   },
