@@ -1,9 +1,9 @@
+import { readFile } from 'fs/promises';
+import { normalize, resolve } from 'path';
 import expect from 'expect.js';
-import { loadROM } from './loadROM.js';
-// import rom from '../../roms/flappyboy.json';
-// import generatedROM from '../../roms/flappyboy.rumble.json';
-// import generatedROM from '../../roms/gbstudio_test.json';
-const rom = null;
+import { loadROM } from './loadROM.mjs';
+
+const rom = JSON.parse(await readFile(resolve(normalize('./roms/flappyboy.json'))));
 
 describe('loadROM', () => {
   let actual;

@@ -1,6 +1,6 @@
 import path from 'path';
 import expect from 'expect.js';
-import { loadELF } from './elf.js';
+import { loadELF } from './elf.mjs';
 
 const FILE_PATH = path.join(process.cwd(), '/roms/hello/hello');
 

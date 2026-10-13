@@ -13,10 +13,10 @@ node_modules/: package.json
 	touch node_modules/
 
 lint: node_modules/
-	npx eslint **/*.mjs
+	npx eslint src test const --ext .mjs
 
 test: lint test.only
 
 test.only:
-	npx mocha **/*.test.mjs
+	npx mocha 'test/**/*.test.mjs' 'src/**/*.test.mjs'
 
