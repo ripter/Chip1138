@@ -1,6 +1,6 @@
 import path from 'path';
 import expect from 'expect.js';
-import { convertROMtoJSON, MEDIATYPE } from './createJSONROM.js';
+import { convertROMtoJSON, MEDIATYPE } from './createJSONROM.mjs';
 
 // const ROOT_PATH = '/roms/gbstudio_test.gb';
 const ROM_PATH = path.join(process.cwd(), '/roms/gbstudio_test.gb');
