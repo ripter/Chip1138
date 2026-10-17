@@ -1,7 +1,7 @@
 // reads a number of bytes and returns a number
 export function readBytes(isLittleEdian, buffer, offset, byteLength) {
   let result = 0; let
-    byte = 0;
+    byte;
   if (byteLength >= 6) {
     throw new Error('Javascript supports 64-bit doubles, this limits the total byteLength to 6.');
   }
