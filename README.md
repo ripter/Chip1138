@@ -1,8 +1,11 @@
 # Chip1138
 
-[![Coverage Status](https://coveralls.io/repos/github/ripter/Chip1138/badge.svg?branch=master)](https://coveralls.io/github/ripter/Chip1138?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/ripter/Chip1138/badge.svg?branch=main)](https://coveralls.io/github/ripter/Chip1138?branch=main)
 
 Fantasy CPU build for fun and learning.
+
+Read [PROJECT.md](PROJECT.md) first: that's the project goal, who does what
+(test writer makes it red, code writer makes it green), and the current status.
 
 With coveralls...
 
