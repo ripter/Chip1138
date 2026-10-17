@@ -1,12 +1,13 @@
+import { readFile } from 'fs/promises';
+import { normalize, resolve } from 'path';
 import expect from 'expect.js';
 import filter from 'lodash.filter';
-import CPU from '../../cpu.mjs';
-import Memory from '../../memory.js';
-import { OPCODE } from '../../../../const/opcode.js';
-import { addTestData, random8bit, random16bit } from '../utils.js';
-// import rom from '../../../../roms/flappyboy.json';
+import CPU from '../../src/cpu.mjs';
+import Memory from '../../src/memory.mjs';
+import { OPCODE } from '../../const/opcode.mjs';
+import { addTestData, random8bit, random16bit } from '../utils.mjs';
 
-const rom = null;
+const ROM = JSON.parse(await readFile(resolve(normalize('./roms/flappyboy.json'))));
 
 describe('ld.test.js', () => {
   let cpu; let opcodes; let
@@ -14,7 +15,7 @@ describe('ld.test.js', () => {
 
   beforeEach(() => {
     // create a new blank CPU for each test.
-    memory = new Memory(rom);
+    memory = new Memory(ROM);
     cpu = new CPU({
       memory,
     });

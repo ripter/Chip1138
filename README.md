@@ -1,13 +1,10 @@
 # Chip1138
 
-![travis-ci](https://travis-ci.org/ripter/Chip1138.svg?branch=master)
-
 [![Coverage Status](https://coveralls.io/repos/github/ripter/Chip1138/badge.svg?branch=master)](https://coveralls.io/github/ripter/Chip1138?branch=master)
 
 Fantasy CPU build for fun and learning.
 
-Now with Travis
-And coveralls...
+With coveralls...
 
 ## Getting Started
 
