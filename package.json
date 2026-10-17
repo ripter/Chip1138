@@ -11,6 +11,9 @@
     "type": "git",
     "url": "git+https://github.com/ripter/Chip1138.git"
   },
+  "engines": {
+    "node": ">=22"
+  },
   "contributors": [
     {
       "name": "skip mcbride",
