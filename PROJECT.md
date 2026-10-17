@@ -50,6 +50,11 @@ Out of scope by default: APU (audio) — revisit if desired after M7.
 
 ## Status (updated per batch)
 
+> **Note for future-me (and any session restart):** this file *is* the memory. After a restart,
+> read this file plus `gh issue list` pinned items to restore context. Latest state also lives
+> in the phase-N issues.
+
 - Phase 0 — green baseline restored. Done (issue #60, PR #61).
 - Phase 1 — "Registers hold zero" **in progress** (issue #63, branch `phase-1-register-zero-values`).
+  Tests committed and red as intended (`test/cpu.zero-values.test.mjs`: 7 pass, 7 fail).
 - Next up: ADD/ADC wraparound + full flags (M1).
