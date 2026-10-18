@@ -15,6 +15,18 @@ class CPU {
     this.a = 0x01;
     this.f = 0xb0;
 
+    this.b = 0x00;
+    this.c = 0x13;
+
+    this.d = 0x00;
+    this.e = 0xd8;
+
+    this.h = 0x01;
+    this.l = 0x4d;
+
+    this.sp = 0xfffe;
+    this.pc = 0x0100;
+
     /*
     /* fullCarry: 0b0001
     /* halfCarry: 0b0010
@@ -137,7 +149,12 @@ class CPU {
     }
     // change in register
     else {
-      this[dest] -= 1;
+      if (this[dest] === 0) {
+        this[dest] = 0xff;
+      } else {
+        this[dest] -= 1;
+      }
+      // this[dest] -= 1;
     }
   }
 
@@ -325,6 +342,7 @@ class CPU {
   get af() {
     const bitA = this.a;
     const bitF = this.f;
+    console.log('+++++++++++++++++++++++get af', bitA, bitF, (bitA << 8) | bitF);
     return (bitA << 8) | bitF;
   }
 
@@ -338,12 +356,14 @@ class CPU {
   get bc() {
     const bitB = this.b;
     const bitC = this.c;
-    return (bitB << 8) | bitC || 0x0013;
+    console.log('************************get bc', this.toHex(bitB), this.toHex(bitC), this.toHex((bitB << 8) | bitC));
+    return (bitB << 8) | bitC;
   }
 
   set bc(value) {
     const bitB = (value >> 8) & 0xff;
     const bitC = value & 0xff;
+    console.log('set bc', bitB, bitC, this.toHex((value & 0xff)));
     this.b = bitB;
     this.c = bitC;
   }
@@ -351,7 +371,7 @@ class CPU {
   get de() {
     const bitD = this.d;
     const bitE = this.e;
-    return (bitD << 8) | bitE || 0x00d8;
+    return (bitD << 8) | bitE;
   }
 
   set de(value) {
