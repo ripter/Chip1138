@@ -223,7 +223,6 @@ class CPU {
    */
   jump(opcode, byte1, byte2) {
     this.pc = (byte2 << 8) | byte1;
-    console.log('************************\tjump', (this.pc).toString(16));
     return 'testttt';
   }
 
@@ -342,7 +341,6 @@ class CPU {
   get af() {
     const bitA = this.a;
     const bitF = this.f;
-    console.log('+++++++++++++++++++++++get af', bitA, bitF, (bitA << 8) | bitF);
     return (bitA << 8) | bitF;
   }
 
@@ -356,14 +354,12 @@ class CPU {
   get bc() {
     const bitB = this.b;
     const bitC = this.c;
-    console.log('************************get bc', this.toHex(bitB), this.toHex(bitC), this.toHex((bitB << 8) | bitC));
     return (bitB << 8) | bitC;
   }
 
   set bc(value) {
     const bitB = (value >> 8) & 0xff;
     const bitC = value & 0xff;
-    console.log('set bc', bitB, bitC, this.toHex((value & 0xff)));
     this.b = bitB;
     this.c = bitC;
   }
