@@ -384,7 +384,7 @@ class CPU {
   get hl() {
     const bitH = this.h;
     const bitL = this.l;
-    return (bitH << 8) | bitL || 0x014d;
+    return (bitH << 8) | bitL;
   }
 
   set hl(value) {
@@ -493,7 +493,7 @@ class CPU {
 
   // Stack pointer, 16 bits
   get sp() {
-    return this.memory16bit[4] || 0xFFFE;
+    return this.memory16bit[4];
   }
 
   set sp(value) {
@@ -507,7 +507,7 @@ class CPU {
    * 0x0100 is the starting position used by the Gameboy.
    */
   get pc() {
-    return this.memory16bit[5] || 0x0100;
+    return this.memory16bit[5];
   }
 
   set pc(value) {
