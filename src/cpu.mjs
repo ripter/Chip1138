@@ -149,12 +149,8 @@ class CPU {
     }
     // change in register
     else {
-      if (this[dest] === 0) {
-        this[dest] = 0xff;
-      } else {
-        this[dest] -= 1;
-      }
-      // this[dest] -= 1;
+      
+      this[dest] -= 1;
     }
   }
 
