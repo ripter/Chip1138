@@ -110,8 +110,8 @@ describe('CPU', () => {
   }); // alternate registers
 
   describe('combined registers', () => {
-    let byte1; let
-      byte2;
+    let byte1; 
+    let byte2;
 
     beforeEach(() => {
       byte1 = random8bit();

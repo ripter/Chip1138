@@ -15,6 +15,18 @@ class CPU {
     this.a = 0x01;
     this.f = 0xb0;
 
+    this.b = 0x00;
+    this.c = 0x13;
+
+    this.d = 0x00;
+    this.e = 0xd8;
+
+    this.h = 0x01;
+    this.l = 0x4d;
+
+    this.sp = 0xfffe;
+    this.pc = 0x0100;
+
     /*
     /* fullCarry: 0b0001
     /* halfCarry: 0b0010
@@ -137,6 +149,7 @@ class CPU {
     }
     // change in register
     else {
+      
       this[dest] -= 1;
     }
   }
@@ -206,7 +219,6 @@ class CPU {
    */
   jump(opcode, byte1, byte2) {
     this.pc = (byte2 << 8) | byte1;
-    console.log('************************\tjump', (this.pc).toString(16));
     return 'testttt';
   }
 
@@ -338,7 +350,7 @@ class CPU {
   get bc() {
     const bitB = this.b;
     const bitC = this.c;
-    return (bitB << 8) | bitC || 0x0013;
+    return (bitB << 8) | bitC;
   }
 
   set bc(value) {
@@ -351,7 +363,7 @@ class CPU {
   get de() {
     const bitD = this.d;
     const bitE = this.e;
-    return (bitD << 8) | bitE || 0x00d8;
+    return (bitD << 8) | bitE;
   }
 
   set de(value) {
@@ -364,7 +376,7 @@ class CPU {
   get hl() {
     const bitH = this.h;
     const bitL = this.l;
-    return (bitH << 8) | bitL || 0x014d;
+    return (bitH << 8) | bitL;
   }
 
   set hl(value) {
@@ -473,7 +485,7 @@ class CPU {
 
   // Stack pointer, 16 bits
   get sp() {
-    return this.memory16bit[4] || 0xFFFE;
+    return this.memory16bit[4];
   }
 
   set sp(value) {
@@ -487,7 +499,7 @@ class CPU {
    * 0x0100 is the starting position used by the Gameboy.
    */
   get pc() {
-    return this.memory16bit[5] || 0x0100;
+    return this.memory16bit[5];
   }
 
   set pc(value) {

@@ -7,7 +7,7 @@ import CPU from '../src/cpu.mjs';
 import Memory from '../src/memory.mjs';
 import { OPCODE } from '../const/opcode.mjs';
 // import rom from '../../../roms/flappyboy.json';
-import { random8bit } from './utils.mjs';
+import { random8bit, randomInt } from './utils.mjs';
 
 const ROM = JSON.parse(await readFile(resolve(normalize('./roms/flappyboy.json'))));
 
@@ -162,7 +162,10 @@ describe('CPU can run OPCODES:', () => {
     let randomValue;
 
     beforeEach(() => {
-      randomValue = random8bit();
+      // 0x00..0xFE. The wrap boundary (0xFF -> 0x00) has its own
+      // deterministic tests in test/cpu.inc-dec-wrap.test.mjs;
+      // `randomValue + 1` is only a valid assertion away from it.
+      randomValue = randomInt(0, 0xff);
     });
 
     opcodeList = filter(OPCODE, { mnemonic: 'INC' });
@@ -191,7 +194,10 @@ describe('CPU can run OPCODES:', () => {
     let randomValue;
 
     beforeEach(() => {
-      randomValue = random8bit();
+      // 0x01..0xFF. The wrap boundary (0x00 -> 0xFF/0xFFFF) has its
+      // own deterministic tests in test/cpu.inc-dec-wrap.test.mjs;
+      // `randomValue - 1` is only a valid assertion away from it.
+      randomValue = randomInt(1, 0x100);
     });
 
     opcodeList = filter(OPCODE, { mnemonic: 'DEC' });
