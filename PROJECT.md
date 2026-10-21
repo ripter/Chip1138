@@ -55,6 +55,15 @@ Out of scope by default: APU (audio) — revisit if desired after M7.
 > in the phase-N issues.
 
 - Phase 0 — green baseline restored. Done (issue #60, PR #61).
-- Phase 1 — "Registers hold zero" **in progress** (issue #63, branch `phase-1-register-zero-values`).
-  Tests committed and red as intended (`test/cpu.zero-values.test.mjs`: 7 pass, 7 fail).
-- Next up: ADD/ADC wraparound + full flags (M1).
+- Phase 1 — "Registers hold zero" done (issue #63, PR #64, merged).
+- Phase 2 — **M1: correct 8-bit ALU flags**, in progress (branch
+  `phase-2-8bit-alu-flags`). Foundation PR up first: F encoding migrated to
+  the Pan Docs layout (Z=0x80, N=0x40, H=0x20, C=0x10, low nibble 0) via
+  red tests in `test/opcodes.test.mjs` (spec update: bit positions only) and
+  new spec `test/cpu.alu-flags.test.mjs`. Red state: 282 pass / 13 fail.
+  Batch scope: ADD, ADC, SUB, SBC, CP + 8-bit INC/DEC flags. **DAA deferred**
+  to its own later batch. Per-op specs land in teaching order:
+  ADD → SUB/CP → ADC/SBC → INC/DEC.
+- Next up: per-op flag specs once the encoding foundation goes green
+  (16-bit `INC/DEC rr` must keep leaving `f` untouched — Phase 1 wrap tests
+  guard that and stay green).
