@@ -7,7 +7,9 @@ import CPU from '../src/cpu.mjs';
 import Memory from '../src/memory.mjs';
 import { OPCODE } from '../const/opcode.mjs';
 // import rom from '../../../roms/flappyboy.json';
-import { random8bit, randomInt } from './utils.mjs';
+import {
+  FLAG_CARRY, FLAG_HALF_CARRY, FLAG_NEGATIVE, random8bit, randomInt,
+} from './utils.mjs';
 
 const ROM = JSON.parse(await readFile(resolve(normalize('./roms/flappyboy.json'))));
 
@@ -49,12 +51,16 @@ describe('CPU can run OPCODES:', () => {
       });
 
       it(`${mnemonic} ${operand1}, ${operand2}; Clears the Add/Subtract Flag n [${addr}]`, () => {
+        // Normalize F first: boot F = 0xB0 already has Z/N/C set (real
+        // layout), so a flag assertion must not inherit the boot bits.
+        cpu.f = 0x00;
         // Set values we want to add together
         cpu[register2] = 0x1;
         cpu[register] = 0x2;
         cpu.processOpcode(parseInt(addr, 16));
 
-        expect(cpu.f & 0b10).to.eql(0);
+        // Spec update: N lives at 0x40 per Pan Docs (was 0b010).
+        expect(cpu.f & FLAG_NEGATIVE).to.eql(0);
       });
     });
 
@@ -72,11 +78,16 @@ describe('CPU can run OPCODES:', () => {
         0x87, // ADD a, a (135)
       ];
 
+      // Normalize F: boot F = 0xB0 already has C set, so this assertion
+      // would pass vacuously without doing so.
+      cpu.f = 0x00;
+
       // run the opcodes
       opcodes.forEach((opcode) => {
         cpu.processOpcode(opcode);
       });
-      expect(cpu.f & 0b0001).to.eql(0b0001);
+      // Spec update: C lives at 0x10 per Pan Docs (was 0b0001).
+      expect(cpu.f & FLAG_CARRY).to.eql(FLAG_CARRY);
     });
 
     it('ADD 10, 11; Unsets the carry flag', () => {
@@ -86,13 +97,17 @@ describe('CPU can run OPCODES:', () => {
         0x80, // ADD a, b
       ];
 
+      // Normalize F first (see the "sets the carry flag" test above).
+      cpu.f = 0x00;
+
       // run the opcodes
       opcodes.forEach((opcode) => {
         cpu.processOpcode(opcode);
       });
 
       // z80 spec: "C is set if carry from bit 7; otherwise, it is reset."
-      expect(cpu.f & 0b0001).to.eql(0);
+      // Spec update: C lives at 0x10 per Pan Docs (was 0b0001).
+      expect(cpu.f & FLAG_CARRY).to.eql(0);
     });
   }); // ADD
 
@@ -122,11 +137,15 @@ describe('CPU can run OPCODES:', () => {
       // Subtract Flag (N):
       // This bit is set if a subtraction was performed in the last math instruction.
       it(`${mnemonic} A, ${operand1}; Sets the Subtract Flag N [${addr}]`, () => {
+        // Normalize F first: boot F = 0xB0 already has N set (real layout),
+        // so this assertion would pass vacuously without doing so.
+        cpu.f = 0x00;
         cpu.a = 0x29;
         cpu[register] = 0x11;
         cpu.processOpcode(parseInt(addr, 16));
 
-        expect(cpu.f & 0b100).to.eql(0b100);
+        // Spec update: N lives at 0x40 per Pan Docs (was 0b100).
+        expect(cpu.f & FLAG_NEGATIVE).to.eql(FLAG_NEGATIVE);
       });
     }); // end forEach opcode
   }); // SUB
@@ -274,11 +293,18 @@ describe('CPU can run OPCODES:', () => {
         0xce, 0x02, // ADC a 0x02
       ];
 
+      // Normalize F first: boot F = 0xB0 already has C set (real layout),
+      // so this assertion would pass vacuously without doing so. F = 0
+      // also means the ADC carry-IN is 0, matching the intent
+      // (0xFE + 0x02 = 0x100 carries out without a carry in).
+      cpu.f = 0x00;
+
       // run the opcodes
       opcodes.forEach((opcode) => {
         cpu.processOpcode(opcode);
       });
-      expect(cpu.f & 0b0001).to.eql(0b0001);
+      // Spec update: C lives at 0x10 per Pan Docs (was 0b0001).
+      expect(cpu.f & FLAG_CARRY).to.eql(FLAG_CARRY);
     });
 
     it('it resets the carry flag', () => {
@@ -288,11 +314,15 @@ describe('CPU can run OPCODES:', () => {
         0x01, // value that will not carry when added to A
       ];
 
+      // Normalize F first (see "it sets the carry flag" above).
+      cpu.f = 0x00;
+
       // run the opcodes
       opcodes.forEach((opcode) => {
         cpu.processOpcode(opcode);
       });
-      expect(cpu.f & 0b0001).to.eql(0);
+      // Spec update: C lives at 0x10 per Pan Docs (was 0b0001).
+      expect(cpu.f & FLAG_CARRY).to.eql(0);
     });
 
     it('it sets the half carry flag', () => {
@@ -301,11 +331,15 @@ describe('CPU can run OPCODES:', () => {
         0xce, 0x02, // ADC a 0x02
       ];
 
+      // Normalize F first (see "it sets the carry flag" above).
+      cpu.f = 0x00;
+
       // run the opcodes
       opcodes.forEach((opcode) => {
         cpu.processOpcode(opcode);
       });
-      expect(cpu.f & 0b0010).to.eql(0b0010);
+      // Spec update: H lives at 0x20 per Pan Docs (was 0b0010).
+      expect(cpu.f & FLAG_HALF_CARRY).to.eql(FLAG_HALF_CARRY);
     });
 
     it('it resets the half carry flag', () => {
@@ -315,11 +349,15 @@ describe('CPU can run OPCODES:', () => {
         0x01, // value that will not carry when added to A
       ];
 
+      // Normalize F first (see "it sets the carry flag" above).
+      cpu.f = 0x00;
+
       // run the opcodes
       opcodes.forEach((opcode) => {
         cpu.processOpcode(opcode);
       });
-      expect(cpu.f & 0b0010).to.eql(0);
+      // Spec update: H lives at 0x20 per Pan Docs (was 0b0010).
+      expect(cpu.f & FLAG_HALF_CARRY).to.eql(0);
     });
   });
 });
