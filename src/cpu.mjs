@@ -18,6 +18,8 @@ class CPU {
     this.b = 0x00;
     this.c = 0x13;
 
+    this.f = this._f;
+
     this.d = 0x00;
     this.e = 0xd8;
 
@@ -27,18 +29,13 @@ class CPU {
     this.sp = 0xfffe;
     this.pc = 0x0100;
 
-    /*
-    /* fullCarry: 0b0001
-    /* halfCarry: 0b0010
-    /* subtract: 0b0100
-    /* zero: 0b1000
-     */
-
+    this._f = 0xb0; // low nibble always reads 0
+    
     this.masks = {
-      full: 0b0001,
-      half: 0b0010,
-      sub: 0b0100,
-      zero: 0b1000,
+      FLAG_ZERO: 0x80,
+      FLAG_NEGATIVE: 0x40,
+      FLAG_HALF_CARRY: 0x20,
+      FLAG_CARRY: 0x10,
     };
   }
 
@@ -309,11 +306,13 @@ class CPU {
   }
 
   get f() {
-    return this.memory8bit[5];
+    // return this.memory8bit[5];
+    return this._f;
   }
 
   set f(value) {
-    this.memory8bit[5] = value;
+    // this.memory8bit[5] = value & 0xf0; // low nibble always reads 0
+    this._f = value & 0xf0; // low nibble always reads 0
   }
 
   get l() {
@@ -335,16 +334,12 @@ class CPU {
   // combined 16 bit registers
   // combining 2 8 bit registers to hold 16 bits
   get af() {
-    const bitA = this.a;
-    const bitF = this.f;
-    return (bitA << 8) | bitF;
+    return (this.a << 8) | this.f;
   }
 
   set af(value) {
-    const bitA = (value >> 8) & 0xff;
-    const bitF = value & 0xff;
-    this.a = bitA;
-    this.f = bitF;
+    this.a = (value >> 8) & 0xff;
+    this._f = value & 0xff; // triggers the setter for f, which will mask the low nibble to 0
   }
 
   get bc() {
