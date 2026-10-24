@@ -64,6 +64,9 @@ Out of scope by default: APU (audio) — revisit if desired after M7.
   Batch scope: ADD, ADC, SUB, SBC, CP + 8-bit INC/DEC flags. **DAA deferred**
   to its own later batch. Per-op specs land in teaching order:
   ADD → SUB/CP → ADC/SBC → INC/DEC.
+  Foundation status: F encoding green (295/0 after review commits d3fed9b /
+  618350b), then review turned up ADC carry-in deleted + ADD C-clear broken;
+  follow-up reds committed (295 pass / 3 fail, all intended).
 - Next up: per-op flag specs once the encoding foundation goes green
   (16-bit `INC/DEC rr` must keep leaving `f` untouched — Phase 1 wrap tests
   guard that and stay green).
