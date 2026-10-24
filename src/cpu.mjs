@@ -56,16 +56,15 @@ class CPU {
     }
 
     // Add the carry value
-    value += this.f & 0b0001;
 
     // Update the flags
     // Carry
     if (value > 0xFF) {
-      this.f |= 0b0001;
+      this.f = (this.f & 0xf0) | 0x10;
     }
     // Half-Carry
     if (value > 0x0F) {
-      this.f |= 0b0010;
+      this.f = (this.f & 0xf0) | 0x20;
     }
 
     this.a = value;
@@ -87,10 +86,10 @@ class CPU {
     }
     // Check for Carry
     if (value > 0xFF) {
-      this.f |= 0b0001;
+      this.f = (this.f & 0xf0) | 0x10;
     } else {
       // Reset Carry
-      this.f &= 0b0001;
+      this.f = this.f & 0xf0;
     }
 
     this[dest] = value;
@@ -103,7 +102,7 @@ class CPU {
 
     this.a -= value;
     // Set the subtract flag, cus we are subtraction 😝
-    this.f |= 0b100;
+    this.f = (this.f & 0xf0) | 0x40;
   }
 
   // Loads bytes into CPU registers
@@ -312,7 +311,7 @@ class CPU {
 
   set f(value) {
     // this.memory8bit[5] = value & 0xf0; // low nibble always reads 0
-    this._f = value & 0xf0; // low nibble always reads 0
+    this._f = value & 0xff; // low nibble always reads 0
   }
 
   get l() {
