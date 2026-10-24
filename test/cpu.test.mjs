@@ -48,7 +48,11 @@ describe('CPU', () => {
     });
     it('f is 8-bit', () => {
       cpu.f = 0xfff; // 4095 should overflow on 8-bit
-      expect(cpu.f).to.eql(0xff); // largest 8-bit number
+      // Spec update: F's low nibble is unused hardware-wise and always
+      // reads 0 (Pan Docs, F register), so the setter clamps the value
+      // to the top nibble. 0xfff therefore reads back as 0xf0 -- the
+      // 8-bit intent of this test is unchanged; the low nibble is not.
+      expect(cpu.f).to.eql(0xf0);
     });
 
     it('c is 8-bit', () => {

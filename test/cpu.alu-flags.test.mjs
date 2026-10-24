@@ -99,3 +99,70 @@ describe('CPU: F keeps the low nibble clear after ALU ops', () => {
     expect(cpu.f & 0x0f).to.eql(0); // red today: F gets 0b100
   });
 });
+
+describe('CPU: ADD without carry clears the carry flag', () => {
+  let cpu;
+  let memory;
+
+  beforeEach(() => {
+    memory = new Memory(ROM);
+    cpu = new CPU({
+      memory,
+    });
+  });
+
+  // Red now: the "Reset Carry" path computes `this.f & 0xf0`, but the
+  // carry bit IS 0x10 -- inside the top nibble. So a pre-existing C
+  // survives every ADD that does not overflow. The tests in
+  // test/opcodes.test.mjs normalized F to 0x00 before the op, which
+  // made this invisible; on real hardware the boot state F = 0xB0 has
+  // C set, so an unrelated earlier op could leak its carry into every
+  // later ADD.
+  // Spec: clear ONLY C here (`f &= ~0x10`), keep the other top-nibble
+  // bits -- per-op Z/H/N semantics are a later issue in this batch.
+  it('ADD A, B without overflow clears a pre-existing C [0x80]', () => {
+    cpu.f = 0x10; // carry set from some earlier op
+    cpu.a = 0x0a;
+    cpu.b = 0x0b;
+    cpu.processOpcode(0x80); // ADD A, B: 0x0a + 0x0b = 0x15, no carry
+
+    expect(cpu.f & FLAG_CARRY).to.eql(0); // red today: C survives
+  });
+});
+
+describe('CPU: ADC adds the carry-in from the real C bit', () => {
+  let cpu;
+  let memory;
+
+  beforeEach(() => {
+    memory = new Memory(ROM);
+    cpu = new CPU({
+      memory,
+    });
+  });
+
+  // Red now: the carry-in line was removed from adc() during the
+  // encoding migration, so ADC currently behaves exactly like ADD.
+  // Spec (Pan Docs): ADC adds the existing carry flag, read from
+  // 0x10: A + B + (C ? 1 : 0).
+  it('ADC A, B with C set adds the carry-in: 0x01 + 0x02 + 1 [0x88]', () => {
+    cpu.f = 0x10; // carry-in 1 (real bit; no other flags)
+    cpu.a = 0x01;
+    cpu.b = 0x02;
+    cpu.processOpcode(0x88); // ADC A, B
+
+    expect(cpu.a).to.eql(0x04); // red today: ADC ignores the carry-in, 0x03
+  });
+
+  // Green guard: the carry-in is the C bit at 0x10 and nothing else.
+  // Blocks restoring the old `f & 0b0001` read, which would treat the
+  // (unused) low-nibble bit 0 as a carry.
+  it('ADC A, B ignores stale low-nibble bits as carry-in [0x88]', () => {
+    cpu.f = 0x01; // bit 0 is NOT a flag
+    cpu.a = 0x01;
+    cpu.b = 0x02;
+    cpu.processOpcode(0x88); // ADC A, B
+
+    expect(cpu.a).to.eql(0x03); // carry-in 0 despite bit 0 set
+  });
+});
